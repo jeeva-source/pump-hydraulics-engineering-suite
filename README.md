@@ -24,7 +24,15 @@ Engineering calculation workspace with V5.0 single-line hydraulics, V5.1.1 harde
 - Signed edge flows, nodal pressure head, continuity residuals and solver diagnostics.
 - SI-only inputs; see [V5.2 calculation basis](docs/V5_2_NETWORK_SOLVER_BASIS.md).
 
-## V5.3 — Pump performance and operating point (development branch)\n- Manufacturer pump curve input with flow, head and optional efficiency, shaft power and NPSHr data.\n- Quadratic system curve calibrated from static head and a system design point.\n- Pump/system intersection solved within supplied pump-curve range without extrapolation.\n- BEP identification, hydraulic power, efficiency-based shaft-power estimate, optional motor input and NPSH screening.\n- Standalone chart-based interface at `app/pump-performance.html`.\n- See [V5.3 calculation basis](docs/V5_3_PUMP_PERFORMANCE_BASIS.md).\n\n## V5.0 foundation
+## V5.3 — Pump performance and operating point (development branch)
+- Manufacturer pump curve input with flow, head and optional efficiency, shaft power and NPSHr data.
+- Quadratic system curve calibrated from static head and a system design point.
+- Pump/system intersection solved within supplied pump-curve range without extrapolation.
+- BEP identification, hydraulic power, efficiency-based shaft-power estimate, optional motor input and NPSH screening.
+- Standalone chart-based interface at `app/pump-performance.html`.
+- See [V5.3 calculation basis](docs/V5_3_PUMP_PERFORMANCE_BASIS.md).
+
+## V5.0 foundation
 - SI-internal unit conversion and input validation.
 - Velocity, Reynolds number, Churchill (1977) Darcy friction factor.
 - Darcy-Weisbach major losses, minor losses, static head, TDH and hydraulic power.
@@ -38,7 +46,10 @@ npm test
 
 The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the V5.2 network engine is `src/network-v5-2.js` with browser bundle `app/network-v5-2.js`. The current static multi-segment UI is `app/index.html`; the V5.2 network UI is `app/network.html`; the V5.3 pump performance UI is `app/pump-performance.html`.
 
-## V5.3 development status\nSee [V5.3 development status and verification](docs/V5_3_DEVELOPMENT_STATUS.md).\n\n## Vercel deployment
+## V5.3 development status
+See [V5.3 development status and verification](docs/V5_3_DEVELOPMENT_STATUS.md).
+
+## Vercel deployment
 Import this repository into Vercel. Select Framework Preset **Other**, leave the build command blank, and set Output Directory to `app`.
 
 ## Release status
