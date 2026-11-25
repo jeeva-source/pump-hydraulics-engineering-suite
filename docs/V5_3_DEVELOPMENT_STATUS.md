@@ -24,7 +24,9 @@ V5.3 pump performance and operating-point module is implemented on branch `v5.3-
 - V5.3 inline browser JavaScript syntax compilation: passed.
 - Vercel preview deployment: READY.
 - HTTP smoke tests returned 200 for the main page, V5.3 pump UI, V5.3 engine bundle, V5.2 network UI and V5.2 engine bundle.
-- Full GitHub Actions `npm test` run #54 completed successfully on the original V5.3 branch head; subsequent review hardening must trigger a fresh run.
+- Full GitHub Actions `npm test` run #56 completed successfully after V5.3 review hardening; all four suites (V5.0, V5.1.1, V5.2 and V5.3) passed.
+- Added independent Colebrook–White network benchmark and explicit signed supply/absorption reporting for fixed-head boundaries.
+- Added V5.3 non-monotonic curve / multiple-intersection coverage and separated efficiency-derived shaft power from vendor shaft power.
 - Interactive browser calculation workflow has not been automated end-to-end.
 
 ## Preview
