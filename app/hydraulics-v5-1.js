@@ -25,7 +25,8 @@ function numeric(value, name) {
 }
 function convertRequired(value, quantity, unitName, name) {
   if (!unitName) throw new TypeError(name + ' unit is required');
-  const baseUnit = { flow: 'm3/s', density: 'kg/m3', viscosity: 'Pa.s', length: 'm', roughness: 'm' }[quantity];\n  if (!baseUnit) throw new RangeError('Unsupported quantity: ' + quantity);\n  return V5.convert(numeric(value, name), quantity, unitName, baseUnit);
+  const baseUnit = { flow: 'm3/s', density: 'kg/m3', viscosity: 'Pa.s', length: 'm', roughness: 'm' }[quantity];
+  if (!baseUnit) throw new RangeError('Unsupported quantity: ' + quantity);\n  return V5.convert(numeric(value, name), quantity, unitName, baseUnit);
 }
 function pressureRequired(value, unitName, name) {
   if (!unitName || !(unitName in PRESSURE)) throw new RangeError(name + ' requires a supported explicit pressure unit');
