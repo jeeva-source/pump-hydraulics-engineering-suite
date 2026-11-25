@@ -39,4 +39,5 @@ assert.ok(loop.iterations>0 && loop.iterations<60);
 assert.ok(loop.maxContinuityResidual_m3_s<1e-9);
 assert.throws(()=>calculateNetwork({density_kg_m3:998,viscosity_Pa_s:0.001,nodes:[{id:'a'},{id:'b'}],edges:[{id:'p',from:'a',to:'b',length_m:1,diameter_m:0.1,roughness_m:0}]}),/fixedTotalHead/);
 assert.throws(()=>calculateNetwork({density_kg_m3:998,viscosity_Pa_s:0.001,nodes:[{id:'a',fixedTotalHead_m:10},{id:'b',demand_m3_s:-1}],edges:[{id:'p',from:'a',to:'b',length_m:1,diameter_m:0.1,roughness_m:0}]}),/demand cannot be negative/);
+assert.throws(()=>calculateNetwork({density_kg_m3:998,viscosity_Pa_s:0.001,nodes:[{id:'a',fixedTotalHead_m:10},{id:'b'},{id:'isolated'}],edges:[{id:'p',from:'a',to:'b',length_m:1,diameter_m:0.1,roughness_m:0}]}),/disconnected/);
 console.log('V5.2 network solver tests passed');
