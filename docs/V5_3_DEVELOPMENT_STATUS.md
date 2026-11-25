@@ -9,7 +9,9 @@ V5.3 pump performance and operating-point module is implemented on branch `v5.3-
 - Piecewise-linear interpolation between supplied pump curve points.
 - No extrapolation beyond the supplied pump curve.
 - Quadratic system curve from static head and one design flow/head point.
-- Pump/system intersection using interval bracketing and bisection.
+- Pump/system intersection using interval bracketing and bisection; all crossings are returned, with lowest-flow crossing labelled provisional when multiple roots exist.
+- Non-monotonic pump-head curves are accepted to support drooping/saddle vendor curves and multi-intersection detection.
+- Estimated shaft power is kept separate from manufacturer shaft-power data; motor-input estimate identifies which shaft-power basis it uses.
 - Discrete supplied-data BEP identification.
 - Hydraulic power, efficiency-based shaft-power estimate and optional motor input estimate.
 - Optional NPSHa/NPSHr screening and manufacturer shaft-power comparison.
@@ -22,7 +24,7 @@ V5.3 pump performance and operating-point module is implemented on branch `v5.3-
 - V5.3 inline browser JavaScript syntax compilation: passed.
 - Vercel preview deployment: READY.
 - HTTP smoke tests returned 200 for the main page, V5.3 pump UI, V5.3 engine bundle, V5.2 network UI and V5.2 engine bundle.
-- Full `npm test` through GitHub Actions was not confirmed; do not interpret isolated harness execution as a GitHub Actions run.
+- Full GitHub Actions `npm test` run #54 completed successfully on the original V5.3 branch head; subsequent review hardening must trigger a fresh run.
 - Interactive browser calculation workflow has not been automated end-to-end.
 
 ## Preview
