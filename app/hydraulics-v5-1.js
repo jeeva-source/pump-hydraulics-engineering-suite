@@ -26,7 +26,8 @@ function numeric(value, name) {
 function convertRequired(value, quantity, unitName, name) {
   if (!unitName) throw new TypeError(name + ' unit is required');
   const baseUnit = { flow: 'm3/s', density: 'kg/m3', viscosity: 'Pa.s', length: 'm', roughness: 'm' }[quantity];
-  if (!baseUnit) throw new RangeError('Unsupported quantity: ' + quantity);\n  return V5.convert(numeric(value, name), quantity, unitName, baseUnit);
+  if (!baseUnit) throw new RangeError('Unsupported quantity: ' + quantity);
+  return V5.convert(numeric(value, name), quantity, unitName, baseUnit);
 }
 function pressureRequired(value, unitName, name) {
   if (!unitName || !(unitName in PRESSURE)) throw new RangeError(name + ' requires a supported explicit pressure unit');
@@ -77,7 +78,10 @@ function calculateMultiSegment(input) {
 
   let previousVelocityHead = inletDiameter === null ? null : Math.pow(Q / (Math.PI * inletDiameter ** 2 / 4), 2) / (2 * G);
   let cumulativeHead = 0, cumulativePressureDropPa = 0;
-  const warnings = [];\n  if (inletPressurePa !== null && vapourPressurePa !== null && inletPressurePa < vapourPressurePa) warnings.push('Source absolute pressure is below the entered liquid vapour pressure; single-phase inlet condition is invalid.');\n  if (inletPressurePa === null || outletPressurePa === null) warnings.push('Source/destination pressure boundary is incomplete; the pressure contribution is assumed zero (equal boundary pressures). Supply both absolute pressures for a pressurised source or destination.');\n  if (inletDiameter === null) warnings.push('Inlet reference diameter omitted: first-segment velocity-head change is assumed zero. Supply an inlet diameter or confirm the source boundary is at rest / same velocity head.');
+  const warnings = [];
+  if (inletPressurePa !== null && vapourPressurePa !== null && inletPressurePa < vapourPressurePa) warnings.push('Source absolute pressure is below the entered liquid vapour pressure; single-phase inlet condition is invalid.');
+  if (inletPressurePa === null || outletPressurePa === null) warnings.push('Source/destination pressure boundary is incomplete; the pressure contribution is assumed zero (equal boundary pressures). Supply both absolute pressures for a pressurised source or destination.');
+  if (inletDiameter === null) warnings.push('Inlet reference diameter omitted: first-segment velocity-head change is assumed zero. Supply an inlet diameter or confirm the source boundary is at rest / same velocity head.');
   const results = input.segments.map((segment, index) => {
     if (!segment || typeof segment !== 'object' || Array.isArray(segment)) throw new TypeError('Segment ' + (index + 1) + ' must be an object');
     const label = segment.name || ('Segment ' + (index + 1));
@@ -164,10 +168,13 @@ function calculateMultiSegment(input) {
     pressure_boundary_head_m: pressureBoundaryHead,
     total_required_head_m: totalRequiredHead,
     total_pressure_drop_Pa: cumulativePressureDropPa,
-    total_pressure_drop_kPa: cumulativePressureDropPa / 1000,\n    required_pump_pressure_difference_Pa: totalRequiredHead * rho * G,\n    required_pump_pressure_difference_kPa: totalRequiredHead * rho * G / 1000,
+    total_pressure_drop_kPa: cumulativePressureDropPa / 1000,
+    required_pump_pressure_difference_Pa: totalRequiredHead * rho * G,
+    required_pump_pressure_difference_kPa: totalRequiredHead * rho * G / 1000,
     hydraulic_power_W: rho * G * Q * totalRequiredHead,
     inlet_pressure_Pa: inletPressurePa, specified_outlet_pressure_Pa: outletPressurePa,
-    outlet_pressure_Pa: inletPressurePa === null ? null : inletPressurePa - cumulativePressureDropPa,\n    calculated_outlet_pressure_Pa: inletPressurePa === null ? null : inletPressurePa - cumulativePressureDropPa,
+    outlet_pressure_Pa: inletPressurePa === null ? null : inletPressurePa - cumulativePressureDropPa,
+    calculated_outlet_pressure_Pa: inletPressurePa === null ? null : inletPressurePa - cumulativePressureDropPa,
     vapour_pressure_Pa: vapourPressurePa, warnings,
     assumptions: [
       'Steady-state, incompressible, single-phase Newtonian liquid.',
