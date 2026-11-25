@@ -1,6 +1,6 @@
 # Changelog
 
-## V5.1.0 — Multi-segment pipe hydraulics
+## V5.3.0 — Pump performance and operating point (development)\n- Added manufacturer pump-curve input with piecewise-linear interpolation and no extrapolation.\n- Added quadratic system curve calibrated from static head and a design flow/head point.\n- Added pump/system intersection solver, BEP identification, hydraulic power, efficiency-based shaft-power estimate and optional motor input estimate.\n- Added optional NPSHa/NPSHr screening and manufacturer curve metadata.\n- Added standalone chart-based browser interface and regression tests.\n- Explicitly disclose that system curve is not yet auto-generated from V5.1/V5.2 cases.\n\n## V5.2 — Connected pipe network (development)\n- Added preliminary steady-state nodal network engine for branches and loops with signed pipe flows and continuity residuals.\n- Added fixed-head boundaries, node withdrawals, topology validation, browser interface and regression tests.\n\n## V5.1.0 — Multi-segment pipe hydraulics
 - Added serial multi-segment liquid hydraulic engine with segment-specific pipe diameter, length and roughness.
 - Added segment-specific minor-loss coefficients, equipment pressure-drop inputs and signed elevation changes.
 - Added velocity-head change treatment at diameter transitions and cumulative segment pressure profile.
