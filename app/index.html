@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101b2b">
-<title>Pump Hydraulics Engineering Suite | V5.1</title>
+<title>Pump Hydraulics Engineering Suite | V5.1.1</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1422;--panel:#121f31;--line:#263950;--text:#e8eef6;--muted:#9cafc4;--accent:#4da3ff;--good:#46c89a;--warn:#f0b75b;--bad:#ff7777}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 75% 0%,#1b3450 0,transparent 34%),var(--bg);color:var(--text);font:14px/1.5 Inter,Segoe UI,Arial,sans-serif}
@@ -11,7 +11,7 @@ main{max-width:1500px;margin:auto;padding:26px clamp(16px,4vw,56px) 60px}.intro{
 @media(max-width:900px){.layout{grid-template-columns:1fr}}@media(max-width:560px){.fields{grid-template-columns:1fr}.results{grid-template-columns:1fr 1fr}.panel{padding:15px}.intro h2{font-size:21px}}
 </style></head>
 <body>
-<header><div class="brand"><div class="mark">PH</div><div><div class="eyebrow">Engineering calculation workspace</div><h1>Pump Hydraulics Engineering Suite</h1></div></div><div class="version">V5.1 · Multi-Segment Hydraulics</div></header>
+<header><div class="brand"><div class="mark">PH</div><div><div class="eyebrow">Engineering calculation workspace</div><h1>Pump Hydraulics Engineering Suite</h1></div></div><div class="version">V5.1.1 · Engineering Hardening</div></header>
 <main>
 <div class="intro"><div class="eyebrow">Hydraulic module / 02</div><h2>Multi-segment pipe system assessment</h2><p>Model a serial suction/discharge path with different pipe diameters, lengths, roughness, fitting losses, equipment pressure drops and elevation changes. All calculations are performed internally in SI units.</p></div>
 <div class="layout">
@@ -22,7 +22,7 @@ main{max-width:1500px;margin:auto;padding:26px clamp(16px,4vw,56px) 60px}.intro{
 <div class="field"><label>Density (kg/m³)</label><input id="density" type="number" min="0" step="any" value="998" required></div>
 <div class="field"><label>Dynamic viscosity (cP)</label><input id="viscosity" type="number" min="0" step="any" value="1.002" required></div>
 <div class="field"><label>Inlet pressure (bar abs, optional)</label><input id="inletPressure" type="number" min="0" step="any" placeholder="Leave blank for relative profile"></div>
-<div class="field"><label>Inlet reference diameter (mm, optional)</label><input id="inletDiameter" type="number" min="0" step="any" placeholder="For inlet velocity-head change"></div>
+<div class="field"><label>Inlet reference diameter (mm, optional)</label><input id="inletDiameter" type="number" min="0" step="any" placeholder="For inlet velocity-head change"></div><div class="field"><label>Destination pressure (bar abs, optional)</label><input id="outletPressure" type="number" min="0" step="any" placeholder="For pressurised destination"></div><div class="field"><label>Liquid vapour pressure (bar abs, optional)</label><input id="vapourPressure" type="number" min="0" step="any" placeholder="At operating temperature"></div><div class="field"><label>Suction velocity limit (m/s)</label><input id="suctionLimit" type="number" min="0" step="any" value="1.5" required></div><div class="field"><label>Discharge velocity limit (m/s)</label><input id="dischargeLimit" type="number" min="0" step="any" value="3.0" required></div>
 </div>
 <div class="section">Pipe segments</div><div id="segments"></div>
 <div class="actions"><button class="btn secondary" id="addSegment" type="button">+ Add segment</button><button class="btn primary" type="submit">Calculate system</button><button class="btn secondary" type="reset">Reset example</button></div><div id="error" class="error" role="alert"></div>
@@ -30,7 +30,7 @@ main{max-width:1500px;margin:auto;padding:26px clamp(16px,4vw,56px) 60px}.intro{
 <section class="panel"><h3>System calculation results</h3><p class="sub">Darcy–Weisbach + Churchill (1977) · segment-wise hydraulic profile</p>
 <div class="results">
 <div class="metric"><span>Total required head</span><strong id="head">—</strong><em>m liquid</em></div>
-<div class="metric"><span>Total pressure drop</span><strong id="dp">—</strong><em>kPa</em></div>
+<div class="metric"><span>Pipe-path pressure drop</span><strong id="dp">—</strong><em>kPa</em></div>
 <div class="metric"><span>Hydraulic power</span><strong id="power">—</strong><em>kW</em></div>
 <div class="metric"><span>Major losses</span><strong id="major">—</strong><em>m</em></div>
 <div class="metric"><span>Minor losses</span><strong id="minor">—</strong><em>m</em></div>
@@ -43,7 +43,7 @@ main{max-width:1500px;margin:auto;padding:26px clamp(16px,4vw,56px) 60px}.intro{
 <script>
 const $=id=>document.getElementById(id);const fmt=(n,d=3)=>Number.isFinite(n)?n.toLocaleString(undefined,{maximumFractionDigits:d}):'—';let nextId=0;
 function addSegment(v={}){const id=++nextId;const el=document.createElement('div');el.className='segment';el.dataset.id=id;el.innerHTML='<div class="segmenthead"><strong>Segment '+id+'</strong><button type="button" class="btn danger remove">Remove</button></div><div class="fields">'+
-'<div class="field"><label>Segment name</label><input class="name" value="'+(v.name||('Pipe segment '+id))+'" required></div>'+
+'<div class="field"><label>Segment name</label><input class="name" value="'+(v.name||('Pipe segment '+id))+'" required></div>'+ '<div class="field"><label>Service</label><select class="service"><option value="suction" '+(v.service==='suction'?'selected':'')+'>Suction</option><option value="discharge" '+(v.service!=='suction'?'selected':'')+'>Discharge</option></select></div>'+
 '<div class="field"><label>Internal diameter (mm)</label><input class="diameter" type="number" min="0" step="any" value="'+(v.diameter??100)+'" required></div>'+
 '<div class="field"><label>Straight length (m)</label><input class="length" type="number" min="0" step="any" value="'+(v.length??30)+'" required></div>'+
 '<div class="field"><label>Absolute roughness (mm)</label><input class="roughness" type="number" min="0" step="any" value="'+(v.roughness??0.045)+'" required></div>'+
@@ -51,12 +51,12 @@ function addSegment(v={}){const id=++nextId;const el=document.createElement('div
 '<div class="field"><label>Equipment pressure drop (kPa)</label><input class="equipment" type="number" min="0" step="any" value="'+(v.equipment??0)+'" required></div>'+
 '<div class="field"><label>Elevation change (m, signed)</label><input class="elevation" type="number" step="any" value="'+(v.elevation??0)+'" required></div></div>';
 el.querySelector('.remove').addEventListener('click',()=>{if($('segments').children.length>1)el.remove();else $('error').textContent='At least one segment must remain.';});$('segments').appendChild(el);}
-function readSegments(){return [...$('segments').children].map(el=>({name:el.querySelector('.name').value,diameter:el.querySelector('.diameter').value,diameterUnit:'mm',length:el.querySelector('.length').value,lengthUnit:'m',roughness:el.querySelector('.roughness').value,roughnessUnit:'mm',minorLossK:el.querySelector('.k').value,equipmentPressureDrop:el.querySelector('.equipment').value,equipmentPressureDropUnit:'kPa',elevationChange:el.querySelector('.elevation').value,elevationChangeUnit:'m'}));}
-function calculate(){ $('error').textContent='';try{const inlet=$('inletPressure').value;const inletD=$('inletDiameter').value;const r=window.PumpHydraulicsV51.calculateMultiSegment({flow:$('flow').value,flowUnit:'m3/h',density:$('density').value,densityUnit:'kg/m3',viscosity:$('viscosity').value,viscosityUnit:'cP',inletPressure:inlet===''?undefined:inlet,inletPressureUnit:'bar',inletDiameter:inletD===''?undefined:inletD,inletDiameterUnit:'mm',segments:readSegments()});
+function readSegments(){return [...$('segments').children].map(el=>({name:el.querySelector('.name').value,service:el.querySelector('.service').value,diameter:el.querySelector('.diameter').value,diameterUnit:'mm',length:el.querySelector('.length').value,lengthUnit:'m',roughness:el.querySelector('.roughness').value,roughnessUnit:'mm',minorLossK:el.querySelector('.k').value,equipmentPressureDrop:el.querySelector('.equipment').value,equipmentPressureDropUnit:'kPa',elevationChange:el.querySelector('.elevation').value,elevationChangeUnit:'m'}));}
+function calculate(){ $('error').textContent='';try{const inlet=$('inletPressure').value;const inletD=$('inletDiameter').value;const outlet=$('outletPressure').value;const vapour=$('vapourPressure').value;const r=window.PumpHydraulicsV51.calculateMultiSegment({flow:$('flow').value,flowUnit:'m3/h',density:$('density').value,densityUnit:'kg/m3',viscosity:$('viscosity').value,viscosityUnit:'cP',inletPressure:inlet===''?undefined:inlet,inletPressureUnit:'bar',inletDiameter:inletD===''?undefined:inletD,inletDiameterUnit:'mm',outletPressure:outlet===''?undefined:outlet,outletPressureUnit:'bar',vapourPressure:vapour===''?undefined:vapour,vapourPressureUnit:'bar',suctionVelocityLimit:$('suctionLimit').value,dischargeVelocityLimit:$('dischargeLimit').value,segments:readSegments()});
 $('head').textContent=fmt(r.total_required_head_m);$('dp').textContent=fmt(r.total_pressure_drop_kPa);$('power').textContent=fmt(r.hydraulic_power_W/1000);$('major').textContent=fmt(r.total_major_loss_head_m);$('minor').textContent=fmt(r.total_minor_loss_head_m);$('equipment').textContent=fmt(r.total_equipment_loss_head_m);
 $('profile').innerHTML=r.segments.map(s=>'<tr><td>'+s.name.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))+'</td><td>'+fmt(s.diameter_m*1000,1)+'</td><td>'+fmt(s.velocity_m_s,3)+'</td><td>'+fmt(s.reynolds,0)+'</td><td>'+fmt(s.major_loss_head_m,3)+'</td><td>'+fmt(s.minor_loss_head_m,3)+'</td><td>'+fmt(s.pressure_drop_Pa/1000,3)+'</td><td>'+(s.outlet_pressure_Pa===null?'—':fmt(s.outlet_pressure_Pa/1e5,3))+'</td></tr>').join('');
 const w=$('warning');if(r.warnings.length){w.classList.remove('hidden');w.innerHTML='<strong>Engineering review flags</strong><ul>'+r.warnings.map(x=>'<li>'+x.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))+'</li>').join('')+'</ul>';}else{w.classList.add('hidden');w.textContent='';}
 }catch(e){$('error').textContent=e.message;}}
-$('addSegment').addEventListener('click',()=>addSegment());$('form').addEventListener('submit',e=>{e.preventDefault();calculate();});$('form').addEventListener('reset',()=>setTimeout(()=>{ $('segments').innerHTML='';nextId=0;addSegment({name:'Suction line',diameter:150,length:20,k:1.7,elevation:2});addSegment({name:'Discharge line',diameter:100,length:80,k:3.7,equipment:15,elevation:8});calculate();},0));
+$('addSegment').addEventListener('click',()=>addSegment());$('form').addEventListener('submit',e=>{e.preventDefault();calculate();});$('form').addEventListener('reset',()=>setTimeout(()=>{ $('segments').innerHTML='';nextId=0;addSegment({name:'Suction line',service:'suction',diameter:150,length:20,k:1.7,elevation:2});addSegment({name:'Discharge line',service:'discharge',diameter:100,length:80,k:3.7,equipment:15,elevation:8});calculate();},0));
 addSegment({name:'Suction line',diameter:150,length:20,k:1.7,elevation:2});addSegment({name:'Discharge line',diameter:100,length:80,k:3.7,equipment:15,elevation:8});calculate();
 </script></body></html>
