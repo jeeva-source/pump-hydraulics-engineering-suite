@@ -17,7 +17,14 @@ Engineering calculation workspace with V5.0 single-line hydraulics, V5.1.1 harde
 - Hydraulic power and overall required head.
 - Dynamic add/remove segment interface for static web deployment.
 
-## V5.2 — Connected pipe-network engine (development branch)\n- Branches, junctions and closed loops using a nodal piezometric-head formulation.\n- Fixed total-head boundary nodes and specified nodal withdrawal demands.\n- Darcy–Weisbach edge losses with Churchill (1977) friction and aggregate minor-loss K.\n- Signed edge flows, nodal pressure head, continuity residuals and solver diagnostics.\n- SI-only inputs; see [V5.2 calculation basis](docs/V5_2_NETWORK_SOLVER_BASIS.md).\n\n## V5.0 foundation
+## V5.2 — Connected pipe-network engine (development branch)
+- Branches, junctions and closed loops using a nodal piezometric-head formulation.
+- Fixed total-head boundary nodes and specified nodal withdrawal demands.
+- Darcy–Weisbach edge losses with Churchill (1977) friction and aggregate minor-loss K.
+- Signed edge flows, nodal pressure head, continuity residuals and solver diagnostics.
+- SI-only inputs; see [V5.2 calculation basis](docs/V5_2_NETWORK_SOLVER_BASIS.md).
+
+## V5.0 foundation
 - SI-internal unit conversion and input validation.
 - Velocity, Reynolds number, Churchill (1977) Darcy friction factor.
 - Darcy-Weisbach major losses, minor losses, static head, TDH and hydraulic power.
@@ -29,7 +36,7 @@ Requirements: Node.js 20+.
 npm test
 ```
 
-The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the V5.2 network engine is `src/network-v5-2.js` with browser bundle `app/network-v5-2.js`. The current static UI is `app/index.html`; the V5.2 network UI is not yet integrated.
+The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the V5.2 network engine is `src/network-v5-2.js` with browser bundle `app/network-v5-2.js`. The current static multi-segment UI is `app/index.html`; the V5.2 network UI is `app/network.html` and is linked from the main calculator.
 
 ## Vercel deployment
 Import this repository into Vercel. Select Framework Preset **Other**, leave the build command blank, and set Output Directory to `app`.
