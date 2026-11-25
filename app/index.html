@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101b2b">
+<title>Pump Hydraulics Engineering Suite | V5.0</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1422;--panel:#121f31;--panel2:#17273b;--line:#263950;--text:#e8eef6;--muted:#9cafc4;--accent:#4da3ff;--good:#46c89a;--warn:#f0b75b;--bad:#ff7777}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 75% 0%,#1b3450 0,transparent 34%),var(--bg);color:var(--text);font:14px/1.5 Inter,Segoe UI,Arial,sans-serif}
+header{padding:24px clamp(18px,4vw,56px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.brand{display:flex;gap:14px;align-items:center}.mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#246bb5,#43b5c5);display:grid;place-items:center;font-weight:800;font-size:20px}.eyebrow{color:#7fbaff;text-transform:uppercase;letter-spacing:.14em;font-size:10px;font-weight:700}.brand h1{font-size:19px;margin:2px 0 0}.version{border:1px solid #315273;border-radius:20px;padding:6px 12px;color:#a9d3ff;font-size:12px}
+main{max-width:1440px;margin:auto;padding:28px clamp(16px,4vw,56px) 60px}.intro{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:22px}.intro h2{font-size:26px;margin:4px 0}.intro p{color:var(--muted);max-width:720px;margin:0}.layout{display:grid;grid-template-columns:minmax(320px, .95fr) minmax(420px,1.25fr);gap:18px;align-items:start}
+.panel{background:linear-gradient(180deg,rgba(23,39,59,.98),rgba(16,29,45,.98));border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 16px 40px #0002}.panel h3{margin:0 0 4px;font-size:16px}.sub{color:var(--muted);font-size:12px;margin:0 0 18px}
+.section{font-size:11px;color:#8ebce9;text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin:20px 0 10px}.section:first-of-type{margin-top:0}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field label{display:block;color:#b9c8d8;font-size:12px;margin-bottom:6px}.control{display:flex;min-width:0;background:#0c1827;border:1px solid #2a4058;border-radius:9px;overflow:hidden}.control input,.control select{width:100%;min-width:0;background:transparent;color:var(--text);border:0;padding:10px 11px;outline:none;font:inherit}.control:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px #4da3ff22}.control select{max-width:94px;color:#a9c8e5;border-left:1px solid #2a4058;font-size:12px}.control option{background:#122033}.field small{display:block;color:#71869d;font-size:10px;margin-top:4px}
+.actions{display:flex;gap:10px;margin-top:20px}.btn{border:1px solid #315c82;border-radius:9px;padding:11px 16px;font-weight:700;cursor:pointer}.primary{background:linear-gradient(135deg,#2477c8,#2995b6);color:white;flex:1}.secondary{background:#1a2b40;color:#c7d7e8}.btn:hover{filter:brightness(1.12)}
+.results{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.metric{padding:14px;background:#0d1a2a;border:1px solid #243950;border-radius:12px;min-width:0}.metric span{display:block;color:var(--muted);font-size:11px}.metric strong{display:block;font-size:21px;letter-spacing:-.03em;margin-top:4px;overflow-wrap:anywhere}.metric em{font-style:normal;color:#8ca5bd;font-size:10px}
+.resulthead{display:flex;justify-content:space-between;gap:14px;align-items:center}.status{font-size:11px;padding:5px 9px;border-radius:20px;background:#173b36;color:#77e0bb}.status.warn{background:#49391e;color:#ffd18a}.details{margin-top:18px;border:1px solid var(--line);border-radius:12px;overflow:hidden}.details h4{margin:0;padding:12px 14px;background:#14253a;font-size:12px}.details table{width:100%;border-collapse:collapse;font-size:12px}.details td{padding:9px 14px;border-top:1px solid #23364b}.details td:last-child{text-align:right;color:#c9d9e9;font-variant-numeric:tabular-nums}
+.notice{margin-top:14px;padding:12px 14px;border:1px solid #66502d;background:#332a1c;border-radius:10px;color:#f4d39b;font-size:12px}.notice ul{margin:6px 0 0;padding-left:18px}.hidden{display:none}.foot{margin-top:22px;color:#7f94aa;font-size:11px;max-width:1000px}.error{margin-top:12px;color:#ff9999;font-size:12px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.intro{display:block}.intro h2{font-size:22px}}@media(max-width:520px){.fields{grid-template-columns:1fr}.results{grid-template-columns:1fr 1fr}.panel{padding:15px}header{padding:18px}.intro h2{font-size:20px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="mark">PH</div><div><div class="eyebrow">Engineering calculation workspace</div><h1>Pump Hydraulics Engineering Suite</h1></div></div><div class="version">V5.0 · Calculation Engine</div></header>
+<main>
+<div class="intro"><div><div class="eyebrow">Hydraulic module / 01</div><h2>Single-line hydraulic assessment</h2><p>Calculate flow velocity, Reynolds number, Darcy friction losses, minor losses and total dynamic head using an SI-internal calculation engine.</p></div></div>
+<div class="layout">
+<section class="panel">
+<h3>Design basis</h3><p class="sub">Enter operating data. Unit selections are explicit; calculations are converted internally to SI.</p>
+<form id="calcForm">
+<div class="section">Flow and pipe geometry</div>
+<div class="fields">
+<div class="field"><label for="flow">Volumetric flow</label><div class="control"><input id="flow" type="number" step="any" min="0" value="50" required><select id="flowUnit"><option>m3/h</option><option>L/s</option><option>m3/s</option><option>US gpm</option></select></div></div>
+<div class="field"><label for="diameter">Pipe internal diameter</label><div class="control"><input id="diameter" type="number" step="any" min="0" value="100" required><select id="diameterUnit"><option>mm</option><option>m</option><option>in</option><option>ft</option></select></div><small>Use actual internal diameter, not nominal pipe size.</small></div>
+<div class="field"><label for="length">Straight pipe length</label><div class="control"><input id="length" type="number" step="any" min="0" value="100" required><select id="lengthUnit"><option>m</option><option>mm</option><option>ft</option><option>in</option></select></div></div>
+<div class="field"><label for="roughness">Absolute roughness</label><div class="control"><input id="roughness" type="number" step="any" min="0" value="0.045" required><select id="roughnessUnit"><option>mm</option><option>micron</option><option>m</option><option>in</option></select></div></div>
+</div>
+<div class="section">Fluid properties</div>
+<div class="fields">
+<div class="field"><label for="density">Fluid density</label><div class="control"><input id="density" type="number" step="any" min="0" value="998" required><select id="densityUnit"><option>kg/m3</option><option>g/cm3</option></select></div></div>
+<div class="field"><label for="viscosity">Dynamic viscosity</label><div class="control"><input id="viscosity" type="number" step="any" min="0" value="1.002" required><select id="viscosityUnit"><option>cP</option><option>mPa.s</option><option>Pa.s</option></select></div></div>
+</div>
+<div class="section">System losses and elevation</div>
+<div class="fields">
+<div class="field"><label for="minorK">Total minor-loss coefficient, ΣK</label><div class="control"><input id="minorK" type="number" step="any" min="0" value="3.7" required></div><small>Enter the sum of fitting/valve K values for this line.</small></div>
+<div class="field"><label for="staticHead">Static elevation head (signed)</label><div class="control"><input id="staticHead" type="number" step="any" value="12" required><select id="staticHeadUnit"><option>m</option><option>ft</option><option>mm</option></select></div><small>Negative value represents a net elevation decrease.</small></div>
+</div>
+<div class="actions"><button class="btn primary" type="submit">Calculate hydraulics</button><button class="btn secondary" type="reset">Reset</button></div><div id="error" class="error" role="alert"></div>
+</form>
+</section>
+<section class="panel">
+<div class="resulthead"><div><h3>Calculation results</h3><p class="sub">SI output · Darcy–Weisbach / Churchill (1977)</p></div><span id="regime" class="status">Ready</span></div>
+<div class="results">
+<div class="metric"><span>Velocity</span><strong id="velocity">—</strong><em>m/s</em></div>
+<div class="metric"><span>Reynolds number</span><strong id="reynolds">—</strong><em>dimensionless</em></div>
+<div class="metric"><span>Darcy friction factor</span><strong id="friction">—</strong><em>dimensionless</em></div>
+<div class="metric"><span>Major loss</span><strong id="major">—</strong><em>m liquid</em></div>
+<div class="metric"><span>Minor loss</span><strong id="minor">—</strong><em>m liquid</em></div>
+<div class="metric"><span>Total dynamic head</span><strong id="tdh">—</strong><em>m liquid</em></div>
+</div>
+<div class="details"><h4>Detailed calculation output</h4><table><tbody>
+<tr><td>Flow rate</td><td id="qout">—</td></tr><tr><td>Pipe cross-sectional area</td><td id="area">—</td></tr><tr><td>Relative roughness</td><td id="rr">—</td></tr><tr><td>Total friction + minor loss</td><td id="loss">—</td></tr><tr><td>Dynamic pressure drop</td><td id="dp">—</td></tr><tr><td>Hydraulic power</td><td id="power">—</td></tr>
+</tbody></table></div>
+<div id="warning" class="notice hidden"></div>
+<p class="foot">Preliminary calculation aid only. This module is a constant-diameter, single-line liquid model. It is not a pump selection approval, code-compliance audit or substitute for independent engineering verification.</p>
+</section>
+</div>
+</main>
+<script src="../src/hydraulics-v5.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const fmt=(n,d=3)=>Number.isFinite(n)?n.toLocaleString(undefined,{maximumFractionDigits:d}):'—';
+function calculate(){
+  $('error').textContent='';
+  try{
+    const result=window.PumpHydraulicsV5.calculateLine({
+      flow:$('flow').value,flowUnit:$('flowUnit').value,
+      diameter:$('diameter').value,diameterUnit:$('diameterUnit').value,
+      length:$('length').value,lengthUnit:$('lengthUnit').value,
+      roughness:$('roughness').value,roughnessUnit:$('roughnessUnit').value,
+      density:$('density').value,densityUnit:$('densityUnit').value,
+      viscosity:$('viscosity').value,viscosityUnit:$('viscosityUnit').value,
+      minorLossK:$('minorK').value,staticHead:$('staticHead').value,staticHeadUnit:$('staticHeadUnit').value
+    });
+    $('velocity').textContent=fmt(result.velocity_m_s,4);
+    $('reynolds').textContent=fmt(result.reynolds,0);
+    $('friction').textContent=result.darcy_friction_factor===null?'—':fmt(result.darcy_friction_factor,5);
+    $('major').textContent=fmt(result.major_loss_head_m,3);
+    $('minor').textContent=fmt(result.minor_loss_head_m,3);
+    $('tdh').textContent=fmt(result.total_dynamic_head_m,3);
+    $('qout').textContent=fmt(result.flow_m3_s*3600,4)+' m³/h';
+    $('area').textContent=fmt(result.area_m2,6)+' m²';
+    $('rr').textContent=fmt(result.relative_roughness,7);
+    $('loss').textContent=fmt(result.total_friction_and_minor_loss_m,3)+' m';
+    $('dp').textContent=fmt(result.dynamic_pressure_drop_Pa/1000,3)+' kPa';
+    $('power').textContent=fmt(result.hydraulic_power_W/1000,3)+' kW';
+    $('regime').textContent=result.regime;
+    $('regime').className='status'+(result.warnings.length?' warn':'');
+    const w=$('warning');
+    if(result.warnings.length){w.classList.remove('hidden');w.innerHTML='<strong>Engineering review required</strong><ul>'+result.warnings.map(x=>'<li>'+x+'</li>').join('')+'</ul>';}
+    else {w.classList.add('hidden');w.textContent='';}
+  }catch(err){$('error').textContent=err.message;}
+}
+$('calcForm').addEventListener('submit',e=>{e.preventDefault();calculate();});
+$('calcForm').addEventListener('reset',()=>setTimeout(calculate,0));
+calculate();
+</script>
+</body></html>
