@@ -86,6 +86,14 @@ function calculateNetwork(input) {
     return { id: e.id, from: e.from, to: e.to, length_m: length, diameter_m: diameter, roughness_m: roughness, K };
   });
   const unknown = nodes.filter(n => n.fixedTotalHead_m === null);
+  if (unknown.length === 0) throw new RangeError('At least one non-boundary node is required');
+  const adjacency = new Map(nodes.map(n => [n.id, []]));
+  for (const e of edges) { adjacency.get(e.from).push(e.to); adjacency.get(e.to).push(e.from); }
+  const reached = new Set(nodes.filter(n => n.fixedTotalHead_m !== null).map(n => n.id));
+  const queue = [...reached];
+  while (queue.length) for (const next of adjacency.get(queue.shift())) if (!reached.has(next)) { reached.add(next); queue.push(next); }
+  const disconnected = nodes.filter(n => !reached.has(n.id)).map(n => n.id);
+  if (disconnected.length) throw new RangeError('Nodes are disconnected from all fixed-head boundaries: ' + disconnected.join(', '));
   const head = new Map(nodes.map(n => [n.id, n.fixedTotalHead_m === null ? (Math.max(...nodes.filter(x => x.fixedTotalHead_m !== null).map(x => x.fixedTotalHead_m)) - 5) : n.fixedTotalHead_m]));
   const edgeFlows = () => edges.map(e => ({ edge: e, q: flowForHead(head.get(e.from) - head.get(e.to), e, rho, mu) }));
   function residuals() {
