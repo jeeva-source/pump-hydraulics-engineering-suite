@@ -167,7 +167,7 @@ function calculateMultiSegment(input) {
     total_pressure_drop_kPa: cumulativePressureDropPa / 1000,\n    required_pump_pressure_difference_Pa: totalRequiredHead * rho * G,\n    required_pump_pressure_difference_kPa: totalRequiredHead * rho * G / 1000,
     hydraulic_power_W: rho * G * Q * totalRequiredHead,
     inlet_pressure_Pa: inletPressurePa, specified_outlet_pressure_Pa: outletPressurePa,
-    calculated_outlet_pressure_Pa: inletPressurePa === null ? null : inletPressurePa - cumulativePressureDropPa,
+    outlet_pressure_Pa: inletPressurePa === null ? null : inletPressurePa - cumulativePressureDropPa,\n    calculated_outlet_pressure_Pa: inletPressurePa === null ? null : inletPressurePa - cumulativePressureDropPa,
     vapour_pressure_Pa: vapourPressurePa, warnings,
     assumptions: [
       'Steady-state, incompressible, single-phase Newtonian liquid.',
