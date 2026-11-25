@@ -43,7 +43,6 @@ function validateCurve(raw) {
   });
   for (let i = 1; i < points.length; i++) {
     if (!(points[i].flow_m3_s > points[i - 1].flow_m3_s)) throw new RangeError('Pump curve flow values must be strictly increasing');
-    if (points[i].head_m > points[i - 1].head_m + 1e-9) throw new RangeError('Pump head curve must be non-increasing with increasing flow');
   }
   for (const field of ['efficiency_pct', 'npshr_m', 'shaft_power_kW']) {
     const count = points.filter(p => p[field] !== undefined).length;
@@ -92,10 +91,12 @@ function calculatePumpOperatingPoint(input) {
   const npshr = interpolate(points, q, 'npshr_m');
   const vendorPower = interpolate(points, q, 'shaft_power_kW');
   const hydraulicPower_kW = rho * g * q * h / 1000;
-  const shaftPower_kW = efficiency === null ? vendorPower : hydraulicPower_kW / (efficiency / 100);
+  const estimatedShaftPower_kW = efficiency === null ? null : hydraulicPower_kW / (efficiency / 100);
   const motorEfficiency = input.motorEfficiency_pct === undefined ? null : finite(input.motorEfficiency_pct, 'motorEfficiency_pct');
   if (motorEfficiency !== null && !(motorEfficiency > 0 && motorEfficiency <= 100)) throw new RangeError('Motor efficiency must be greater than 0 and at most 100 percent');
-  const motorInputPower_kW = shaftPower_kW === null ? null : motorEfficiency === null ? null : shaftPower_kW / (motorEfficiency / 100);
+  const motorPowerBasis = estimatedShaftPower_kW !== null ? 'calculated from interpolated pump efficiency' : vendorPower !== null ? 'calculated from manufacturer shaft-power curve' : null;
+  const shaftPowerForMotor_kW = estimatedShaftPower_kW !== null ? estimatedShaftPower_kW : vendorPower;
+  const motorInputPower_kW = shaftPowerForMotor_kW === null || motorEfficiency === null ? null : shaftPowerForMotor_kW / (motorEfficiency / 100);
   const bep = points.some(p => p.efficiency_pct !== undefined) ? points.reduce((best, p) => p.efficiency_pct > best.efficiency_pct ? p : best) : null;
   const npsha = input.npsha_m === undefined ? null : finite(input.npsha_m, 'npsha_m');
   if (npsha !== null && npsha < 0) throw new RangeError('NPSHa cannot be negative');
@@ -109,7 +110,7 @@ function calculatePumpOperatingPoint(input) {
   if (npsha !== null && npshr !== null && npsha < npshr) warnings.push('NPSHa is below interpolated NPSHr; inadequate NPSH margin / cavitation risk requires review.');
   if (npsha !== null && npshr === null) warnings.push('NPSHa was entered but no complete NPSHr curve was supplied; NPSH margin cannot be evaluated.');
   if (efficiency === null && vendorPower === null) warnings.push('No complete pump efficiency or shaft-power curve was supplied; shaft and motor power cannot be determined.');
-  if (vendorPower !== null && efficiency !== null && Math.abs(vendorPower - shaftPower_kW) / Math.max(vendorPower, 1e-9) > 0.1) warnings.push('Interpolated vendor shaft power differs from power estimated using hydraulic power and pump efficiency by more than 10%; reconcile manufacturer data.');
+  if (vendorPower !== null && estimatedShaftPower_kW !== null && Math.abs(vendorPower - estimatedShaftPower_kW) / Math.max(vendorPower, 1e-9) > 0.1) warnings.push('Interpolated vendor shaft power differs from power estimated using hydraulic power and pump efficiency by more than 10%; reconcile manufacturer data.');
   const systemCurve = Array.from({ length: 21 }, (_, i) => {
     const flow = maxQ * i / 20;
     return { flow_m3_s: flow, systemHead_m: systemHead(flow, system), pumpHead_m: flow < minQ ? null : interpolate(points, flow, 'head_m') };
@@ -119,11 +120,13 @@ function calculatePumpOperatingPoint(input) {
     basis: 'SI', pumpMetadata, interpolation: 'Piecewise linear manufacturer curve; system curve H = Hstatic + Ksys Q²',
     systemCurve: system, operatingPoint: {
       flow_m3_s: q, flow_m3_h: q * 3600, head_m: h, differentialPressure_kPa: rho * g * h / 1000,
-      efficiency_pct: efficiency, hydraulicPower_kW, estimatedShaftPower_kW: shaftPower_kW,
-      vendorShaftPower_kW: vendorPower, motorInputPower_kW, npsha_m: npsha, npshr_m: npshr,
+      efficiency_pct: efficiency, hydraulicPower_kW, estimatedShaftPower_kW,
+      vendorShaftPower_kW: vendorPower, motorInputPower_kW, motorInputPowerBasis: motorPowerBasis, npsha_m: npsha, npshr_m: npshr,
       npshMargin_m: npsha !== null && npshr !== null ? npsha - npshr : null
     },
     bep: bep ? { flow_m3_s: bep.flow_m3_s, flow_m3_h: bep.flow_m3_s * 3600, head_m: bep.head_m, efficiency_pct: bep.efficiency_pct } : null,
+    intersections: uniqueRoots.map(flow => ({ flow_m3_s: flow, flow_m3_h: flow * 3600, head_m: systemHead(flow, system) })),
+    selectedIntersectionPolicy: uniqueRoots.length > 1 ? 'Lowest-flow intersection shown provisionally; engineering review required.' : 'Only intersection within supplied curve range.',
     pumpCurve: points, systemCurvePoints: systemCurve, intersectionsFound: uniqueRoots.length, warnings
   };
 }
