@@ -27,7 +27,7 @@ Do not silently substitute assumed values for missing project data. Flag missing
 ### 2.2 Friction and pressure loss
 - Calculate Reynolds number using the stated hydraulic diameter and fluid properties.
 - Use the laminar Darcy friction factor f = 64/Re where applicable.
-- For turbulent flow, document the selected correlation and its valid range. The current implementation uses Swamee–Jain as an explicit approximation; do not represent it as a universal solution for every flow regime.
+- For turbulent flow, document the selected correlation and its valid range. The current V5 implementation uses the Churchill (1977) all-regime Darcy friction-factor correlation. Verify its use and sensitivity against an independent reference for the Reynolds-number and roughness range of each project.
 - Separate major pipe friction from minor fitting/equipment losses.
 - Confirm elevation and pressure terms are handled with a consistent datum and sign convention.
 - Independently benchmark representative laminar, transitional, and turbulent cases.
@@ -65,7 +65,7 @@ A reference register is not a compliance check. Confirm contractual code hierarc
 
 ## 4. Known model limitations to disclose
 
-The current calculator provides preliminary single-line / simplified pump-system calculations. Unless explicitly implemented and validated, do not claim support for:
+The current calculator provides preliminary single-line and serial multi-segment liquid calculations. V5.1.1 adds source/destination absolute-pressure boundary inputs, optional vapour-pressure screening, strict explicit-unit validation, and separate configurable suction/discharge velocity screening. It remains a series-path model, not a connected network solver. Unless explicitly implemented and validated, do not claim support for:
 
 - Full multi-branch network balancing or pressure-dependent control logic.
 - General non-Newtonian rheology or comprehensive viscosity correction.
