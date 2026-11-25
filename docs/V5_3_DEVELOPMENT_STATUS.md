@@ -26,7 +26,7 @@ V5.3 pump performance and operating-point module is implemented on branch `v5.3-
 - Interactive browser calculation workflow has not been automated end-to-end.
 
 ## Preview
-`https://pump-hydraulics-engineering-suite-ktrkue1rc-jee-8996.vercel.app/pump-performance.html`
+`https://pump-hydraulics-engineering-suite-git-v53-pump-7bdd3d-jee-8996.vercel.app/pump-performance.html`
 
 ## Pull request
 `https://github.com/jeeva-source/pump-hydraulics-engineering-suite/pull/3`
