@@ -1,7 +1,7 @@
 {
   "name": "pump-hydraulics-engineering-suite",
-  "version": "5.1.1",
-  "description": "Pump hydraulics engineering suite with hardened single-line and multi-segment SI calculation engines",
+  "version": "5.3.0",
+  "description": "Pump hydraulics suite with multi-segment, pipe-network and pump operating-point calculation engines",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -10,7 +10,8 @@
     "test:v5": "node tests/hydraulics-v5.test.js",
     "test:v5.1": "node tests/hydraulics-v5-1.test.js",
     "test:v5.2": "node tests/network-v5-2.test.js",
-    "test": "npm run test:v5 && npm run test:v5.1 && npm run test:v5.2"
+    "test": "npm run test:v5 && npm run test:v5.1 && npm run test:v5.2 && npm run test:v5.3",
+    "test:v5.3": "node tests/pump-performance-v5-3.test.js"
   },
   "devDependencies": {
     "electron": "^34.0.0",
