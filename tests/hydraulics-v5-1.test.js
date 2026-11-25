@@ -84,7 +84,7 @@ assert.ok(downhill.total_required_head_m < 0);
 assert.ok(downhill.warnings.some(w => /negative/.test(w)));
 
 // Zero-flow case: flow-dependent losses vanish; static elevation remains.
-const noFlow = calculateMultiSegment({ ...base, flow: 0, segments: base.segments.map(s => ({ ...s, equipmentPressureDrop: 0 })) });
+const noFlow = calculateMultiSegment({ ...base, flow: 0, segments: base.segments.map(s => ({ ...s, equipmentPressureDrop: 0, equipmentPressureDropUnit: 'kPa' })) });
 assert.equal(noFlow.total_major_loss_head_m, 0);
 assert.equal(noFlow.total_minor_loss_head_m, 0);
 assert.equal(noFlow.hydraulic_power_W, 0);
