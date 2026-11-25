@@ -18,7 +18,7 @@ At each non-boundary node, continuity is enforced:
 \sum Q_{in}-\sum Q_{out}-Q_{demand}=0
 \]
 
-Unknown nodal total heads are solved using a damped Newton method with a finite-difference Jacobian. The result reports iteration count and maximum continuity residual.
+Unknown nodal total heads are solved using a damped Newton method with a finite-difference Jacobian. The result reports iteration count and maximum continuity residual over unknown (non-boundary) nodes. Fixed-head boundary nodes exchange whatever source/sink flow is required and are reported with a null continuity residual; their boundary supply is reported separately.
 
 ## Input basis
 - Density: kg/m³
