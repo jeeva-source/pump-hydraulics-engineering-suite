@@ -21,8 +21,15 @@ const close = (actual, expected, tolerance, label) => assert.ok(Math.abs(actual 
 
 // Correlation reference checks: exact laminar solution and independent turbulent benchmark.
 close(V5.churchillDarcy(500, 0.0005), 64 / 500, 1e-12, 'Laminar Darcy factor');
-close(V5.churchillDarcy(100000, 0.0005), 0.02042, 0.00002, 'Turbulent Churchill benchmark');\nconst colebrookReference = 0.02033;\nassert.ok(Math.abs(V5.churchillDarcy(100000, 0.0005) - colebrookReference) / colebrookReference < 0.02, 'Churchill must remain within 2% of the independent Colebrook-White reference');
-assert.ok(V5.churchillDarcy(2300, 0.0001) > 0, 'Transitional correlation returns finite positive value');\nconst transitionD = 0.1, transitionRho = 998, transitionMu = 0.001002, transitionRe = 2300;\nconst transitionQ = transitionRe * transitionMu * (Math.PI * transitionD ** 2 / 4) / (transitionRho * transitionD);\nconst transition = calculateMultiSegment({ flow: transitionQ * 3600, flowUnit: 'm3/h', density: transitionRho, densityUnit: 'kg/m3', viscosity: transitionMu, viscosityUnit: 'Pa.s', inletDiameter: 100, inletDiameterUnit: 'mm', segments: [{ diameter: 100, diameterUnit: 'mm', length: 10, lengthUnit: 'm', roughness: 0.045, roughnessUnit: 'mm' }] });\nassert.equal(transition.segments[0].regime, 'Transitional');\nassert.ok(transition.warnings.some(w => /transitional Reynolds-number/.test(w)));
+close(V5.churchillDarcy(100000, 0.0005), 0.02042, 0.00002, 'Turbulent Churchill benchmark');
+const colebrookReference = 0.02033;
+assert.ok(Math.abs(V5.churchillDarcy(100000, 0.0005) - colebrookReference) / colebrookReference < 0.02, 'Churchill must remain within 2% of the independent Colebrook-White reference');
+assert.ok(V5.churchillDarcy(2300, 0.0001) > 0, 'Transitional correlation returns finite positive value');
+const transitionD = 0.1, transitionRho = 998, transitionMu = 0.001002, transitionRe = 2300;
+const transitionQ = transitionRe * transitionMu * (Math.PI * transitionD ** 2 / 4) / (transitionRho * transitionD);
+const transition = calculateMultiSegment({ flow: transitionQ * 3600, flowUnit: 'm3/h', density: transitionRho, densityUnit: 'kg/m3', viscosity: transitionMu, viscosityUnit: 'Pa.s', inletDiameter: 100, inletDiameterUnit: 'mm', segments: [{ diameter: 100, diameterUnit: 'mm', length: 10, lengthUnit: 'm', roughness: 0.045, roughnessUnit: 'mm' }] });
+assert.equal(transition.segments[0].regime, 'Transitional');
+assert.ok(transition.warnings.some(w => /transitional Reynolds-number/.test(w)));
 
 const r = calculateMultiSegment(base);
 assert.equal(r.segment_count, 2);
@@ -30,7 +37,9 @@ assert.ok(r.segments[0].velocity_m_s > 0);
 assert.ok(r.segments[1].velocity_m_s > r.segments[0].velocity_m_s);
 assert.ok(r.total_major_loss_head_m > 0 && r.total_minor_loss_head_m > 0 && r.total_equipment_loss_head_m > 0);
 close(r.total_elevation_change_m, 10, 1e-12, 'Elevation sum');
-assert.ok(r.total_required_head_m > 10 && r.hydraulic_power_W > 0);\nclose(r.total_required_head_m, 14.795, 0.002, 'Two-segment worked example head');\nclose(r.hydraulic_power_W / 1000, 2.0111, 0.002, 'Two-segment worked example hydraulic power');
+assert.ok(r.total_required_head_m > 10 && r.hydraulic_power_W > 0);
+close(r.total_required_head_m, 14.795, 0.002, 'Two-segment worked example head');
+close(r.hydraulic_power_W / 1000, 2.0111, 0.002, 'Two-segment worked example hydraulic power');
 assert.ok(r.outlet_pressure_Pa < r.inlet_pressure_Pa);
 assert.ok(r.warnings.some(w => /pressure boundary is incomplete/.test(w)));
 assert.ok(Number.isFinite(r.required_pump_pressure_difference_kPa));
