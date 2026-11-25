@@ -38,7 +38,7 @@ npm test
 
 The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the V5.2 network engine is `src/network-v5-2.js` with browser bundle `app/network-v5-2.js`. The current static multi-segment UI is `app/index.html`; the V5.2 network UI is `app/network.html`; the V5.3 pump performance UI is `app/pump-performance.html`.
 
-## Vercel deployment
+## V5.3 development status\nSee [V5.3 development status and verification](docs/V5_3_DEVELOPMENT_STATUS.md).\n\n## Vercel deployment
 Import this repository into Vercel. Select Framework Preset **Other**, leave the build command blank, and set Output Directory to `app`.
 
 ## Release status
