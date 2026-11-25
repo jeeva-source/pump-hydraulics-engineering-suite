@@ -32,4 +32,15 @@ assert.throws(()=>calculatePumpOperatingPoint({...input,npsha_m:-1}),/NPSHa cann
 assert.throws(()=>calculatePumpOperatingPoint({...input,pumpMetadata:{ratedSpeed_rpm:0}}),/Rated speed must be greater than zero/);
 const noPower=calculatePumpOperatingPoint({density_kg_m3:1000,systemCurve:input.systemCurve,pumpCurve:input.pumpCurve.map(({flow_m3_s,head_m})=>({flow_m3_s,head_m}))});
 assert.equal(noPower.operatingPoint.estimatedShaftPower_kW,null);
+const vendorOnly=calculatePumpOperatingPoint({density_kg_m3:998,motorEfficiency_pct:90,systemCurve:input.systemCurve,pumpCurve:input.pumpCurve.map(({flow_m3_s,head_m,shaft_power_kW})=>({flow_m3_s,head_m,shaft_power_kW}))});
+assert.equal(vendorOnly.operatingPoint.estimatedShaftPower_kW,null);
+assert.ok(vendorOnly.operatingPoint.vendorShaftPower_kW>0);
+assert.ok(Math.abs(vendorOnly.operatingPoint.motorInputPower_kW-vendorOnly.operatingPoint.vendorShaftPower_kW/0.9)<1e-12);
+assert.equal(vendorOnly.operatingPoint.motorInputPowerBasis,'calculated from manufacturer shaft-power curve');
+// A non-monotonic manufacturer curve can create multiple system intersections.
+const multi=calculatePumpOperatingPoint({density_kg_m3:998,systemCurve:{staticHead_m:10,designFlow_m3_s:0.03,designHead_m:20},pumpCurve:[{flow_m3_s:0.01,head_m:30},{flow_m3_s:0.02,head_m:10},{flow_m3_s:0.03,head_m:35},{flow_m3_s:0.04,head_m:15},{flow_m3_s:0.05,head_m:5}]});
+assert.equal(multi.intersectionsFound,3);
+assert.equal(multi.intersections.length,3);
+assert.match(multi.selectedIntersectionPolicy,/Lowest-flow/);
+assert.ok(multi.warnings.some(w=>w.includes('Multiple pump/system intersections')));
 console.log('V5.3 pump performance tests passed');
