@@ -110,4 +110,6 @@ function calculateLine(input) {
   };
 }
 
-const api = { G, UNIT, convert, churchillDarcy, calculateLine };\nif (typeof module !== 'undefined' && module.exports) module.exports = api;\nelse if (typeof window !== 'undefined') window.PumpHydraulicsV5 = api;
+const api = { G, UNIT, convert, churchillDarcy, calculateLine };
+if (typeof module !== 'undefined' && module.exports) module.exports = api;
+else if (typeof window !== 'undefined') window.PumpHydraulicsV5 = api;
