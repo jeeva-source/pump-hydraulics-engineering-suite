@@ -23,7 +23,7 @@ app.whenReady().then(() => {
   const template = [
     { label: 'File', submenu: [{ role: 'reload' }, { role: 'toggleDevTools' }, { type: 'separator' }, { role: 'quit' }] },
     { label: 'View', submenu: [{ role: 'resetZoom' }, { role: 'zoomIn' }, { role: 'zoomOut' }, { type: 'separator' }, { role: 'togglefullscreen' }] },
-    { label: 'Help', submenu: [{ label: 'About', click: () => require('electron').dialog.showMessageBox({ message: 'Pump Hydraulics Engineering Suite V5.1.1', detail: 'Single-line and multi-segment hydraulic calculation workspace. V5.1.1 includes explicit input validation and pressure-boundary screening. Verify all results against licensed standards, project specifications and vendor data.' }) }] }
+    { label: 'Help', submenu: [{ label: 'About', click: () => require('electron').dialog.showMessageBox({ message: 'Pump Hydraulics Engineering Suite V5.3.0', detail: 'Multi-segment piping, connected network and pump/system operating-point calculation workspace. V5.3 adds manufacturer pump-curve interpolation and BEP, power and NPSH screening. Verify all results against manufacturer data, licensed standards and project specifications.' }) }] }
   ];
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
