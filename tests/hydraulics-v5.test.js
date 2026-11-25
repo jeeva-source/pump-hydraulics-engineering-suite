@@ -41,6 +41,6 @@ assert.throws(() => calculateLine({ ...base, diameter: 0 }), /diameter/);
 assert.throws(() => calculateLine({ ...base, flow: -1 }), /negative/);
 assert.throws(() => calculateLine({ ...base, viscosity: 0 }), /viscosity/);
 assert.throws(() => calculateLine({ ...base, minorLossK: [-1] }), /negative/);
-assert.throws(() => convert(1, 'length', 'yard', 'm'), /Unsupported/);
+assert.throws(() => convert(1, 'length', 'yard', 'm'), /Unsupported/);\nassert.throws(() => calculateLine({ ...base, flow: '' }), /blank is not zero/);\nassert.throws(() => calculateLine({ ...base, flow: '0x10' }), /decimal number/);\nassert.throws(() => calculateLine({ ...base, densityUnit: undefined }), /Unsupported density unit/);
 
 console.log('V5.0 hydraulic engine: all regression assertions passed.');
