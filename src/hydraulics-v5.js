@@ -61,7 +61,7 @@ function calculateLine(input) {
 
   if (Q < 0) throw new RangeError('Flow cannot be negative');
   if (!(D > 0)) throw new RangeError('Pipe internal diameter must be greater than zero');
-  if (L < 0 || eps < 0 || staticHead < 0) throw new RangeError('Length, roughness and static head cannot be negative');
+  if (L < 0 || eps < 0) throw new RangeError('Pipe length and roughness cannot be negative');
   if (!(rho > 0)) throw new RangeError('Density must be greater than zero');
   if (!(mu > 0)) throw new RangeError('Dynamic viscosity must be greater than zero');
   if (eps >= D) throw new RangeError('Absolute roughness must be smaller than pipe internal diameter');
