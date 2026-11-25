@@ -9,7 +9,8 @@
     "dist": "electron-builder",
     "test:v5": "node tests/hydraulics-v5.test.js",
     "test:v5.1": "node tests/hydraulics-v5-1.test.js",
-    "test": "npm run test:v5 && npm run test:v5.1"
+    "test:v5.2": "node tests/network-v5-2.test.js",
+    "test": "npm run test:v5 && npm run test:v5.1 && npm run test:v5.2"
   },
   "devDependencies": {
     "electron": "^34.0.0",
