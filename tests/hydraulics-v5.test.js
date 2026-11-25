@@ -43,4 +43,4 @@ assert.throws(() => calculateLine({ ...base, viscosity: 0 }), /viscosity/);
 assert.throws(() => calculateLine({ ...base, minorLossK: [-1] }), /negative/);
 assert.throws(() => convert(1, 'length', 'yard', 'm'), /Unsupported/);
 
-console.log('V5.0 hydraulic engine: 16 checks passed.');
+console.log('V5.0 hydraulic engine: all regression assertions passed.');
