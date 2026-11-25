@@ -26,3 +26,12 @@
 - Reject fixed equipment pressure drop at zero flow rather than silently applying a flow-independent loss.
 - Synchronized tested source engines with browser bundles and strengthened regression tests.
 - Corrected engineering notes, roadmap, desktop About version and removed the broken test:curve command.
+
+## V5.2.0 — Connected pipe-network solver (development)
+
+- Added a nodal piezometric-head solver for branched and looped steady liquid networks.
+- Added fixed-head boundary exchanges, nodal withdrawals, signed edge flow, Darcy–Weisbach losses and Churchill friction.
+- Added standalone JSON-driven browser UI and solver diagnostics.
+- Corrected continuity reporting to exclude fixed-head boundary exchange from internal-node residuals; boundary supply/absorption is reported separately.
+- Added an independent Colebrook–White single-pipe benchmark alongside network continuity tests.
+- Development release; do not treat as production-ready until CI and engineering review pass.
