@@ -20,7 +20,7 @@ Darcy friction factor uses the V5.0 Churchill (1977) all-regime correlation. For
 ## Boundary pressure and overall outputs
 When both source and destination absolute pressures are supplied, the required pump head includes the boundary pressure contribution (P_destination − P_source)/(ρg). A destination pressure alone is not sufficient; source absolute pressure is mandatory. The reported segment pressure profile is the pressure profile from the entered inlet pressure after the modeled segment pressure changes; it does not assume a pump location within the path. The pipe-path pressure drop remains separately reported.
 
-The total required head is the sum of segment required heads plus the pressure-boundary contribution. The reported pressure drop includes friction, fittings, equipment, elevation and net velocity-head change. Hydraulic power is ρgQH_total. If inlet pressure is supplied, the app reports a calculated pressure profile by subtracting cumulative segment pressure drop.
+The total required head is the sum of segment required heads plus the pressure-boundary contribution. The pipe-path pressure drop includes friction, fittings, equipment, elevation and net velocity-head change. The required pump pressure difference additionally includes the source-to-destination absolute-pressure boundary contribution when both are provided. Hydraulic power is ρgQH_total. If inlet pressure is supplied, the app reports a calculated pressure profile by subtracting cumulative segment pressure drop.
 
 ## Assumptions and limitations
 - Steady-state, incompressible, single-phase Newtonian liquid.
