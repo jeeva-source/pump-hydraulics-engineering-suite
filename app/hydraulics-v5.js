@@ -16,6 +16,8 @@ const UNIT = {
 };
 
 function finite(value, name) {
+  if (value === null || value === undefined || (typeof value === 'string' && value.trim() === '')) throw new TypeError(name + ' is required; blank is not zero');
+  if (typeof value === 'string' && !/^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/.test(value.trim())) throw new TypeError(name + ' must be a decimal number');
   const n = Number(value);
   if (!Number.isFinite(n)) throw new TypeError(name + ' must be a finite number');
   return n;
@@ -54,7 +56,7 @@ function calculateLine(input) {
   const D = toSI(input.diameter, 'length', input.diameterUnit, 'diameter');
   const L = toSI(input.length, 'length', input.lengthUnit, 'length');
   const eps = toSI(input.roughness, 'roughness', input.roughnessUnit, 'roughness');
-  const rho = toSI(input.density, 'density', input.densityUnit || 'kg/m3', 'density');
+  const rho = toSI(input.density, 'density', input.densityUnit, 'density');
   const mu = toSI(input.viscosity, 'viscosity', input.viscosityUnit, 'viscosity');
   const staticHead = input.staticHead === undefined ? 0 :
     toSI(input.staticHead, 'length', input.staticHeadUnit || 'm', 'staticHead');

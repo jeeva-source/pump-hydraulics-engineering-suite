@@ -15,3 +15,14 @@
 - Added velocity, Reynolds number, major/minor losses, static head, total head, pressure drop and hydraulic power.
 - Added input validation and transitional-flow warning.
 - Added automated regression checks and calculation-basis documentation.
+
+## V5.1.1 — Engineering verification and input hardening
+
+- Added source/destination absolute-pressure boundary contribution to required pump head.
+- Added optional liquid vapour-pressure screening and warnings for non-positive calculated absolute pressure.
+- Reject blank numeric values, non-decimal numeric strings, missing dimensional units and non-positive absolute boundary pressures.
+- Added explicit warning when inlet reference diameter is omitted.
+- Added separate configurable suction/discharge velocity screening thresholds and negative-head/power warnings.
+- Reject fixed equipment pressure drop at zero flow rather than silently applying a flow-independent loss.
+- Synchronized tested source engines with browser bundles and strengthened regression tests.
+- Corrected engineering notes, roadmap, desktop About version and removed the broken test:curve command.
