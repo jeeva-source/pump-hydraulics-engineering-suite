@@ -77,7 +77,7 @@ function calculateMultiSegment(input) {
 
   let previousVelocityHead = inletDiameter === null ? null : Math.pow(Q / (Math.PI * inletDiameter ** 2 / 4), 2) / (2 * G);
   let cumulativeHead = 0, cumulativePressureDropPa = 0;
-  const warnings = [];\n  if (inletPressurePa !== null && vapourPressurePa !== null && inletPressurePa < vapourPressurePa) warnings.push('Source absolute pressure is below the entered liquid vapour pressure; single-phase inlet condition is invalid.');\n  if (inletDiameter === null) warnings.push('Inlet reference diameter omitted: first-segment velocity-head change is assumed zero. Supply an inlet diameter or confirm the source boundary is at rest / same velocity head.');
+  const warnings = [];\n  if (inletPressurePa !== null && vapourPressurePa !== null && inletPressurePa < vapourPressurePa) warnings.push('Source absolute pressure is below the entered liquid vapour pressure; single-phase inlet condition is invalid.');\n  if (inletPressurePa === null || outletPressurePa === null) warnings.push('Source/destination pressure boundary is incomplete; the pressure contribution is assumed zero (equal boundary pressures). Supply both absolute pressures for a pressurised source or destination.');\n  if (inletDiameter === null) warnings.push('Inlet reference diameter omitted: first-segment velocity-head change is assumed zero. Supply an inlet diameter or confirm the source boundary is at rest / same velocity head.');
   const results = input.segments.map((segment, index) => {
     if (!segment || typeof segment !== 'object' || Array.isArray(segment)) throw new TypeError('Segment ' + (index + 1) + ' must be an object');
     const label = segment.name || ('Segment ' + (index + 1));
@@ -164,7 +164,7 @@ function calculateMultiSegment(input) {
     pressure_boundary_head_m: pressureBoundaryHead,
     total_required_head_m: totalRequiredHead,
     total_pressure_drop_Pa: cumulativePressureDropPa,
-    total_pressure_drop_kPa: cumulativePressureDropPa / 1000,
+    total_pressure_drop_kPa: cumulativePressureDropPa / 1000,\n    required_pump_pressure_difference_Pa: totalRequiredHead * rho * G,\n    required_pump_pressure_difference_kPa: totalRequiredHead * rho * G / 1000,
     hydraulic_power_W: rho * G * Q * totalRequiredHead,
     inlet_pressure_Pa: inletPressurePa, specified_outlet_pressure_Pa: outletPressurePa,
     calculated_outlet_pressure_Pa: inletPressurePa === null ? null : inletPressurePa - cumulativePressureDropPa,
