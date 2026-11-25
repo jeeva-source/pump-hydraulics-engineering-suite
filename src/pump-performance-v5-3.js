@@ -57,6 +57,11 @@ function calculatePumpOperatingPoint(input) {
   const g = input.gravity_m_s2 === undefined ? 9.80665 : finite(input.gravity_m_s2, 'gravity_m_s2');
   if (!(rho > 0) || !(g > 0)) throw new RangeError('Density and gravity must be greater than zero');
   const points = validateCurve(input.pumpCurve);
+  const metadata = input.pumpMetadata === undefined ? {} : input.pumpMetadata;
+  if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) throw new TypeError('pumpMetadata must be an object');
+  const pumpMetadata = { manufacturer: metadata.manufacturer == null ? null : String(metadata.manufacturer).trim(), model: metadata.model == null ? null : String(metadata.model).trim(), curveRevision: metadata.curveRevision == null ? null : String(metadata.curveRevision).trim(), fluidBasis: metadata.fluidBasis == null ? null : String(metadata.fluidBasis).trim(), ratedSpeed_rpm: metadata.ratedSpeed_rpm == null || metadata.ratedSpeed_rpm === '' ? null : finite(metadata.ratedSpeed_rpm, 'pumpMetadata.ratedSpeed_rpm'), impellerDiameter_mm: metadata.impellerDiameter_mm == null || metadata.impellerDiameter_mm === '' ? null : finite(metadata.impellerDiameter_mm, 'pumpMetadata.impellerDiameter_mm') };
+  if (pumpMetadata.ratedSpeed_rpm !== null && !(pumpMetadata.ratedSpeed_rpm > 0)) throw new RangeError('Rated speed must be greater than zero');
+  if (pumpMetadata.impellerDiameter_mm !== null && !(pumpMetadata.impellerDiameter_mm > 0)) throw new RangeError('Impeller diameter must be greater than zero');
   const staticHead = finite(input.systemCurve?.staticHead_m, 'systemCurve.staticHead_m');
   const designFlow = finite(input.systemCurve?.designFlow_m3_s, 'systemCurve.designFlow_m3_s');
   const designHead = finite(input.systemCurve?.designHead_m, 'systemCurve.designHead_m');
@@ -111,7 +116,7 @@ function calculatePumpOperatingPoint(input) {
   });
   return {
     model: 'Centrifugal pump curve and quadratic system curve operating-point analysis',
-    basis: 'SI', interpolation: 'Piecewise linear manufacturer curve; system curve H = Hstatic + Ksys Q²',
+    basis: 'SI', pumpMetadata, interpolation: 'Piecewise linear manufacturer curve; system curve H = Hstatic + Ksys Q²',
     systemCurve: system, operatingPoint: {
       flow_m3_s: q, flow_m3_h: q * 3600, head_m: h, differentialPressure_kPa: rho * g * h / 1000,
       efficiency_pct: efficiency, hydraulicPower_kW, estimatedShaftPower_kW: shaftPower_kW,
