@@ -1,5 +1,5 @@
 'use strict';
-const assert = require('node:assert/strict');
+const assert = require('node:assert/strict');\nconst fs = require('node:fs');\nconst path = require('node:path');\nassert.equal(fs.readFileSync(path.join(__dirname, '../src/hydraulics-v5.js'), 'utf8'), fs.readFileSync(path.join(__dirname, '../app/hydraulics-v5.js'), 'utf8'), 'Browser V5 engine must stay synchronized with tested source');\nassert.equal(fs.readFileSync(path.join(__dirname, '../src/hydraulics-v5-1.js'), 'utf8'), fs.readFileSync(path.join(__dirname, '../app/hydraulics-v5-1.js'), 'utf8'), 'Browser V5.1 engine must stay synchronized with tested source');
 const V5 = require('../src/hydraulics-v5');
 const { calculateMultiSegment } = require('../src/hydraulics-v5-1');
 
