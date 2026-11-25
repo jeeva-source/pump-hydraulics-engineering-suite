@@ -66,8 +66,8 @@ Evolve the current calculator into a traceable pump-system engineering workspace
 2. V5.1: serial multi-segment pipe model and pressure profile.
 3. V5.1.1: input, boundary-condition, pressure/vapour screening, benchmark-test and documentation hardening.
 4. V5.2: connected network solver engine and regression tests (implemented on development branch; UI integration and independent engineering validation pending).
-5. V5.3: vendor pump curves, operating-point and operating-region checks (planned).
-6. V5.4: NPSH analysis, engineering reports, project files and case comparison (planned; not implemented).
+5. V5.3: pump curve interpolation, quadratic system curve and operating-point engine with BEP/power/NPSH screening (implemented on development branch; integration and engineering validation pending).
+6. V5.4: manufacturer operating limits, NPSH margin configuration, reports, project files and case comparison (planned; not implemented).
 7. V5.5: CI hardening, deployment verification and release documentation.
 
 ## Deferred specialist scope
