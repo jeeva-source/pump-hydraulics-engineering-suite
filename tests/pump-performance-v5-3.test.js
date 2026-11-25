@@ -14,7 +14,9 @@ const input = {
   {flow_m3_s:0.04,head_m:24,efficiency_pct:70,npshr_m:4,shaft_power_kW:13}
  ]
 };
-const r=calculatePumpOperatingPoint(input);
+const r=calculatePumpOperatingPoint({...input,pumpMetadata:{manufacturer:'Example OEM',model:'Illustrative 100-65',ratedSpeed_rpm:2950,impellerDiameter_mm:210,curveRevision:'A',fluidBasis:'Water at 20 C'}});
+assert.equal(r.pumpMetadata.manufacturer,'Example OEM');
+assert.equal(r.pumpMetadata.ratedSpeed_rpm,2950);
 assert.ok(r.operatingPoint.flow_m3_s>0.03 && r.operatingPoint.flow_m3_s<0.04);
 assert.ok(r.operatingPoint.head_m>30 && r.operatingPoint.head_m<45);
 assert.equal(r.bep.flow_m3_s,0.03);
@@ -27,6 +29,7 @@ assert.throws(()=>calculatePumpOperatingPoint({...input,pumpCurve:[...input.pump
 assert.throws(()=>calculatePumpOperatingPoint({...input,systemCurve:{staticHead_m:30,designFlow_m3_s:0.03,designHead_m:10}}),/design head > static head/);
 assert.throws(()=>calculatePumpOperatingPoint({...input,pumpCurve:input.pumpCurve.map(p=>({...p,head_m:p.head_m+100}))}),/No pump\/system intersection/);
 assert.throws(()=>calculatePumpOperatingPoint({...input,npsha_m:-1}),/NPSHa cannot be negative/);
+assert.throws(()=>calculatePumpOperatingPoint({...input,pumpMetadata:{ratedSpeed_rpm:0}}),/Rated speed must be greater than zero/);
 const noPower=calculatePumpOperatingPoint({density_kg_m3:1000,systemCurve:input.systemCurve,pumpCurve:input.pumpCurve.map(({flow_m3_s,head_m})=>({flow_m3_s,head_m}))});
 assert.equal(noPower.operatingPoint.estimatedShaftPower_kW,null);
 console.log('V5.3 pump performance tests passed');
