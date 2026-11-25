@@ -29,7 +29,7 @@ The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the st
 ## Vercel deployment
 Import this repository into Vercel. Select Framework Preset **Other**, leave the build command blank, and set Output Directory to `app`.
 
-## Engineering basis
+## Release status\nSee [V5.1.1 release status and remaining gates](docs/V5_1_1_RELEASE_STATUS.md).\n\n## Engineering basis
 See [V5.0 calculation basis](docs/V5_CALCULATION_BASIS.md) and [V5.1 multi-segment calculation basis](docs/V5_1_MULTI_SEGMENT_BASIS.md).
 
 ## Important limitations
