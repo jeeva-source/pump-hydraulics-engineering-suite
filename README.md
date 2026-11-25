@@ -8,7 +8,12 @@ Engineering calculation workspace with V5.0 single-line hydraulics and V5.1.1 ha
 - User-entered equipment pressure drops.
 - Signed elevation changes and segment velocity-head changes.
 - Segment-wise velocity, Reynolds number, Churchill Darcy friction factor, major/minor/equipment losses and pressure profile.
-- Optional source and destination absolute-pressure boundaries; boundary pressure contribution included in required head.\n- Optional liquid vapour-pressure screening and positive absolute-pressure validation.\n- Explicit units and nonblank decimal numeric inputs required by the engine.\n- Separate configurable suction and discharge velocity screening limits.\n- Omitted inlet reference diameter produces a visible velocity-head assumption warning.\n- Fixed equipment pressure drops are rejected at zero flow.
+- Optional source and destination absolute-pressure boundaries; boundary pressure contribution included in required head.
+- Optional liquid vapour-pressure screening and positive absolute-pressure validation.
+- Explicit units and nonblank decimal numeric inputs required by the engine.
+- Separate configurable suction and discharge velocity screening limits.
+- Omitted inlet reference diameter produces a visible velocity-head assumption warning.
+- Fixed equipment pressure drops are rejected at zero flow.
 - Hydraulic power and overall required head.
 - Dynamic add/remove segment interface for static web deployment.
 
@@ -29,7 +34,10 @@ The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the st
 ## Vercel deployment
 Import this repository into Vercel. Select Framework Preset **Other**, leave the build command blank, and set Output Directory to `app`.
 
-## Release status\nSee [V5.1.1 release status and remaining gates](docs/V5_1_1_RELEASE_STATUS.md).\n\n## Engineering basis
+## Release status
+See [V5.1.1 release status and remaining gates](docs/V5_1_1_RELEASE_STATUS.md).
+
+## Engineering basis
 See [V5.0 calculation basis](docs/V5_CALCULATION_BASIS.md) and [V5.1 multi-segment calculation basis](docs/V5_1_MULTI_SEGMENT_BASIS.md).
 
 ## Important limitations
