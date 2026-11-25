@@ -1,14 +1,14 @@
 # Pump Hydraulics Engineering Suite
 
-Engineering calculation workspace with V5.0 single-line hydraulics and V5.1 multi-segment pipe hydraulics.
+Engineering calculation workspace with V5.0 single-line hydraulics and V5.1.1 hardened multi-segment pipe hydraulics.
 
-## V5.1 — Multi-segment pipe hydraulics
+## V5.1.1 — Engineering verification and input hardening
 - Serial suction/discharge line made of segments with different internal diameters, lengths and roughness.
 - Segment-specific fitting/valve K totals.
 - User-entered equipment pressure drops.
 - Signed elevation changes and segment velocity-head changes.
 - Segment-wise velocity, Reynolds number, Churchill Darcy friction factor, major/minor/equipment losses and pressure profile.
-- Optional inlet pressure and inlet reference diameter.
+- Optional source and destination absolute-pressure boundaries; boundary pressure contribution included in required head.\n- Optional liquid vapour-pressure screening and positive absolute-pressure validation.\n- Explicit units and nonblank decimal numeric inputs required by the engine.\n- Separate configurable suction and discharge velocity screening limits.\n- Omitted inlet reference diameter produces a visible velocity-head assumption warning.\n- Fixed equipment pressure drops are rejected at zero flow.
 - Hydraulic power and overall required head.
 - Dynamic add/remove segment interface for static web deployment.
 
@@ -24,7 +24,7 @@ Requirements: Node.js 20+.
 npm test
 ```
 
-The V5.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the static browser bundle is `app/hydraulics-v5-1.js`. The web UI is `app/index.html`.
+The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the static browser bundle is `app/hydraulics-v5-1.js`. The web UI is `app/index.html`.
 
 ## Vercel deployment
 Import this repository into Vercel. Select Framework Preset **Other**, leave the build command blank, and set Output Directory to `app`.
