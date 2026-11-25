@@ -33,7 +33,7 @@ Unknown nodal total heads are solved using a damped Newton method with a finite-
 Node total head is treated as piezometric head (pressure head + elevation). The solver does not separately model velocity-head changes at junctions, pumps, control valves, reservoirs with momentum effects, or equipment characteristics.
 
 ## Sign convention
-Positive edge flow follows the entered `from` to `to` direction. Negative flow means the solved direction is opposite. Demands are withdrawals. Fixed-head nodes act as hydraulic boundaries.
+Positive edge flow follows the entered `from` to `to` direction. Negative flow means the solved direction is opposite. Demands are withdrawals. Fixed-head nodes act as hydraulic boundaries. Positive boundary supply means injection into the model; negative supply means absorption by the boundary.
 
 ## Limitations and engineering cautions
 This is a preliminary steady-state network solver, not a transient solver or certified network package. It does not model water hammer, two-phase flow, non-Newtonian fluids, pump curves, control-valve characteristics, cavitation, NPSH, leakage, pressure-dependent demand, or detailed junction losses. A pipe network must be connected to a valid fixed-head boundary and satisfy continuity. Verify topology, units, pipe IDs, roughness, K values, fluid properties, and boundary heads independently. Negative gauge pressure and reverse edge flows are reported as warnings, not automatically deemed unacceptable.
