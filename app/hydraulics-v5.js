@@ -16,6 +16,8 @@ const UNIT = {
 };
 
 function finite(value, name) {
+  if (value === null || value === undefined || (typeof value === 'string' && value.trim() === '')) throw new TypeError(name + ' is required; blank is not zero');
+  if (typeof value === 'string' && !/^[+-]?(?:\\d+\\.?\\d*|\\.\\d+)(?:[eE][+-]?\\d+)?$/.test(value.trim())) throw new TypeError(name + ' must be a decimal number');
   const n = Number(value);
   if (!Number.isFinite(n)) throw new TypeError(name + ' must be a finite number');
   return n;
