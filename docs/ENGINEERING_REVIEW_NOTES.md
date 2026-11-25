@@ -19,6 +19,8 @@ Do not silently substitute assumed values for missing project data. Flag missing
 
 ## 2. Hydraulic calculation checks
 
+**Scope note:** Sections on pump curves, operating regions and NPSH below are engineering review guidance only. The current application does not yet implement pump-curve operating-point analysis or NPSHa/NPSHr calculations. These are roadmap items, not available software functions.
+
 ### 2.1 Flow and velocity
 - Confirm consistent units and distinguish actual volumetric flow from standard or mass flow.
 - Check continuity: Q = A × v.
