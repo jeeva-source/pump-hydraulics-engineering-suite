@@ -1,7 +1,7 @@
 {
   "name": "pump-hydraulics-engineering-suite",
-  "version": "5.1.1",
-  "description": "Pump hydraulics engineering suite with hardened single-line and multi-segment SI calculation engines",
+  "version": "5.2.0",
+  "description": "Pump hydraulics engineering suite with serial, network and pump-system hydraulic calculation engines",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
