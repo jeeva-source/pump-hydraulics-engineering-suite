@@ -93,3 +93,8 @@ npm test
 ```
 
 The V5.0 engine is currently a calculation foundation, not yet wired into the legacy V4 interface. The repository currently does not contain the `app/` directory referenced by the desktop packaging configuration; UI integration and deployable-app restoration are separate required tasks. See [V5 calculation basis](docs/V5_CALCULATION_BASIS.md) for equations, units, assumptions and exclusions.
+
+
+## Vercel deployment
+
+This is a static browser interface. Import the repository into Vercel and set the framework preset to **Other**, build command blank, and output directory to **app**. The browser-compatible engine bundle is included in `app/hydraulics-v5.js`. Electron desktop packaging includes both `app/` and `src/`.
