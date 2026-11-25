@@ -77,7 +77,7 @@ function calculateMultiSegment(input) {
 
   let previousVelocityHead = inletDiameter === null ? null : Math.pow(Q / (Math.PI * inletDiameter ** 2 / 4), 2) / (2 * G);
   let cumulativeHead = 0, cumulativePressureDropPa = 0;
-  const warnings = [];\n  if (inletDiameter === null) warnings.push('Inlet reference diameter omitted: first-segment velocity-head change is assumed zero. Supply an inlet diameter or confirm the source boundary is at rest / same velocity head.');
+  const warnings = [];\n  if (inletPressurePa !== null && vapourPressurePa !== null && inletPressurePa < vapourPressurePa) warnings.push('Source absolute pressure is below the entered liquid vapour pressure; single-phase inlet condition is invalid.');\n  if (inletDiameter === null) warnings.push('Inlet reference diameter omitted: first-segment velocity-head change is assumed zero. Supply an inlet diameter or confirm the source boundary is at rest / same velocity head.');
   const results = input.segments.map((segment, index) => {
     if (!segment || typeof segment !== 'object' || Array.isArray(segment)) throw new TypeError('Segment ' + (index + 1) + ' must be an object');
     const label = segment.name || ('Segment ' + (index + 1));
