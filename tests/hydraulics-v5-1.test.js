@@ -1,5 +1,9 @@
 'use strict';
-const assert = require('node:assert/strict');\nconst fs = require('node:fs');\nconst path = require('node:path');\nassert.equal(fs.readFileSync(path.join(__dirname, '../src/hydraulics-v5.js'), 'utf8'), fs.readFileSync(path.join(__dirname, '../app/hydraulics-v5.js'), 'utf8'), 'Browser V5 engine must stay synchronized with tested source');\nassert.equal(fs.readFileSync(path.join(__dirname, '../src/hydraulics-v5-1.js'), 'utf8'), fs.readFileSync(path.join(__dirname, '../app/hydraulics-v5-1.js'), 'utf8'), 'Browser V5.1 engine must stay synchronized with tested source');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+assert.equal(fs.readFileSync(path.join(__dirname, '../src/hydraulics-v5.js'), 'utf8'), fs.readFileSync(path.join(__dirname, '../app/hydraulics-v5.js'), 'utf8'), 'Browser V5 engine must stay synchronized with tested source');
+assert.equal(fs.readFileSync(path.join(__dirname, '../src/hydraulics-v5-1.js'), 'utf8'), fs.readFileSync(path.join(__dirname, '../app/hydraulics-v5-1.js'), 'utf8'), 'Browser V5.1 engine must stay synchronized with tested source');
 const V5 = require('../src/hydraulics-v5');
 const { calculateMultiSegment } = require('../src/hydraulics-v5-1');
 
@@ -27,7 +31,9 @@ assert.ok(r.segments[1].velocity_m_s > r.segments[0].velocity_m_s);
 assert.ok(r.total_major_loss_head_m > 0 && r.total_minor_loss_head_m > 0 && r.total_equipment_loss_head_m > 0);
 close(r.total_elevation_change_m, 10, 1e-12, 'Elevation sum');
 assert.ok(r.total_required_head_m > 10 && r.hydraulic_power_W > 0);
-assert.ok(r.outlet_pressure_Pa < r.inlet_pressure_Pa);\nassert.ok(r.warnings.some(w => /pressure boundary is incomplete/.test(w)));\nassert.ok(Number.isFinite(r.required_pump_pressure_difference_kPa));
+assert.ok(r.outlet_pressure_Pa < r.inlet_pressure_Pa);
+assert.ok(r.warnings.some(w => /pressure boundary is incomplete/.test(w)));
+assert.ok(Number.isFinite(r.required_pump_pressure_difference_kPa));
 close(r.total_pressure_drop_Pa, r.total_required_head_m * 998 * 9.80665 - (r.pressure_boundary_head_m * 998 * 9.80665), 1e-6, 'Pipe-path pressure drop');
 
 // Pressure boundary condition contributes ΔP/(rho*g) to required pump head.
