@@ -47,7 +47,7 @@ assert.throws(() => calculateMultiSegment({ ...base, flowUnit: undefined }), /un
 assert.throws(() => calculateMultiSegment({ ...base, inletPressure: 0 }), /absolute pressure must be greater than zero/);
 assert.throws(() => calculateMultiSegment({ ...base, segments: [{ ...base.segments[0], length: '' }] }), /required; blank is not zero/);
 assert.throws(() => calculateMultiSegment({ ...base, segments: [{ ...base.segments[0], diameterUnit: undefined }] }), /unit is required/);
-assert.throws(() => calculateMultiSegment({ ...base, segments: [{ ...base.segments[0], equipmentPressureDrop: 15 }], flow: 0 }), /cannot be applied at zero flow/);
+assert.throws(() => calculateMultiSegment({ ...base, segments: [{ ...base.segments[0], equipmentPressureDrop: 15, equipmentPressureDropUnit: 'kPa' }], flow: 0 }), /cannot be applied at zero flow/);
 
 // Vapour-pressure / absolute-pressure screening.
 const vapour = calculateMultiSegment({
@@ -83,6 +83,6 @@ assert.equal(noFlow.hydraulic_power_W, 0);
 assert.throws(() => calculateMultiSegment({ ...base, segments: [] }), /At least one/);
 assert.throws(() => calculateMultiSegment({ ...base, segments: [{ ...base.segments[0], diameter: 0 }] }), /diameter/);
 assert.throws(() => calculateMultiSegment({ ...base, segments: [{ ...base.segments[0], minorLossK: -1 }] }), /K values/);
-assert.throws(() => calculateMultiSegment({ ...base, segments: [{ ...base.segments[0], equipmentPressureDrop: -2 }] }), /pressure drop/);
+assert.throws(() => calculateMultiSegment({ ...base, segments: [{ ...base.segments[0], equipmentPressureDrop: -2, equipmentPressureDropUnit: 'kPa' }] }), /pressure drop/);
 assert.throws(() => calculateMultiSegment({ ...base, flow: -1 }), /Flow cannot be negative/);
 console.log('V5.1.1 engineering-hardening regression suite: all assertions passed.');
