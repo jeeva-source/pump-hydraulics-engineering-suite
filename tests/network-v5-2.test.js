@@ -37,6 +37,18 @@ const loop = calculateNetwork({
 close(loop.totalBoundarySupply_m3_s,0.02,1e-8,'Loop network supply');
 assert.ok(loop.iterations>0 && loop.iterations<60);
 assert.ok(loop.maxContinuityResidual_m3_s<1e-9);
+assert.ok(loop.nodes.filter(n=>!n.boundary).every(n=>Math.abs(n.continuityResidual_m3_s)<1e-9));
+close(loop.nodes.find(n=>n.id==='reservoir').boundarySupply_m3_s,0.02,1e-8,'Reservoir boundary injection');
+close(loop.maxContinuityResidual_m3_s,Math.max(...loop.nodes.filter(n=>!n.boundary).map(n=>Math.abs(n.continuityResidual_m3_s))),1e-15,'Internal-node residual definition');
+// Independent single-pipe benchmark: fixed demand sets Q; compare calculated head loss
+// with a separately coded Colebrook-White reference (not the Churchill engine function).
+const benchmark=calculateNetwork({density_kg_m3:998,viscosity_Pa_s:0.001002,nodes:[{id:'source',fixedTotalHead_m:50},{id:'terminal',demand_m3_s:0.01}],edges:[{id:'benchmark-pipe',from:'source',to:'terminal',length_m:100,diameter_m:0.15,roughness_m:0.000045,K:2}]});
+const qRef=0.01, areaRef=Math.PI*0.15**2/4, velocityRef=qRef/areaRef, reRef=998*velocityRef*0.15/0.001002;
+let fRef=0.02;
+for(let i=0;i<100;i++){const next=1/(-2*Math.log10(0.000045/(3.7*0.15)+2.51/(reRef*Math.sqrt(fRef))))**2;if(Math.abs(next-fRef)<1e-14){fRef=next;break;}fRef=next;}
+const expectedHeadLoss=(fRef*100/0.15+2)*velocityRef**2/(2*9.80665);
+close(benchmark.edges[0].flow_m3_s,0.01,1e-9,'Single-pipe imposed demand');
+close(50-benchmark.nodes.find(n=>n.id==='terminal').totalHead_m,expectedHeadLoss,expectedHeadLoss*0.001,'Independent Colebrook benchmark head loss');
 assert.throws(()=>calculateNetwork({density_kg_m3:998,viscosity_Pa_s:0.001,nodes:[{id:'a'},{id:'b'}],edges:[{id:'p',from:'a',to:'b',length_m:1,diameter_m:0.1,roughness_m:0}]}),/fixedTotalHead/);
 assert.throws(()=>calculateNetwork({density_kg_m3:998,viscosity_Pa_s:0.001,nodes:[{id:'a',fixedTotalHead_m:10},{id:'b',demand_m3_s:-1}],edges:[{id:'p',from:'a',to:'b',length_m:1,diameter_m:0.1,roughness_m:0}]}),/demand cannot be negative/);
 assert.throws(()=>calculateNetwork({density_kg_m3:998,viscosity_Pa_s:0.001,nodes:[{id:'a',fixedTotalHead_m:10},{id:'b'},{id:'isolated'}],edges:[{id:'p',from:'a',to:'b',length_m:1,diameter_m:0.1,roughness_m:0}]}),/disconnected/);
