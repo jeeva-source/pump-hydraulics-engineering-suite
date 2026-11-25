@@ -26,7 +26,7 @@ The public input contract requires explicit units for flow, pipe diameter, pipe 
 
 ## Validation and safeguards
 
-- Rejects non-finite values, negative flow, negative length/roughness/static head, non-positive diameter/density/viscosity, and roughness greater than or equal to diameter.
+- Rejects non-finite values, negative flow, negative length/roughness, non-positive diameter/density/viscosity, and roughness greater than or equal to diameter.
 - Rejects negative minor-loss K values.
 - Supports a scalar K or an array of K values.
 - Zero flow returns zero velocity and zero flow-dependent losses; friction factor is null.
@@ -34,6 +34,6 @@ The public input contract requires explicit units for flow, pipe diameter, pipe 
 
 ## Important interpretation
 
-This is a straight, constant-diameter line model with one representative velocity and one set of fluid properties. It does not model elevation profiles, multiple pipe segments, fittings with different diameters, pump curves, suction-vessel pressure, NPSHa/NPSHr, compressibility, non-Newtonian fluids, two-phase flow, water hammer, or network balancing. The returned dynamic pressure drop excludes static elevation head. Hydraulic power uses total head including static head.
+This is a straight, constant-diameter line model with one representative velocity and one set of fluid properties. Static head is signed; a negative value represents a net elevation decrease in the chosen flow direction. It does not model elevation profiles, multiple pipe segments, fittings with different diameters, pump curves, suction-vessel pressure, NPSHa/NPSHr, compressibility, non-Newtonian fluids, two-phase flow, water hammer, or network balancing. The returned dynamic pressure drop excludes static elevation head. Hydraulic power uses total head including static head.
 
 Use actual pipe internal diameter, fluid properties at operating conditions, and verified fitting/equipment loss data. Independently check results before design or procurement use.
