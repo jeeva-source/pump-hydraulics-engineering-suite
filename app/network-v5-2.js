@@ -149,9 +149,11 @@ function calculateNetwork(input) {
       if (f.from === n.id) outflow += f.flow_m3_s;
       if (f.from === n.id) pressureHead = head.get(n.id) - n.elevation_m;
     }
-    return { id: n.id, elevation_m: n.elevation_m, totalHead_m: head.get(n.id), pressureHead_m: pressureHead, pressure_kPa_gauge: pressureHead * rho * G / 1000, demand_m3_s: n.demand_m3_s, inflow_m3_s: inflow, outflow_m3_s: outflow, continuityResidual_m3_s: n.fixedTotalHead_m !== null ? null : inflow - outflow - n.demand_m3_s, boundary: n.fixedTotalHead_m !== null };
+    const boundary = n.fixedTotalHead_m !== null;
+    return { id: n.id, elevation_m: n.elevation_m, totalHead_m: head.get(n.id), pressureHead_m: pressureHead, pressure_kPa_gauge: pressureHead * rho * G / 1000, demand_m3_s: n.demand_m3_s, inflow_m3_s: inflow, outflow_m3_s: outflow, continuityResidual_m3_s: boundary ? null : inflow - outflow - n.demand_m3_s, boundary, boundarySupply_m3_s: boundary ? outflow - inflow + n.demand_m3_s : null };
   });
-  const sourceSupply = nodes.filter(n => n.fixedTotalHead_m !== null).reduce((s, n) => s + (nodeResults[n.index].outflow_m3_s - nodeResults[n.index].inflow_m3_s + n.demand_m3_s), 0);
+  const sourceSupply = nodeResults.filter(n => n.boundary).reduce((s, n) => s + n.boundarySupply_m3_s, 0);
+  const maxContinuityResidual = Math.max(...nodeResults.filter(n => !n.boundary).map(n => Math.abs(n.continuityResidual_m3_s)));
   const warnings = [];
   if (flows.some(f => f.reynolds >= 2300 && f.reynolds <= 4000)) warnings.push('One or more pipes operate in the transitional Reynolds-number range; verify sensitivity.');
   if (flows.some(f => f.flow_m3_s < -1e-12)) warnings.push('One or more pipe flows are opposite to the entered edge direction; signed flow is reported.');
