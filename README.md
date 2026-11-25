@@ -1,6 +1,6 @@
 # Pump Hydraulics Engineering Suite
 
-Engineering calculation workspace with V5.0 single-line hydraulics, V5.1.1 hardened multi-segment hydraulics and the V5.2 connected pipe-network calculation engine.
+Engineering calculation workspace with V5.0 single-line hydraulics, V5.1.1 hardened multi-segment hydraulics, V5.2 connected pipe networks and V5.3 pump performance analysis.
 
 ## V5.1.1 — Engineering verification and input hardening
 - Serial suction/discharge line made of segments with different internal diameters, lengths and roughness.
@@ -24,7 +24,7 @@ Engineering calculation workspace with V5.0 single-line hydraulics, V5.1.1 harde
 - Signed edge flows, nodal pressure head, continuity residuals and solver diagnostics.
 - SI-only inputs; see [V5.2 calculation basis](docs/V5_2_NETWORK_SOLVER_BASIS.md).
 
-## V5.0 foundation
+## V5.3 — Pump performance and operating point (development branch)\n- Manufacturer pump curve input with flow, head and optional efficiency, shaft power and NPSHr data.\n- Quadratic system curve calibrated from static head and a system design point.\n- Pump/system intersection solved within supplied pump-curve range without extrapolation.\n- BEP identification, hydraulic power, efficiency-based shaft-power estimate, optional motor input and NPSH screening.\n- Standalone chart-based interface at `app/pump-performance.html`.\n- See [V5.3 calculation basis](docs/V5_3_PUMP_PERFORMANCE_BASIS.md).\n\n## V5.0 foundation
 - SI-internal unit conversion and input validation.
 - Velocity, Reynolds number, Churchill (1977) Darcy friction factor.
 - Darcy-Weisbach major losses, minor losses, static head, TDH and hydraulic power.
@@ -36,7 +36,7 @@ Requirements: Node.js 20+.
 npm test
 ```
 
-The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the V5.2 network engine is `src/network-v5-2.js` with browser bundle `app/network-v5-2.js`. The current static multi-segment UI is `app/index.html`; the V5.2 network UI is `app/network.html` and is linked from the main calculator.
+The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the V5.2 network engine is `src/network-v5-2.js` with browser bundle `app/network-v5-2.js`. The current static multi-segment UI is `app/index.html`; the V5.2 network UI is `app/network.html`; the V5.3 pump performance UI is `app/pump-performance.html`.
 
 ## Vercel deployment
 Import this repository into Vercel. Select Framework Preset **Other**, leave the build command blank, and set Output Directory to `app`.
@@ -48,4 +48,4 @@ See [V5.1.1 release status and remaining gates](docs/V5_1_1_RELEASE_STATUS.md).
 See [V5.0 calculation basis](docs/V5_CALCULATION_BASIS.md) and [V5.1 multi-segment calculation basis](docs/V5_1_MULTI_SEGMENT_BASIS.md).
 
 ## Important limitations
-This is a preliminary engineering aid, not certified engineering software or a code-compliance package. V5.1 remains a single serial path. The V5.2 engine adds a separate preliminary steady network solver, but its UI integration and independent engineering validation remain outstanding. No pump curve, control-valve characteristic, transient surge, two-phase flow, NPSH or certified code-compliance assessment is included. Independently validate all calculations and project-specific design criteria before engineering release.
+This is a preliminary engineering aid, not certified engineering software or a code-compliance package. V5.1 remains a single serial path. The V5.2 engine provides a preliminary steady network solver. V5.3 adds a separate pump/system curve operating-point tool; it does not yet automatically derive the V5.3 system curve from V5.1/V5.2 cases. No transient surge, two-phase flow or certified code-compliance assessment is included. Independently validate all calculations and project-specific design criteria before engineering release.
