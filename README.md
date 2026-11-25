@@ -80,3 +80,16 @@ The numbers above are illustrative only. Replace them with verified points digit
 ## Important limitations
 
 This is an engineering calculation and screening aid, not certified engineering software or a code-compliance package. Independent verification is required before design, procurement, construction or operation. The app has been syntax-checked, but a full Electron launch, installer build and independent validation against a known vendor curve have not been completed in this environment. Confirm all inputs, units, calculations and vendor data independently.
+
+
+## V5.0 calculation-engine foundation
+
+V5.0 adds a standalone SI-internal single-line hydraulic engine in `src/hydraulics-v5.js`. It provides explicit unit conversion, input validation, velocity, Reynolds number, Churchill (1977) Darcy friction factor, Darcy–Weisbach major loss, minor losses, static head, total head and hydraulic power. Transitional-flow cases are flagged for review.
+
+Run the V5.0 checks with:
+
+```bash
+npm test
+```
+
+The V5.0 engine is currently a calculation foundation, not yet wired into the legacy V4 interface. The repository currently does not contain the `app/` directory referenced by the desktop packaging configuration; UI integration and deployable-app restoration are separate required tasks. See [V5 calculation basis](docs/V5_CALCULATION_BASIS.md) for equations, units, assumptions and exclusions.
