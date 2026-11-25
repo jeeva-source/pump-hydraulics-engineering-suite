@@ -23,7 +23,7 @@ app.whenReady().then(() => {
   const template = [
     { label: 'File', submenu: [{ role: 'reload' }, { role: 'toggleDevTools' }, { type: 'separator' }, { role: 'quit' }] },
     { label: 'View', submenu: [{ role: 'resetZoom' }, { role: 'zoomIn' }, { role: 'zoomOut' }, { type: 'separator' }, { role: 'togglefullscreen' }] },
-    { label: 'Help', submenu: [{ label: 'About', click: () => require('electron').dialog.showMessageBox({ message: 'Pump Hydraulics Engineering Suite V4', detail: 'Engineering calculation, vendor pump curve and operating-point review workspace. Verify all results against licensed standards, project specifications and vendor data.' }) }] }
+    { label: 'Help', submenu: [{ label: 'About', click: () => require('electron').dialog.showMessageBox({ message: 'Pump Hydraulics Engineering Suite V5.0', detail: 'Single-line hydraulic calculation workspace with explicit SI unit handling. Verify all results against licensed standards, project specifications and vendor data.' }) }] }
   ];
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
