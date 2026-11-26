@@ -101,4 +101,5 @@ const negativeStatic = calculatePumpOperatingPoint({
  ]
 });
 assert.ok(negativeStatic.warnings.some(w=>w.includes('static head is negative')));
-\nconsole.log('V5.3 pump performance tests passed');
+
+console.log('V5.3 pump performance tests passed');
