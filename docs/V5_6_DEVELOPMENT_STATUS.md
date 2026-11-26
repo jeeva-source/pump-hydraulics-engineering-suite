@@ -31,3 +31,10 @@ V5.6.0 pipe-derived system-curve engine and browser module added to the integrat
 
 ## Release state
 PR #5 remains open and unmerged. Production main is not changed.
+
+
+## Tangency hardening verification — 26 November 2026
+- GitHub Actions run #112 passed the complete `npm test` suite on final code commit `218dd0c275845a389ed8f27292a131e639566810`: https://github.com/jeeva-source/pump-hydraulics-engineering-suite/actions/runs/45760610024
+- The V5.6 regression suite now includes a synthetic tangent-contact case; source/browser bundle parity is checked byte-for-byte.
+- Runs #109–#111 failed while the source and browser bundle were temporarily out of sync during sequential updates; the browser bundle was then synced to the source and run #112 passed.
+- The READY Vercel preview recorded earlier is from the pre-tangency-hardening build. A new deployment remains blocked by the Hobby team's 24-hour deployment API quota; do not treat the older preview as containing the latest change.
