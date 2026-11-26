@@ -38,3 +38,8 @@ PR #5 remains open and unmerged. Production main is not changed.
 - The V5.6 regression suite now includes a synthetic tangent-contact case; source/browser bundle parity is checked byte-for-byte.
 - Runs #109–#111 failed while the source and browser bundle were temporarily out of sync during sequential updates; the browser bundle was then synced to the source and run #112 passed.
 - The READY Vercel preview recorded earlier is from the pre-tangency-hardening build. A new deployment remains blocked by the Hobby team's 24-hour deployment API quota; do not treat the older preview as containing the latest change.
+
+
+## Independent example benchmark — 26 November 2026
+- Added numerical assertions for operating flow 0.02548409071 m³/s, head 33.32227301 m and hydraulic power 8.31103244 kW for the documented two-segment example.
+- Benchmark independently recomputed from the stated geometry, Churchill friction and Darcy–Weisbach equations; it is a software regression cross-check, not a third-party certification.
