@@ -63,4 +63,5 @@ assert.throws(()=>calculateNetwork({
   {id:'same',from:'a',to:'b',length_m:20,diameter_m:0.1,roughness_m:0}
  ]
 }),/Duplicate edge id/);
-\nconsole.log('V5.2 network solver tests passed');
+
+console.log('V5.2 network solver tests passed');
