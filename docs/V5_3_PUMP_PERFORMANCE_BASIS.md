@@ -7,7 +7,7 @@ V5.3 calculates the intersection of a supplied centrifugal-pump manufacturer cur
 - Liquid density: kg/m³
 - Pump manufacturer curve flow: m³/s
 - Pump head: m
-- Optional pump efficiency: percent (0–100)
+- Optional pump efficiency: percent (0–100); zero is valid at shutoff, but cannot be used to calculate shaft power
 - Optional manufacturer NPSHr: m
 - Optional manufacturer shaft power: kW
 - System static head: m
@@ -19,7 +19,7 @@ V5.3 calculates the intersection of a supplied centrifugal-pump manufacturer cur
 Use manufacturer-certified/tested data for the pump curve. The example dataset in the UI is illustrative only and must not be used for equipment selection.
 
 ## Pump curve interpolation
-Pump head and optional performance quantities are linearly interpolated between adjacent supplied manufacturer data points. Flow points must be strictly increasing. Head values are not forced to be monotonic because some manufacturer curves can have drooping or saddle characteristics; the solver checks every adjacent interval and reports multiple intersections. Optional series must be complete at every point when included. The solver does not extrapolate beyond the supplied flow range.
+Pump head and optional performance quantities are linearly interpolated between adjacent supplied manufacturer data points. Flow points must be strictly increasing. Head values are not forced to be monotonic because some manufacturer curves can have drooping or saddle characteristics. Within each interval, the pump curve is linear and the system curve is quadratic, so the engine solves the resulting quadratic equation and can detect two intersections or a tangent intersection inside one interval. Optional series must be complete at every point when included. The solver does not extrapolate beyond the supplied flow range.
 
 ## System curve
 The system curve is represented by:
@@ -34,10 +34,10 @@ where:
 K_{sys}=\frac{H_{design}-H_{static}}{Q_{design}^2}
 \]
 
-This quadratic form is an approximation for a fixed system configuration with predominantly turbulent-flow resistance. The user must obtain static head and the design-point system head from a valid system hydraulic calculation. V5.3 does not yet automatically call the V5.1.1 or V5.2 engines to build this curve.
+This quadratic form is an approximation for a fixed system configuration with predominantly turbulent-flow resistance. Static head may be negative when source pressure/elevation assists flow relative to the destination; the application flags this condition for datum review. The user must obtain static head and the design-point system head from a valid system hydraulic calculation. V5.3 does not yet automatically call the V5.1.1 or V5.2 engines to build this curve.
 
 ## Operating point
-The intersection is found within each adjacent pump-curve interval using bisection on the difference between interpolated pump head and system head. No extrapolation is performed. Multiple intersections are all returned in the `intersections` array. The lowest-flow intersection is displayed as a provisional point, with an explicit warning and selection-policy note; the engineer must establish the physically stable operating point from the full pump/system behaviour.
+The intersection is found within each adjacent pump-curve interval by solving the exact quadratic formed by linear pump-head interpolation minus quadratic system head. Roots are bounded to the supplied interval and numerically deduplicated. No extrapolation is performed. Multiple intersections are all returned in the `intersections` array. The lowest-flow intersection is displayed as a provisional point, with an explicit warning and selection-policy note; the engineer must establish the physically stable operating point from the full pump/system behaviour.
 
 ## Power
 Hydraulic power:
@@ -46,7 +46,7 @@ Hydraulic power:
 P_h=\rho gQH
 \]
 
-Estimated pump shaft power is calculated from hydraulic power and interpolated pump efficiency when a complete efficiency curve is supplied:
+Estimated pump shaft power is calculated from hydraulic power and interpolated pump efficiency when a complete efficiency curve is supplied and the operating-point efficiency is greater than zero:
 
 \[
 P_{shaft}=\frac{P_h}{\eta_{pump}}
