@@ -1,4 +1,4 @@
-# V5.3 Development Status — 25 November 2026
+# V5.3.1 Development Status — 26 November 2026
 
 ## Delivery
 V5.3 pump performance and operating-point module is implemented on branch `v5.3-pump-performance`. It is available in a Vercel preview and is proposed for integration through pull request #3.
@@ -9,14 +9,14 @@ V5.3 pump performance and operating-point module is implemented on branch `v5.3-
 - Piecewise-linear interpolation between supplied pump curve points.
 - No extrapolation beyond the supplied pump curve.
 - Quadratic system curve from static head and one design flow/head point.
-- Pump/system intersection using interval bracketing and bisection; all crossings are returned, with lowest-flow crossing labelled provisional when multiple roots exist.
+- Pump/system intersections solved analytically within each piecewise-linear pump-curve interval against the quadratic system curve; detects two roots in one interval and tangent intersections.
 - Non-monotonic pump-head curves are accepted to support drooping/saddle vendor curves and multi-intersection detection.
 - Estimated shaft power is kept separate from manufacturer shaft-power data; motor-input estimate identifies which shaft-power basis it uses.
-- Discrete supplied-data BEP identification.
+- Discrete supplied-data BEP identification; zero-efficiency shutoff points are accepted but excluded from BEP and efficiency-based shaft-power calculations.
 - Hydraulic power, efficiency-based shaft-power estimate and optional motor input estimate.
 - Optional NPSHa/NPSHr screening and manufacturer shaft-power comparison.
 - Chart-based UI at `app/pump-performance.html`.
-- V5.2 correction: fixed-head boundary flow is separated from internal-node continuity residuals.
+- V5.2 correction: fixed-head boundary flow is separated from internal-node continuity residuals; duplicate edge IDs are rejected.
 
 ## Verification performed
 - V5.0, V5.1.1, V5.2 and V5.3 regression test files executed through an isolated JavaScript harness: all assertions passed.
@@ -41,3 +41,12 @@ The system curve uses `H = Hstatic + Ksys Q²`, calibrated from one user-supplie
 No speed/impeller affinity correction, viscosity correction, dissimilar/parallel/series pump modelling, vendor POR/AOR/minimum-flow/runout limits, detailed NPSHa derivation, transient analysis, or API/ANSI-HI compliance certification is implemented.
 
 All example pump data is illustrative. Use manufacturer-approved curves and project-specific criteria. Independent engineering review is required before design use or production release.
+
+
+## V5.3.1 hardening added
+- Replaced endpoint sign-change root search with interval-wise quadratic solution to avoid missing two roots or a tangent root inside a single vendor data interval.
+- Accepted valid zero-efficiency shutoff points without dividing by zero or selecting them as BEP.
+- Allowed negative net static head for pressurised-source/downhill systems and added an explicit datum warning.
+- Added independent expected-root regression values, tangent-root test, shutoff power-basis test and negative-static-head test.
+- Added duplicate network edge-ID validation and regression coverage.
+- Full GitHub Actions run for this V5.3.1 branch is pending; do not treat it as passed until the run is inspected.
