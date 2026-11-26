@@ -73,8 +73,8 @@ const invalidMargin = calculatePumpOperatingEnvelope({ pumpCurve, cases: [{ ...c
 assert.equal(invalidMargin.cases[0].status, 'calculation_error');
 assert.match(invalidMargin.cases[0].error, /cannot be negative/);
 const page = fs.readFileSync(path.join(__dirname, '../app/pump-operating-envelope-v5-7.html'), 'utf8');
-assert.match(page, /pump-operating-envelope-v5-7\\.js/);
-const inlineScripts = [...page.matchAll(/<script\\b([^>]*)>([\\s\\S]*?)<\\/script>/gi)].filter(match => !/\\bsrc=/.test(match[1]));
+assert.ok(page.includes('pump-operating-envelope-v5-7.js'));
+const inlineScripts = [...page.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)].filter(match => !match[0].startsWith('<script src='));
 assert.equal(inlineScripts.length, 1, 'V5.7 workspace should have one inline controller script');
 for (const script of inlineScripts) new vm.Script(script[2], { filename: 'pump-operating-envelope-v5-7.html' });
 console.log('V5.7 multi-case pump operating envelope tests passed');
