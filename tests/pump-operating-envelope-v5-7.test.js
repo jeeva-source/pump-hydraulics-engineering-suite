@@ -2,6 +2,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 assert.equal(fs.readFileSync(path.join(__dirname, '../src/pump-operating-envelope-v5-7.js'), 'utf8'), fs.readFileSync(path.join(__dirname, '../app/pump-operating-envelope-v5-7.js'), 'utf8'), 'V5.7 source and browser engine must match');
 require('../src/hydraulics-v5');
 const { calculatePumpOperatingEnvelope } = require('../src/pump-operating-envelope-v5-7');
@@ -71,4 +72,9 @@ assert.throws(() => calculatePumpOperatingEnvelope({ pumpCurve, cases, motorEffi
 const invalidMargin = calculatePumpOperatingEnvelope({ pumpCurve, cases: [{ ...cases[0], requiredNpshMargin_m: -1 }, cases[1]] });
 assert.equal(invalidMargin.cases[0].status, 'calculation_error');
 assert.match(invalidMargin.cases[0].error, /cannot be negative/);
+const page = fs.readFileSync(path.join(__dirname, '../app/pump-operating-envelope-v5-7.html'), 'utf8');
+assert.match(page, /pump-operating-envelope-v5-7\\.js/);
+const inlineScripts = [...page.matchAll(/<script\\b([^>]*)>([\\s\\S]*?)<\\/script>/gi)].filter(match => !/\\bsrc=/.test(match[1]));
+assert.equal(inlineScripts.length, 1, 'V5.7 workspace should have one inline controller script');
+for (const script of inlineScripts) new vm.Script(script[2], { filename: 'pump-operating-envelope-v5-7.html' });
 console.log('V5.7 multi-case pump operating envelope tests passed');
