@@ -1,6 +1,6 @@
 # Pump Hydraulics Engineering Suite
 
-Engineering calculation workspace with V5.0 single-line hydraulics, V5.1.1 hardened multi-segment hydraulics, V5.2 connected pipe networks, V5.3.1 pump performance hardening and V5.4 pump selection/NPSH assessment.
+Engineering calculation workspace with V5.0 single-line hydraulics, V5.1.1 hardened multi-segment hydraulics, V5.2 connected pipe networks, V5.3.1 pump performance hardening and V5.4 pump selection/NPSH assessment and V5.5 pump configurations.
 
 ## V5.1.1 — Engineering verification and input hardening
 - Serial suction/discharge line made of segments with different internal diameters, lengths and roughness.
@@ -45,7 +45,7 @@ Requirements: Node.js 20+.
 npm test
 ```
 
-The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the V5.2 network engine is `src/network-v5-2.js` with browser bundle `app/network-v5-2.js`. The current static multi-segment UI is `app/index.html`; the V5.2 network UI is `app/network.html`; the V5.3 pump performance UI is `app/pump-performance.html`; the V5.4 selection UI is `app/pump-selection.html`.
+The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the V5.2 network engine is `src/network-v5-2.js` with browser bundle `app/network-v5-2.js`. The current static multi-segment UI is `app/index.html`; the V5.2 network UI is `app/network.html`; the V5.3 pump performance UI is `app/pump-performance.html`; the V5.4 selection UI is `app/pump-selection.html`; the V5.5 configuration UI is `app/pump-configurations.html`.
 
 ## V5.3 / V5.4 development status
 See [V5.3 development status and verification](docs/V5_3_DEVELOPMENT_STATUS.md) and [V5.4 development status](docs/V5_4_DEVELOPMENT_STATUS.md).
@@ -71,3 +71,12 @@ This is a preliminary engineering aid, not certified engineering software or a c
 - Provide approximate speed and impeller affinity-law helpers with explicit limitations.
 - Browser interface: `app/pump-selection.html` with JSON report export and print/save-PDF.
 - See [V5.4 calculation basis](docs/V5_4_PUMP_SELECTION_BASIS.md) and [V5.4 development status](docs/V5_4_DEVELOPMENT_STATUS.md).
+
+
+## V5.5 — Pump configurations and variable-speed cases (development branch)
+- Evaluate one pump or identical pumps in series/parallel against the V5.3 system curve.
+- Apply entered speed ratio to reference pump curve using Q ∝ N and H ∝ N².
+- Report total station flow/head/power and per-pump power split.
+- Preserve manufacturer NPSHr and shaft-power data only where their reference basis is valid; at changed speed NPSHr is not inferred.
+- Browser UI: `app/pump-configurations.html` with combined curve, system curve, operating point, JSON export and print/save-PDF.
+- See [V5.5 calculation basis](docs/V5_5_PUMP_CONFIGURATIONS_BASIS.md), [project history](docs/PROJECT_HISTORY.md) and [open-source reference review](docs/OPEN_SOURCE_REFERENCE_REVIEW.md).
