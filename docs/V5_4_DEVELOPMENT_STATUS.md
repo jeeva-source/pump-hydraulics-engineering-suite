@@ -23,9 +23,9 @@ V5.4 pump selection and NPSH engineering module is implemented on branch `v5.4-p
 - V5.4 engine regression assertions executed in an isolated JavaScript harness: passed.
 - V5.4 source/browser bundle byte-for-byte parity: passed.
 - Full integrated V5.0–V5.3.1 GitHub Actions run #69 passed before V5.4 was added.
-- Full V5.4-inclusive GitHub Actions run has not yet been confirmed.
+- Full V5.4-inclusive GitHub Actions run #71 passed on branch commit `7945788b182551f66aa3dcde3d67ecded601f608`; all V5.0, V5.1.1, V5.2, V5.3 and V5.4 test suites passed.
 - Interactive browser input-to-result testing of the V5.4 page has not yet been performed.
-- Vercel preview deployment for this V5.4 branch is pending.
+- Vercel preview deployment READY for commit `7945788b182551f66aa3dcde3d67ecded601f608`; main, network, pump-performance and pump-selection pages plus the V5.4 and V5.3 browser engines returned HTTP 200.
 
 ## Limitations
 
