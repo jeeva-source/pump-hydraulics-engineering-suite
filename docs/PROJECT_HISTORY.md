@@ -29,7 +29,9 @@ This file is the durable project memory and development history. Update it whene
 | V5.3 | Manufacturer pump curves, system curve, operating point, BEP, efficiency and power | Implemented on integrated development branch |
 | V5.3.1 | Exact interval-wise intersection solver; multiple/tangent roots; zero-efficiency shutoff; negative static-head handling; network validation | Implemented on integrated development branch |
 | V5.4 | NPSHa from source/suction conditions, NPSHr comparison, project margin, POR/AOR/MCSF/runout, candidate comparison | Implemented on integrated development branch |
-| V5.5 | Identical pumps in series/parallel, speed-ratio curve transformation, total/per-pump power and case report | Implemented; CI #88 passed; Vercel preview READY; interactive browser test pending |
+| V5.5 | Identical pumps in series/parallel, speed-ratio curve transformation, total/per-pump power and case report | Implemented on development branch |
+| V5.6 | Automatic serial-pipe system curve coupled to V5.1 hydraulics | Implemented on development branch; independent benchmark and regression tests recorded |
+| V5.7 | Multi-case pump operating envelope (minimum/normal/maximum/upset) | Implemented on development branch; CI verification pending |
 
 ## Key repository milestones
 
@@ -66,6 +68,8 @@ See [Open-source reference review](OPEN_SOURCE_REFERENCE_REVIEW.md) and [V5.5 de
 - `src/pump-performance-v5-3.js`: V5.3 pump curve and operating point.
 - `src/pump-selection-v5-4.js`: V5.4 NPSH and vendor operating-limit screening.
 - `src/pump-configurations-v5-5.js`: V5.5 identical pump arrangements and speed cases.
+- `src/pipe-system-curve-v5-6.js`: V5.6 serial pipe-derived system curve.
+- `src/pump-operating-envelope-v5-7.js`: V5.7 multi-case operating envelope.
 - Browser engine bundles in `app/` are kept byte-for-byte aligned with their source engines.
 - Calculation regression tests are in `tests/`; `npm test` runs the complete versioned suite.
 
@@ -132,3 +136,15 @@ Never mark a feature as complete or production released solely because code was 
 - Added 3D layout-adapter and storage regression tests to the standard `npm test` sequence.
 - PR #6 (`Integrate 3D hydraulic twin into V5.6 workspace`) was squash-merged into `v5.4-pump-selection-npsh` at `2967e0e85caca9f915707cce408dbd0f44a151ea`; PR #5 now includes the integration. PR #6 CI run #116 passed and updated PR #5 CI run #117 passed. Vercel preview deployment remains blocked by the Hobby 24-hour deployment quota, and interactive browser/WebGL checks remain pending. This is not production-released.
 - 3D geometry is illustrative, not fabrication/CAD geometry; it does not establish equipment dimensions, nozzle loads, support design or code compliance.
+
+
+## V5.7 multi-case pump operating envelope — 26 November 2026
+
+- Added `src/pump-operating-envelope-v5-7.js` and matching browser engine `app/pump-operating-envelope-v5-7.js`.
+- Each minimum/normal/maximum/upset case is independently solved through V5.6 using its complete V5.1 serial pipe input and the common supplied manufacturer pump curve.
+- Case outputs include operating flow/head, efficiency, hydraulic/shaft/motor power where available, BEP, NPSHa/NPSHr margin, vendor POR/AOR/MCSF/runout checks and warnings.
+- Missing project criteria/vendor limits are reported as incomplete; they are never inferred. Per-case calculation errors are isolated so valid cases remain available.
+- Added regression tests for multiple cases, power, NPSH, vendor criteria, missing data, failed cases, isolated errors, invalid inputs and source/browser bundle parity.
+- Updated npm test/build/lint scripts to include V5.7.
+- Scope is serial-path steady-state analysis only. Branched network coupling, per-case distinct pump curves/speed changes and suction-source NPSHa calculation remain future work.
+- Development CI and browser interaction verification pending. PR #5 remains open and unmerged; production main remains unchanged.
