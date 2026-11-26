@@ -1,6 +1,6 @@
 # Pump Hydraulics Engineering Suite
 
-Engineering calculation workspace with V5.0 single-line hydraulics, V5.1.1 hardened multi-segment hydraulics, V5.2 connected pipe networks and V5.3 pump performance analysis.
+Engineering calculation workspace with V5.0 single-line hydraulics, V5.1.1 hardened multi-segment hydraulics, V5.2 connected pipe networks and V5.3.1 pump performance analysis hardening.
 
 ## V5.1.1 — Engineering verification and input hardening
 - Serial suction/discharge line made of segments with different internal diameters, lengths and roughness.
@@ -24,10 +24,11 @@ Engineering calculation workspace with V5.0 single-line hydraulics, V5.1.1 harde
 - Signed edge flows, nodal pressure head, continuity residuals and solver diagnostics.
 - SI-only inputs; see [V5.2 calculation basis](docs/V5_2_NETWORK_SOLVER_BASIS.md).
 
-## V5.3 — Pump performance and operating point (development branch)
+## V5.3.1 — Pump performance and operating point hardening (development branch)
 - Manufacturer pump curve input with flow, head and optional efficiency, shaft power and NPSHr data.
 - Quadratic system curve calibrated from static head and a system design point.
-- Pump/system intersection solved within supplied pump-curve range without extrapolation.
+- Pump/system intersections solved analytically within supplied curve intervals, including multiple/tangent crossings, without extrapolation.
+- Zero-efficiency shutoff points and negative net static head are handled explicitly.
 - BEP identification, hydraulic power, efficiency-based shaft-power estimate, optional motor input and NPSH screening.
 - Standalone chart-based interface at `app/pump-performance.html`.
 - See [V5.3 calculation basis](docs/V5_3_PUMP_PERFORMANCE_BASIS.md).
