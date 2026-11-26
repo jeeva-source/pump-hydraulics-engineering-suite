@@ -110,3 +110,11 @@ Never mark a feature as complete or production released solely because code was 
 - Branched network coupling deliberately deferred; pump boundary semantics require separate validation.
 - Initial CI run exposed an incorrect NPSHr test expectation; corrected the expected value to use interpolation at the calculated operating flow. Numeric-string validation was hardened and tested. Final CI/preview verification remains pending.
 - PR #5 remains unmerged; production main remains unchanged.
+
+
+### V5.6 numerical hardening — 26 November 2026
+
+- Added tangential pump/system contact detection where the residual touches zero without changing sign. The method minimises absolute head residual with bounded golden-section search inside each sampled interval and accepts only a strict relative head tolerance.
+- Added a synthetic tangent-contact regression built from the V5.1.1 hydraulic engine; it asserts recovery of a tangent operating flow that a sign-change-only scan would miss.
+- Updated the V5.6 calculation basis and development status to document the method and remaining numerical limitations.
+- This is software hardening only; independent engineering validation and interactive browser testing remain outstanding.
