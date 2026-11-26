@@ -120,3 +120,5 @@ Never mark a feature as complete or production released solely because code was 
 - This is software hardening only; independent engineering validation and interactive browser testing remain outstanding.
 
 - Tangency hardening final CI: GitHub Actions run #112 passed `npm test` on `218dd0c275845a389ed8f27292a131e639566810`; source/browser bundle parity verified by test. A new Vercel preview could not be created because of the 24-hour Hobby deployment quota; the prior READY preview predates this hardening.
+
+- Added independent numerical cross-check assertions to the V5.6 example regression: Q = 0.02548409071 m³/s, H = 33.32227301 m, hydraulic power = 8.31103244 kW. See `docs/V5_6_PIPE_DERIVED_SYSTEM_CURVE_BASIS.md`.
