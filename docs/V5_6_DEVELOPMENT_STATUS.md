@@ -21,7 +21,11 @@ V5.6.0 pipe-derived system-curve engine and browser module added to the integrat
 - No transient, two-phase, compressible or standards-compliance assessment.
 
 ## Verification
-Pending CI and preview deployment for this commit. Do not mark V5.6 production released until full CI, deployment checks, interactive browser verification and independent engineering review are complete.
+- GitHub Actions workflow run #105 passed the complete `npm test` suite on branch head `ef6b8c2a2cd09594869458accfbf70324b5f4f35`: https://github.com/jeeva-source/pump-hydraulics-engineering-suite/actions/runs/45759637504
+- Source/browser V5.6 engine files match byte-for-byte (asserted by the V5.6 regression test).
+- Vercel preview deployment `dpl_26RkYqfa45YpoTVnprWBHjgLJbWs` was READY. The V5.6 page and engine bundle, plus V5.0/V5.1/V5.3 dependencies, returned HTTP 200: https://pump-hydraulics-engineering-suite-4fk01i15f-jee-8996.vercel.app/pipe-system-curve.html
+- The preview deployment record was created at commit `3425b3364cdc68a0dba0dded12dd57eb59e72018`; subsequent branch changes were test/documentation and main-page title/navigation updates. A fresh preview for the final documentation commit is the next deployment check.
+- Interactive browser input-to-result automation and independent engineering review have not been completed.
 
 ## Release state
 PR #5 remains open and unmerged. Production main is not changed.
