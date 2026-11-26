@@ -1,6 +1,6 @@
 # Pump Hydraulics Engineering Suite
 
-Engineering calculation workspace with V5.0 single-line hydraulics, V5.1.1 hardened multi-segment hydraulics, V5.2 connected pipe networks and V5.3.1 pump performance analysis hardening.
+Engineering calculation workspace with V5.0 single-line hydraulics, V5.1.1 hardened multi-segment hydraulics, V5.2 connected pipe networks, V5.3.1 pump performance hardening and V5.4 pump selection/NPSH assessment.
 
 ## V5.1.1 — Engineering verification and input hardening
 - Serial suction/discharge line made of segments with different internal diameters, lengths and roughness.
@@ -45,10 +45,10 @@ Requirements: Node.js 20+.
 npm test
 ```
 
-The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the V5.2 network engine is `src/network-v5-2.js` with browser bundle `app/network-v5-2.js`. The current static multi-segment UI is `app/index.html`; the V5.2 network UI is `app/network.html`; the V5.3 pump performance UI is `app/pump-performance.html`.
+The V5.1.1 multi-segment engine is available as `src/hydraulics-v5-1.js`; the V5.2 network engine is `src/network-v5-2.js` with browser bundle `app/network-v5-2.js`. The current static multi-segment UI is `app/index.html`; the V5.2 network UI is `app/network.html`; the V5.3 pump performance UI is `app/pump-performance.html`; the V5.4 selection UI is `app/pump-selection.html`.
 
-## V5.3 development status
-See [V5.3 development status and verification](docs/V5_3_DEVELOPMENT_STATUS.md).
+## V5.3 / V5.4 development status
+See [V5.3 development status and verification](docs/V5_3_DEVELOPMENT_STATUS.md) and [V5.4 development status](docs/V5_4_DEVELOPMENT_STATUS.md).
 
 ## Vercel deployment
 Import this repository into Vercel. Select Framework Preset **Other**, leave the build command blank, and set Output Directory to `app`.
@@ -61,3 +61,13 @@ See [V5.0 calculation basis](docs/V5_CALCULATION_BASIS.md) and [V5.1 multi-segme
 
 ## Important limitations
 This is a preliminary engineering aid, not certified engineering software or a code-compliance package. V5.1 remains a single serial path. The V5.2 engine provides a preliminary steady network solver. V5.3 adds a separate pump/system curve operating-point tool; it does not yet automatically derive the V5.3 system curve from V5.1/V5.2 cases. No transient surge, two-phase flow or certified code-compliance assessment is included. Independently validate all calculations and project-specific design criteria before engineering release.
+
+
+## V5.4 — Pump selection and NPSH assessment (development branch)
+- Calculate NPSHa from source absolute pressure, vapour pressure, elevation, source velocity and suction losses.
+- Compare calculated NPSHa with manufacturer NPSHr and a configurable project margin.
+- Evaluate manufacturer-supplied POR/AOR/MCSF/runout limits without inferring missing limits.
+- Compare multiple candidate pump curves against a common system duty.
+- Provide approximate speed and impeller affinity-law helpers with explicit limitations.
+- Browser interface: `app/pump-selection.html` with JSON report export and print/save-PDF.
+- See [V5.4 calculation basis](docs/V5_4_PUMP_SELECTION_BASIS.md) and [V5.4 development status](docs/V5_4_DEVELOPMENT_STATUS.md).
