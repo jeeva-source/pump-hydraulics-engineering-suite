@@ -29,7 +29,7 @@ This file is the durable project memory and development history. Update it whene
 | V5.3 | Manufacturer pump curves, system curve, operating point, BEP, efficiency and power | Implemented on integrated development branch |
 | V5.3.1 | Exact interval-wise intersection solver; multiple/tangent roots; zero-efficiency shutoff; negative static-head handling; network validation | Implemented on integrated development branch |
 | V5.4 | NPSHa from source/suction conditions, NPSHr comparison, project margin, POR/AOR/MCSF/runout, candidate comparison | Implemented on integrated development branch |
-| V5.5 | Identical pumps in series/parallel, speed-ratio curve transformation, total/per-pump power and case report | Implemented on integrated development branch; verification pending at time of this history entry |
+| V5.5 | Identical pumps in series/parallel, speed-ratio curve transformation, total/per-pump power and case report | Implemented; CI #88 passed; Vercel preview READY; interactive browser test pending |
 
 ## Key repository milestones
 
@@ -40,6 +40,8 @@ This file is the durable project memory and development history. Update it whene
 - PR #5 contains V5.2, V5.3.1 and V5.4 changes; it was open and not merged at the last recorded check.
 - V5.4 preview deployment: https://pump-hydraulics-engineering-suite-27b0rr998-jee-8996.vercel.app
 - V5.4 preview was READY; production main remained V5.1.1.
+- V5.5 integrated preview: https://pump-hydraulics-engineering-suite-n1upgbmqf-jee-8996.vercel.app (READY, branch `v5.4-pump-selection-npsh`, commit `7e550203b020a6913e367ba033a7b6d2a58af6cd`).
+- GitHub Actions run #88 passed the complete V5.0–V5.5 test suite on the same commit.
 
 ## Open-source research and provenance
 
@@ -54,7 +56,7 @@ Other reviewed projects:
 - `lucascerriku/pipe-flow-pump-sizing-calculator`: https://github.com/lucascerriku/pipe-flow-pump-sizing-calculator — MIT stated in README; useful single-line hydraulic benchmark project.
 - `GreekDevFillip/centrifugal-pump-simulator`: https://github.com/GreekDevFillip/centrifugal-pump-simulator — small C++ power calculator, not adopted.
 
-See [Open-source reference review](OPEN_SOURCE_REFERENCE_REVIEW.md).
+See [Open-source reference review](OPEN_SOURCE_REFERENCE_REVIEW.md) and [V5.5 development status](V5_5_DEVELOPMENT_STATUS.md).
 
 ## Current architecture
 
