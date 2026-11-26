@@ -77,7 +77,7 @@ assert.ok(Math.abs(trim.head_m-32.4)<1e-12);
 assert.ok(Math.abs(trim.shaftPower_kW-7.29)<1e-12);
 
 assert.throws(()=>calculateNpsha({...base.suctionConditions,density_kg_m3:0}),/Density and gravity/);
-assert.throws(()=>calculateNpsha({...base.suctionConditions,sourcePressureAbs_Pa:0}),/Source absolute pressure/);
+assert.throws(()=>calculateNpsha({...base.suctionConditions,density_kg_m3:1000,sourcePressureAbs_Pa:0}),/Source absolute pressure/);
 assert.throws(()=>evaluatePumpSelection({...base,vendorLimits:{porMinFlow_m3_s:0.03}}),/supplied together/);
 assert.throws(()=>evaluatePumpSelection({...base,vendorLimits:{porMinFlow_m3_s:0.04,porMaxFlow_m3_s:0.03}}),/less than/);
 assert.throws(()=>correctForSpeed({referenceFlow_m3_s:0.02,referenceHead_m:40,referenceSpeed_rpm:0,newSpeed_rpm:1500}),/speeds must be positive/);
