@@ -67,8 +67,8 @@ Evolve the current calculator into a traceable pump-system engineering workspace
 3. V5.1.1: input, boundary-condition, pressure/vapour screening, benchmark-test and documentation hardening.
 4. V5.2: connected network solver engine, browser UI and regression tests (implemented on development branch; independent engineering validation required).
 5. V5.3: pump curve interpolation, quadratic system curve and operating-point engine with BEP/power/NPSH screening (implemented on development branch; V5.3.1 root-solving hardening added; integrated CI and engineering validation required).
-6. V5.4: manufacturer operating limits, NPSH margin configuration, reports, project files and case comparison (planned; not implemented).
-7. V5.5: CI hardening, deployment verification and release documentation.
+6. V5.4: NPSHa calculation, manufacturer NPSHr comparison, configurable project margin, POR/AOR/MCSF/runout checks, candidate comparison and approximate affinity helpers (implemented on development branch; full CI and browser verification pending).
+7. V5.5: integrated pump arrangements, VFD operating cases, project case management and engineering report improvements (planned).
 
 ## Deferred specialist scope
 
