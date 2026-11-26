@@ -21,7 +21,7 @@ const pumpCurve=[
 ];
 const result=calculatePipeDerivedSystemCurve({hydraulicInput,pumpCurve,motorEfficiency_pct:94,npsha_m:5,sampleCount:121});
 assert.equal(result.version,'5.6.0');
-assert.throws(()=>calculatePipeDerivedSystemCurve({hydraulicInput:{...hydraulicInput,density:'998'},pumpCurve}),/decimal number/);
+assert.throws(()=>calculatePipeDerivedSystemCurve({hydraulicInput:{...hydraulicInput,density:'bad'},pumpCurve}),/decimal number/);
 assert.equal(result.systemCurvePoints.length,121);
 assert.equal(result.staticHead_m,20);
 assert.ok(result.operatingPoint.flow_m3_s>0.005 && result.operatingPoint.flow_m3_s<0.035);
