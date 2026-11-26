@@ -38,4 +38,15 @@ assert.throws(()=>calculatePipeDerivedSystemCurve({hydraulicInput,pumpCurve,samp
 assert.throws(()=>calculatePipeDerivedSystemCurve({hydraulicInput:{...hydraulicInput,segments:[{...hydraulicInput.segments[0],equipmentPressureDrop:10,equipmentPressureDropUnit:'kPa'}]},pumpCurve}),/does not accept fixed equipment pressure drops/);
 assert.throws(()=>calculatePipeDerivedSystemCurve({hydraulicInput,pumpCurve:pumpCurve.map(p=>({...p,head_m:p.head_m+100}))}),/No pump\/system intersection/);
 assert.throws(()=>calculatePipeDerivedSystemCurve({hydraulicInput,pumpCurve,npsha_m:-1}),/cannot be negative/);
+// Tangential intersection regression: a straight pump-curve segment is tangent to
+// the convex pipe system curve. There is no sign change, so bracket-only solvers miss it.
+const V51 = require('../src/hydraulics-v5-1');
+const tangentFlow = 0.02125;
+const tangentHydraulic = q => V51.calculateMultiSegment({...hydraulicInput,flow:q,flowUnit:'m3/s'}).total_required_head_m;
+const tangentStep = 1e-6;
+const tangentHead = tangentHydraulic(tangentFlow);
+const tangentSlope = (tangentHydraulic(tangentFlow+tangentStep)-tangentHydraulic(tangentFlow-tangentStep))/(2*tangentStep);
+const tangentPump = [0.005,0.035,0.05].map(q=>({flow_m3_s:q,head_m:tangentHead+tangentSlope*(q-tangentFlow),efficiency_pct:70}));
+const tangentResult = calculatePipeDerivedSystemCurve({hydraulicInput,pumpCurve:tangentPump,sampleCount:101});
+assert.ok(tangentResult.intersections.some(p=>Math.abs(p.flow_m3_s-tangentFlow)<1e-7),'tangential intersection must be detected without a residual sign change');
 console.log('V5.6 pipe-derived system curve tests passed');
