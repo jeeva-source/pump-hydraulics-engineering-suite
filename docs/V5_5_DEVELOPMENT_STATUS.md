@@ -30,9 +30,9 @@ No source files or code blocks were copied. V5.5 independently implements these 
 - V5.5 isolated JavaScript regression harness passed.
 - V5.5 source and browser engine bundles match byte-for-byte.
 - V5.5 browser inline JavaScript syntax check passed.
-- GitHub Actions run #88 passed the complete `npm test` suite on commit `7e550203b020a6913e367ba033a7b6d2a58af6cd`.
+- GitHub Actions run #88 passed the complete `npm test` suite on commit `26b046d69323f33300488d51d34d069fb0f12c1d`.
 - Vercel preview deployment READY for the same commit:
-  - https://pump-hydraulics-engineering-suite-n1upgbmqf-jee-8996.vercel.app
+  - https://pump-hydraulics-engineering-suite-hrzr7ebov-jee-8996.vercel.app
   - `/`, `/network.html`, `/pump-performance.html`, `/pump-selection.html`, `/pump-configurations.html`, and `/pump-configurations-v5-5.js` returned HTTP 200.
 - Interactive browser input-to-result automation has not been performed.
 
