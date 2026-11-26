@@ -60,5 +60,5 @@ assert.throws(()=>analysePumpConfiguration({...base,speedRatio:0}),/greater than
 assert.throws(()=>analysePumpConfiguration({...base,speedRatio:2.1}),/no more than 2.0/);
 assert.throws(()=>analysePumpConfiguration({...base,density_kg_m3:0}),/greater than zero/);
 assert.throws(()=>analysePumpConfiguration({...base,motorEfficiency_pct:101}),/motorEfficiency_pct/);
-assert.throws(()=>transformPumpCurve(curve,'series',2,1).map(p=>p.flow_m3_s),/never/);
+assert.throws(()=>transformPumpCurve(curve.slice(0,2),'series',2,1),/at least three/);
 console.log('V5.5 pump configuration tests passed');
