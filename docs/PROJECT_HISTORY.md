@@ -118,3 +118,5 @@ Never mark a feature as complete or production released solely because code was 
 - Added a synthetic tangent-contact regression built from the V5.1.1 hydraulic engine; it asserts recovery of a tangent operating flow that a sign-change-only scan would miss.
 - Updated the V5.6 calculation basis and development status to document the method and remaining numerical limitations.
 - This is software hardening only; independent engineering validation and interactive browser testing remain outstanding.
+
+- Tangency hardening final CI: GitHub Actions run #112 passed `npm test` on `218dd0c275845a389ed8f27292a131e639566810`; source/browser bundle parity verified by test. A new Vercel preview could not be created because of the 24-hour Hobby deployment quota; the prior READY preview predates this hardening.
