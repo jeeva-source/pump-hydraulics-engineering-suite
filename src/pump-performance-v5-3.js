@@ -110,11 +110,15 @@ function calculatePumpOperatingPoint(input) {
   const motorPowerBasis = estimatedShaftPower_kW !== null ? 'calculated from interpolated pump efficiency' : vendorPower !== null ? 'calculated from manufacturer shaft-power curve' : null;
   const shaftPowerForMotor_kW = estimatedShaftPower_kW !== null ? estimatedShaftPower_kW : vendorPower;
   const motorInputPower_kW = shaftPowerForMotor_kW === null || motorEfficiency === null ? null : shaftPowerForMotor_kW / (motorEfficiency / 100);
-  const efficiencyPoints = points.filter(p => p.efficiency_pct !== undefined && p.efficiency_pct > 0);\n  const bep = efficiencyPoints.length ? efficiencyPoints.reduce((best, p) => p.efficiency_pct > best.efficiency_pct ? p : best) : null;
+  const efficiencyPoints = points.filter(p => p.efficiency_pct !== undefined && p.efficiency_pct > 0);
+  const bep = efficiencyPoints.length ? efficiencyPoints.reduce((best, p) => p.efficiency_pct > best.efficiency_pct ? p : best) : null;
   const npsha = input.npsha_m === undefined ? null : finite(input.npsha_m, 'npsha_m');
   if (npsha !== null && npsha < 0) throw new RangeError('NPSHa cannot be negative');
   const warnings = [];
-  if (staticHead < 0) warnings.push('System static head is negative; confirm the source/destination pressure and elevation datum. The static contribution assists flow.');\n  if (efficiency !== null && efficiency <= 0) warnings.push('Pump efficiency is zero at the operating point; efficiency-based shaft power is undefined. Use manufacturer shaft-power data.');\n  if (points.some(p => p.efficiency_pct !== undefined) && !bep) warnings.push('No positive efficiency values were supplied; BEP cannot be identified.');\n  if (uniqueRoots.length > 1) warnings.push('Multiple pump/system intersections were found; review the full pump curve and system configuration.');
+  if (staticHead < 0) warnings.push('System static head is negative; confirm the source/destination pressure and elevation datum. The static contribution assists flow.');
+  if (efficiency !== null && efficiency <= 0) warnings.push('Pump efficiency is zero at the operating point; efficiency-based shaft power is undefined. Use manufacturer shaft-power data.');
+  if (points.some(p => p.efficiency_pct !== undefined) && !bep) warnings.push('No positive efficiency values were supplied; BEP cannot be identified.');
+  if (uniqueRoots.length > 1) warnings.push('Multiple pump/system intersections were found; review the full pump curve and system configuration.');
   if (q < minQ || q > maxQ) warnings.push('Operating point is outside manufacturer curve data; extrapolation is not permitted.');
   if (bep) {
     const ratio = q / bep.flow_m3_s;
