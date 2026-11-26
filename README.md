@@ -79,4 +79,4 @@ This is a preliminary engineering aid, not certified engineering software or a c
 - Report total station flow/head/power and per-pump power split.
 - Preserve manufacturer NPSHr and shaft-power data only where their reference basis is valid; at changed speed NPSHr is not inferred.
 - Browser UI: `app/pump-configurations.html` with combined curve, system curve, operating point, JSON export and print/save-PDF.
-- See [V5.5 calculation basis](docs/V5_5_PUMP_CONFIGURATIONS_BASIS.md), [project history](docs/PROJECT_HISTORY.md) and [open-source reference review](docs/OPEN_SOURCE_REFERENCE_REVIEW.md).
+- See [V5.5 calculation basis](docs/V5_5_PUMP_CONFIGURATIONS_BASIS.md), [project history](docs/PROJECT_HISTORY.md) and [open-source reference review](docs/OPEN_SOURCE_REFERENCE_REVIEW.md). See [V5.5 development status](docs/V5_5_DEVELOPMENT_STATUS.md) for verification and limitations.
