@@ -99,3 +99,14 @@ At each development session, append:
 - known defects and next actions.
 
 Never mark a feature as complete or production released solely because code was written.
+
+
+## V5.6 development — 26 November 2026
+
+- Added `src/pipe-system-curve-v5-6.js` and matching browser bundle `app/pipe-system-curve-v5-6.js`.
+- Added `app/pipe-system-curve.html`: serial pipe inputs, manufacturer curve, sampled system curve, operating point, loss breakdown, warnings, JSON export and print.
+- Method: re-evaluate V5.1.1 at each sampled flow; do not fit a quadratic system curve. Refine sign-change intersections against the hydraulic engine by bisection.
+- Fixed equipment pressure drops are explicitly rejected because V5.1 models them as constants, not flow-dependent equipment curves.
+- Branched network coupling deliberately deferred; pump boundary semantics require separate validation.
+- Tests/CI and Vercel preview: pending at the time of this history entry; update after verification.
+- PR #5 remains unmerged; production main remains unchanged.
