@@ -29,7 +29,7 @@ assert.ok(result.operatingPoint.hydraulicPower_kW>0);
 assert.ok(result.operatingPoint.motorInputPower_kW>result.operatingPoint.selectedShaftPower_kW);
 assert.ok(result.operatingPoint.hydraulicBreakdown.majorLossHead_m>0);
 assert.equal(result.operatingPoint.npsha_m,5);
-assert.equal(result.operatingPoint.npshr_m,3);
+assert.ok(Math.abs(result.operatingPoint.npshr_m-(2+(result.operatingPoint.flow_m3_s-0.015)/0.01))<1e-10);
 assert.ok(result.intersectionsFound>=1);
 assert.ok(result.systemCurvePoints.at(-1).systemHead_m>result.systemCurvePoints[0].systemHead_m);
 assert.throws(()=>calculatePipeDerivedSystemCurve({hydraulicInput:{...hydraulicInput,segments:[]},pumpCurve}),/At least one/);
