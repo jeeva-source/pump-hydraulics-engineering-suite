@@ -25,6 +25,10 @@ assert.throws(()=>calculatePipeDerivedSystemCurve({hydraulicInput:{...hydraulicI
 assert.equal(result.systemCurvePoints.length,121);
 assert.equal(result.staticHead_m,20);
 assert.ok(result.operatingPoint.flow_m3_s>0.005 && result.operatingPoint.flow_m3_s<0.035);
+// Independent numerical benchmark for the example case (Churchill + Darcy-Weisbach).
+assert.ok(Math.abs(result.operatingPoint.flow_m3_s-0.025484090708661762)<1e-8);
+assert.ok(Math.abs(result.operatingPoint.head_m-33.32227300787352)<1e-7);
+assert.ok(Math.abs(result.operatingPoint.hydraulicPower_kW-8.31103243735403)<1e-7);
 assert.ok(result.operatingPoint.head_m>0);
 assert.ok(result.operatingPoint.hydraulicPower_kW>0);
 assert.ok(result.operatingPoint.motorInputPower_kW>result.operatingPoint.selectedShaftPower_kW);
