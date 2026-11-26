@@ -21,7 +21,7 @@ function finite(value, name) {
   if (value === null || value === undefined || (typeof value === 'string' && value.trim() === '')) {
     throw new TypeError(name + ' is required');
   }
-  if (typeof value === 'string' && !/^[+-]?(?:\\d+\\.?\\d*|\\.\\d+)(?:[eE][+-]?\\d+)?$/.test(value.trim())) {
+  if (typeof value === 'string' && !/^[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?$/.test(value.trim())) {
     throw new TypeError(name + ' must be a decimal number');
   }
   const n = Number(value);
