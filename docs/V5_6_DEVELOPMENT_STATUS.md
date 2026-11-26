@@ -24,7 +24,8 @@ V5.6.0 pipe-derived system-curve engine and browser module added to the integrat
 - GitHub Actions workflow run #105 passed the complete `npm test` suite on branch head `ef6b8c2a2cd09594869458accfbf70324b5f4f35`: https://github.com/jeeva-source/pump-hydraulics-engineering-suite/actions/runs/45759637504
 - Source/browser V5.6 engine files match byte-for-byte (asserted by the V5.6 regression test).
 - Vercel preview deployment `dpl_26RkYqfa45YpoTVnprWBHjgLJbWs` was READY. The V5.6 page and engine bundle, plus V5.0/V5.1/V5.3 dependencies, returned HTTP 200: https://pump-hydraulics-engineering-suite-4fk01i15f-jee-8996.vercel.app/pipe-system-curve.html
-- The preview deployment record was created at commit `3425b3364cdc68a0dba0dded12dd57eb59e72018`; subsequent branch changes were test/documentation and main-page title/navigation updates. A fresh preview for the final documentation commit is the next deployment check.
+- Preview deployment record: `dpl_26RkYqfa45YpoTVnprWBHjgLJbWs`, READY, URL https://pump-hydraulics-engineering-suite-4fk01i15f-jee-8996.vercel.app. Its recorded commit is `3425b3364cdc68a0dba0dded12dd57eb59e72018`; the V5.6 runtime files and page were included and returned HTTP 200. Later branch changes were tests/docs/main-page metadata only.
+- A fresh deployment from the final branch head was attempted but Vercel rejected it with the team Hobby 24-hour deployment API quota (`api-deployments-young-hobby-team-24h`, retry after 86400 seconds). No production promotion or setting change was attempted.
 - Interactive browser input-to-result automation and independent engineering review have not been completed.
 
 ## Release state
