@@ -86,6 +86,31 @@ function calculatePipeDerivedSystemCurve(input) {
       addRoot((lo + hi) / 2);
     }
   }
+  // Detect tangential contacts that do not change residual sign. Minimise |pump head - system head|
+  // inside each sampled interval; accept only a tight head residual. This complements,
+  // rather than replaces, the sign-change bisection above.
+  for (let i = 0; i < qNodes.length - 1; i++) {
+    let lo = qNodes[i], hi = qNodes[i + 1];
+    if (!(hi > lo)) continue;
+    const ratio = (Math.sqrt(5) - 1) / 2;
+    let x1 = hi - ratio * (hi - lo), x2 = lo + ratio * (hi - lo);
+    let f1 = Math.abs(residual(x1)), f2 = Math.abs(residual(x2));
+    for (let j = 0; j < 64; j++) {
+      if (f1 <= f2) {
+        hi = x2; x2 = x1; f2 = f1;
+        x1 = hi - ratio * (hi - lo); f1 = Math.abs(residual(x1));
+      } else {
+        lo = x1; x1 = x2; f1 = f2;
+        x2 = lo + ratio * (hi - lo); f2 = Math.abs(residual(x2));
+      }
+    }
+    const candidate = (lo + hi) / 2;
+    const candidateResidual = Math.abs(residual(candidate));
+    const candidateHead = V53.interpolate(pump, candidate, 'head_m');
+    const systemHead = atFlow(candidate).total_required_head_m;
+    const headTolerance = 1e-8 * Math.max(1, Math.abs(candidateHead), Math.abs(systemHead));
+    if (candidateResidual <= headTolerance) addRoot(candidate);
+  }
   roots.sort((a, b) => a - b);
   if (!roots.length) throw new RangeError('No pump/system intersection exists within the manufacturer curve flow range. Check the pipe data and pump selection; extrapolation is not permitted.');
 
