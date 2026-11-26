@@ -122,3 +122,13 @@ Never mark a feature as complete or production released solely because code was 
 - Tangency hardening final CI: GitHub Actions run #112 passed `npm test` on `218dd0c275845a389ed8f27292a131e639566810`; source/browser bundle parity verified by test. A new Vercel preview could not be created because of the 24-hour Hobby deployment quota; the prior READY preview predates this hardening.
 
 - Added independent numerical cross-check assertions to the V5.6 example regression: Q = 0.02548409071 m³/s, H = 33.32227301 m, hydraulic power = 8.31103244 kW. See `docs/V5_6_PIPE_DERIVED_SYSTEM_CURVE_BASIS.md`.
+
+## 3D hydraulic twin integration — 26 November 2026
+
+- Integrated the companion repository's 3D Studio interface into the V5.6 development branch using the existing `app/hydraulics-3d.js`, `app/pipe-layout-3d.js` and `app/storage-config.js` assets already present on the branch.
+- The main multi-segment workspace now hosts the interactive Three.js pump/pipe scene, configuration persistence, segment selection, camera presets, service/velocity/pressure colour modes, exploded view, flow animation and fullscreen controls.
+- Retained navigation to V5.2 network, V5.3 pump performance, V5.4 pump selection/NPSH, V5.5 pump configurations and V5.6 automatic system curve modules.
+- Three.js and addon imports are pinned to jsDelivr package version `0.187.0`. This avoids relying on the Express-only `/vendor/three` route, which is unavailable in the static Vercel output directory.
+- Added 3D layout-adapter and storage regression tests to the standard `npm test` sequence.
+- Integration branch: `integration/3d-hydraulic-twin`. Not production-released until CI, preview deployment and interactive browser checks pass and the pull request is reviewed/merged.
+- 3D geometry is illustrative, not fabrication/CAD geometry; it does not establish equipment dimensions, nozzle loads, support design or code compliance.
