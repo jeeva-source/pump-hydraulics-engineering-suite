@@ -29,3 +29,13 @@ V5.6 generates a system curve by recalculating the existing V5.1.1 serial multi-
 
 ## Verification
 See `docs/V5_6_DEVELOPMENT_STATUS.md`. Software regression tests do not replace independent engineering verification with project-specific benchmarks and manufacturer data.
+
+
+## Independent numerical regression benchmark
+For the documented two-segment example (998 kg/m³, 1 mPa·s, 150 mm × 12 m suction and 100 mm × 85 m discharge, stated roughness/K/elevation values, and the four-point example pump curve), an independent numerical solution using Churchill Darcy friction and Darcy–Weisbach gives approximately:
+
+- Operating flow: 0.02548409071 m³/s (91.7427 m³/h)
+- Operating head: 33.32227301 m
+- Hydraulic power: 8.31103244 kW
+
+The V5.6 regression test checks these values with numerical tolerances. This is a calculation cross-check for the example only, not third-party certification or field validation.
