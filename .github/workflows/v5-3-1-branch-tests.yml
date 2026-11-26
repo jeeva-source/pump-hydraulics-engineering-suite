@@ -1,0 +1,19 @@
+name: V5.3.1 branch regression tests
+
+on:
+  push:
+    branches:
+      - v5.3.1-pump-curve-hardening
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run complete regression suite
+        run: npm test
