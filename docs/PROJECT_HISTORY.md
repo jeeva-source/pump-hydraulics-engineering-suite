@@ -108,5 +108,5 @@ Never mark a feature as complete or production released solely because code was 
 - Method: re-evaluate V5.1.1 at each sampled flow; do not fit a quadratic system curve. Refine sign-change intersections against the hydraulic engine by bisection.
 - Fixed equipment pressure drops are explicitly rejected because V5.1 models them as constants, not flow-dependent equipment curves.
 - Branched network coupling deliberately deferred; pump boundary semantics require separate validation.
-- Tests/CI and Vercel preview: pending at the time of this history entry; update after verification.
+- Initial CI run exposed an incorrect NPSHr test expectation; corrected the expected value to use interpolation at the calculated operating flow. Numeric-string validation was hardened and tested. Final CI/preview verification remains pending.
 - PR #5 remains unmerged; production main remains unchanged.
