@@ -16,7 +16,7 @@ textarea{width:100%;min-height:510px;resize:vertical;background:#091522;border:1
 @media(max-width:900px){.grid{grid-template-columns:1fr}textarea{min-height:350px}}@media(max-width:550px){.metrics{grid-template-columns:1fr 1fr}main{padding:0 12px}}
 </style></head>
 <body>
-<header><div><div class="eyebrow">Engineering calculation workspace</div><h1>Pipe Network Solver</h1></div><div class="version">V5.2 · Development preview</div><a href="./index.html">← Multi-segment</a><a href="./pump-performance.html">V5.3 Pump Performance →</a></header>
+<header><div><div class="eyebrow">Engineering calculation workspace</div><h1>Pipe Network Solver</h1></div><div class="version">V5.2 · Development preview</div><a href="./index.html">← Multi-segment</a><a href="./pump-performance.html">V5.3 Pump Performance →</a><a href="./pump-selection.html">V5.4 Pump Selection →</a></header>
 <main><div class="intro"><div class="eyebrow">Hydraulic module / 03</div><h2>Connected pipe-network analysis</h2><p>Define nodes, fixed total-head boundaries, withdrawal demands and pipe edges. The solver calculates signed branch flows and nodal piezometric heads using a damped Newton continuity solution. All inputs are SI.</p></div>
 <div class="grid"><section class="panel"><h3>Network definition (JSON)</h3><p class="sub">Edit the example below. Positive demand is a withdrawal. Positive edge flow follows its from → to direction.</p>
 <textarea id="networkInput" spellcheck="false"></textarea><div class="actions"><button class="btn primary" id="calculate">Solve network</button><button class="btn" id="loadExample">Reload example</button></div><div class="error" id="error" role="alert"></div></section>
