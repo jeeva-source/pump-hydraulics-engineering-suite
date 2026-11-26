@@ -1,4 +1,4 @@
-# Changelog
+# Changelog\n\n## V5.6.0 — Automatic pipe-derived system curve (development)\n- Added sampled system-curve generation by recalculating V5.1.1 serial pipe hydraulics at multiple flow rates.\n- Added manufacturer pump-curve intersection with bisection refinement and no curve extrapolation.\n- Added loss breakdown, operating duty, power, optional NPSH screening and warnings.\n- Rejected fixed equipment pressure drops rather than treating them as flow-dependent; deferred V5.2 network coupling.\n- Added browser module, regression tests and engineering basis/status documentation.\n
 
 ## V5.5.0 — Pump configurations and variable-speed cases (development)
 - Added identical-pump single/series/parallel curve transformation.
