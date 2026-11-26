@@ -1,6 +1,6 @@
 {
   "name": "pump-hydraulics-engineering-suite",
-  "version": "5.3.0",
+  "version": "5.3.1",
   "description": "Pump hydraulics suite with multi-segment, pipe-network and pump operating-point calculation engines",
   "main": "main.js",
   "scripts": {
