@@ -42,7 +42,7 @@ assert.equal(selected.vendorOperatingLimits.mcsfStatus,'at_or_above_mcsf');
 assert.equal(selected.vendorOperatingLimits.runoutStatus,'at_or_below_runout');
 assert.equal(selected.assessment.status,'meets_supplied_criteria');
 
-const lowNpsh=evaluatePumpSelection({...base,suctionConditions:{...base.suctionConditions,sourcePressureAbs_Pa:50000}});
+const lowNpsh=evaluatePumpSelection({...base,suctionConditions:{...base.suctionConditions,sourcePressureAbs_Pa:5000}});
 assert.ok(lowNpsh.npsh.margin_m<0);
 assert.equal(lowNpsh.npsh.status,'npsha_below_npshr');
 assert.equal(lowNpsh.assessment.status,'does_not_meet_supplied_criteria');
