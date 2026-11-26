@@ -16,7 +16,7 @@ const curve=[
 ];
 const base={
  density_kg_m3:998,motorEfficiency_pct:94,
- systemCurve:{staticHead_m:10,designFlow_m3_s:0.03,designHead_m:30},
+ systemCurve:{staticHead_m:10,designFlow_m3_s:0.03,designHead_m:35},
  pumpCurve:curve,
  pumpMetadata:{manufacturer:'Illustrative OEM',model:'Test Pump',ratedSpeed_rpm:2950}
 };
