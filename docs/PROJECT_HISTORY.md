@@ -130,5 +130,5 @@ Never mark a feature as complete or production released solely because code was 
 - Retained navigation to V5.2 network, V5.3 pump performance, V5.4 pump selection/NPSH, V5.5 pump configurations and V5.6 automatic system curve modules.
 - Three.js and addon imports are pinned to jsDelivr package version `0.187.0`. This avoids relying on the Express-only `/vendor/three` route, which is unavailable in the static Vercel output directory.
 - Added 3D layout-adapter and storage regression tests to the standard `npm test` sequence.
-- Integration branch: `integration/3d-hydraulic-twin`. Not production-released until CI, preview deployment and interactive browser checks pass and the pull request is reviewed/merged.
+- PR #6 (`Integrate 3D hydraulic twin into V5.6 workspace`) was squash-merged into `v5.4-pump-selection-npsh` at `2967e0e85caca9f915707cce408dbd0f44a151ea`; PR #5 now includes the integration. PR #6 CI run #116 passed and updated PR #5 CI run #117 passed. Vercel preview deployment remains blocked by the Hobby 24-hour deployment quota, and interactive browser/WebGL checks remain pending. This is not production-released.
 - 3D geometry is illustrative, not fabrication/CAD geometry; it does not establish equipment dimensions, nozzle loads, support design or code compliance.
