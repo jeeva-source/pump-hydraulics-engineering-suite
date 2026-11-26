@@ -68,5 +68,7 @@ assert.throws(() => calculatePumpOperatingEnvelope({ pumpCurve, cases: [cases[0]
 assert.throws(() => calculatePumpOperatingEnvelope({ pumpCurve: pumpCurve.slice(0, 2), cases }), /at least three/);
 assert.throws(() => calculatePumpOperatingEnvelope({ pumpCurve, cases: [cases[0], { ...cases[1], hydraulicInput: null }] }), /requires a hydraulicInput/);
 assert.throws(() => calculatePumpOperatingEnvelope({ pumpCurve, cases, motorEfficiency_pct: 101 }), /motorEfficiency_pct/);
-assert.throws(() => calculatePumpOperatingEnvelope({ pumpCurve, cases: [{ ...cases[0], requiredNpshMargin_m: -1 }, cases[1]] }).cases[0].status, /./);
+const invalidMargin = calculatePumpOperatingEnvelope({ pumpCurve, cases: [{ ...cases[0], requiredNpshMargin_m: -1 }, cases[1]] });
+assert.equal(invalidMargin.cases[0].status, 'calculation_error');
+assert.match(invalidMargin.cases[0].error, /cannot be negative/);
 console.log('V5.7 multi-case pump operating envelope tests passed');
