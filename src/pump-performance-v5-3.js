@@ -36,7 +36,7 @@ function validateCurve(raw) {
     for (const field of ['efficiency_pct', 'npshr_m', 'shaft_power_kW']) {
       if (p[field] !== undefined && p[field] !== null) point[field] = finite(p[field], 'pumpCurve[' + i + '].' + field);
     }
-    if (point.efficiency_pct !== undefined && !(point.efficiency_pct > 0 && point.efficiency_pct <= 100)) throw new RangeError('Pump efficiency must be greater than 0 and at most 100 percent');
+    if (point.efficiency_pct !== undefined && !(point.efficiency_pct >= 0 && point.efficiency_pct <= 100)) throw new RangeError('Pump efficiency must be between 0 and 100 percent');
     if (point.npshr_m !== undefined && point.npshr_m < 0) throw new RangeError('NPSHr cannot be negative');
     if (point.shaft_power_kW !== undefined && point.shaft_power_kW < 0) throw new RangeError('Shaft power cannot be negative');
     return point;
@@ -64,44 +64,57 @@ function calculatePumpOperatingPoint(input) {
   const staticHead = finite(input.systemCurve?.staticHead_m, 'systemCurve.staticHead_m');
   const designFlow = finite(input.systemCurve?.designFlow_m3_s, 'systemCurve.designFlow_m3_s');
   const designHead = finite(input.systemCurve?.designHead_m, 'systemCurve.designHead_m');
-  if (staticHead < 0 || !(designFlow > 0) || !(designHead > staticHead)) throw new RangeError('System curve requires static head >= 0, design flow > 0 and design head > static head');
+  if (!(designFlow > 0) || !(designHead > staticHead)) throw new RangeError('System curve requires design flow > 0 and design head > static head');
   const system = { staticHead_m: staticHead, designFlow_m3_s: designFlow, designHead_m: designHead, resistance_m_per_m6: (designHead - staticHead) / (designFlow * designFlow) };
   const minQ = points[0].flow_m3_s, maxQ = points[points.length - 1].flow_m3_s;
-  const loQ = Math.max(minQ, 0), hiQ = maxQ;
   const diff = q => interpolate(points, q, 'head_m') - systemHead(q, system);
   const roots = [];
+  // Within each interval the supplied pump head is linear in Q and the
+  // system head is quadratic. Solve that quadratic exactly so two crossings
+  // or a tangent crossing inside one vendor interval cannot be missed.
   for (let i = 0; i < points.length - 1; i++) {
-    let lo = points[i].flow_m3_s, hi = points[i + 1].flow_m3_s;
-    let flo = diff(lo), fhi = diff(hi);
-    if (Math.abs(flo) < 1e-10) roots.push(lo);
-    if (flo * fhi < 0) {
-      for (let n = 0; n < 80; n++) {
-        const mid = (lo + hi) / 2, fm = diff(mid);
-        if (Math.abs(fm) < 1e-12) { lo = hi = mid; break; }
-        if (flo * fm > 0) { lo = mid; flo = fm; } else hi = mid;
-      }
-      roots.push((lo + hi) / 2);
+    const p0 = points[i], p1 = points[i + 1];
+    const q0 = p0.flow_m3_s, q1 = p1.flow_m3_s;
+    const slope = (p1.head_m - p0.head_m) / (q1 - q0);
+    const intercept = p0.head_m - slope * q0;
+    const A = -system.resistance_m_per_m6;
+    const B = slope;
+    const C = intercept - system.staticHead_m;
+    const discriminant = B * B - 4 * A * C;
+    const discriminantTolerance = 1e-12 * Math.max(1, B * B, Math.abs(4 * A * C));
+    if (discriminant < -discriminantTolerance) continue;
+    const rootTerm = Math.sqrt(Math.max(0, discriminant));
+    const candidates = rootTerm <= Math.sqrt(discriminantTolerance)
+      ? [-B / (2 * A)]
+      : [(-B - rootTerm) / (2 * A), (-B + rootTerm) / (2 * A)];
+    for (const candidate of candidates) {
+      const flowTolerance = Math.max(1e-10, Math.max(Math.abs(q0), Math.abs(q1)) * 1e-9);
+      if (candidate < q0 - flowTolerance || candidate > q1 + flowTolerance) continue;
+      const bounded = Math.min(q1, Math.max(q0, candidate));
+      const residual = diff(bounded);
+      const headScale = Math.max(1, Math.abs(interpolate(points, bounded, 'head_m')), Math.abs(systemHead(bounded, system)));
+      if (Math.abs(residual) <= 1e-8 * headScale) roots.push(bounded);
     }
-    if (i === points.length - 2 && Math.abs(fhi) < 1e-10) roots.push(hi);
   }
-  const uniqueRoots = roots.filter((q, i) => roots.findIndex(x => Math.abs(x - q) < 1e-8) === i);
+  const uniqueRoots = roots.filter((q, i) => roots.findIndex(x => Math.abs(x - q) <= Math.max(1e-10, Math.max(Math.abs(x), Math.abs(q)) * 1e-9)) === i)
+    .sort((a, b) => a - b);
   if (!uniqueRoots.length) throw new RangeError('No pump/system intersection exists within the supplied manufacturer pump-curve flow range; do not extrapolate the curve');
   const q = uniqueRoots[0], h = systemHead(q, system);
   const efficiency = interpolate(points, q, 'efficiency_pct');
   const npshr = interpolate(points, q, 'npshr_m');
   const vendorPower = interpolate(points, q, 'shaft_power_kW');
   const hydraulicPower_kW = rho * g * q * h / 1000;
-  const estimatedShaftPower_kW = efficiency === null ? null : hydraulicPower_kW / (efficiency / 100);
+  const estimatedShaftPower_kW = efficiency === null || efficiency <= 0 ? null : hydraulicPower_kW / (efficiency / 100);
   const motorEfficiency = input.motorEfficiency_pct === undefined ? null : finite(input.motorEfficiency_pct, 'motorEfficiency_pct');
   if (motorEfficiency !== null && !(motorEfficiency > 0 && motorEfficiency <= 100)) throw new RangeError('Motor efficiency must be greater than 0 and at most 100 percent');
   const motorPowerBasis = estimatedShaftPower_kW !== null ? 'calculated from interpolated pump efficiency' : vendorPower !== null ? 'calculated from manufacturer shaft-power curve' : null;
   const shaftPowerForMotor_kW = estimatedShaftPower_kW !== null ? estimatedShaftPower_kW : vendorPower;
   const motorInputPower_kW = shaftPowerForMotor_kW === null || motorEfficiency === null ? null : shaftPowerForMotor_kW / (motorEfficiency / 100);
-  const bep = points.some(p => p.efficiency_pct !== undefined) ? points.reduce((best, p) => p.efficiency_pct > best.efficiency_pct ? p : best) : null;
+  const efficiencyPoints = points.filter(p => p.efficiency_pct !== undefined && p.efficiency_pct > 0);\n  const bep = efficiencyPoints.length ? efficiencyPoints.reduce((best, p) => p.efficiency_pct > best.efficiency_pct ? p : best) : null;
   const npsha = input.npsha_m === undefined ? null : finite(input.npsha_m, 'npsha_m');
   if (npsha !== null && npsha < 0) throw new RangeError('NPSHa cannot be negative');
   const warnings = [];
-  if (uniqueRoots.length > 1) warnings.push('Multiple pump/system intersections were found; review the full pump curve and system configuration.');
+  if (staticHead < 0) warnings.push('System static head is negative; confirm the source/destination pressure and elevation datum. The static contribution assists flow.');\n  if (efficiency !== null && efficiency <= 0) warnings.push('Pump efficiency is zero at the operating point; efficiency-based shaft power is undefined. Use manufacturer shaft-power data.');\n  if (points.some(p => p.efficiency_pct !== undefined) && !bep) warnings.push('No positive efficiency values were supplied; BEP cannot be identified.');\n  if (uniqueRoots.length > 1) warnings.push('Multiple pump/system intersections were found; review the full pump curve and system configuration.');
   if (q < minQ || q > maxQ) warnings.push('Operating point is outside manufacturer curve data; extrapolation is not permitted.');
   if (bep) {
     const ratio = q / bep.flow_m3_s;
