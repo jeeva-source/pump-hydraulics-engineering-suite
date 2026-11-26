@@ -75,8 +75,11 @@ function calculateNetwork(input) {
     return item;
   });
   if (!nodes.some(n => n.fixedTotalHead_m !== null)) throw new RangeError('At least one fixedTotalHead_m boundary node is required');
-  const edgeIds = new Set();\n  const edges = input.edges.map((e, i) => {
-    if (!e || typeof e !== 'object' || !e.id) throw new TypeError('Each edge requires an id');\n    if (edgeIds.has(e.id)) throw new RangeError('Duplicate edge id: ' + e.id);\n    edgeIds.add(e.id);
+  const edgeIds = new Set();
+  const edges = input.edges.map((e, i) => {
+    if (!e || typeof e !== 'object' || !e.id) throw new TypeError('Each edge requires an id');
+    if (edgeIds.has(e.id)) throw new RangeError('Duplicate edge id: ' + e.id);
+    edgeIds.add(e.id);
     if (!nodeMap.has(e.from) || !nodeMap.has(e.to) || e.from === e.to) throw new RangeError('Edge ' + e.id + ' must connect two distinct existing nodes');
     const length = num(e.length_m, e.id + ' length_m');
     const diameter = num(e.diameter_m, e.id + ' diameter_m');
