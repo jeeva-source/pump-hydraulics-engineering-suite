@@ -40,8 +40,8 @@ This file is the durable project memory and development history. Update it whene
 - PR #5 contains V5.2, V5.3.1 and V5.4 changes; it was open and not merged at the last recorded check.
 - V5.4 preview deployment: https://pump-hydraulics-engineering-suite-27b0rr998-jee-8996.vercel.app
 - V5.4 preview was READY; production main remained V5.1.1.
-- V5.5 integrated preview: https://pump-hydraulics-engineering-suite-hrzr7ebov-jee-8996.vercel.app (READY, branch `v5.4-pump-selection-npsh`, commit `26b046d69323f33300488d51d34d069fb0f12c1d`).
-- GitHub Actions run #90 passed the complete V5.0–V5.5 test suite on commit `26b046d69323f33300488d51d34d069fb0f12c1d`.
+- V5.5 integrated preview: https://pump-hydraulics-engineering-suite-gyfi74hlg-jee-8996.vercel.app (READY, branch `v5.4-pump-selection-npsh`, commit `6b9ee9888dcbc4974269dc661487ea3846254290`).
+- GitHub Actions run #91 passed the complete V5.0–V5.5 test suite on commit `6b9ee9888dcbc4974269dc661487ea3846254290`.
 
 ## Open-source research and provenance
 
