@@ -48,8 +48,8 @@ assert.equal(slow.transformedPumpCurve[0].npshr_m,undefined);
 assert.equal(slow.transformedPumpCurve[0].shaft_power_kW,undefined);
 assert.ok(slow.warnings.some(w=>w.includes('Manufacturer NPSHr')));
 
-const seriesSlow=analysePumpConfiguration({...base,arrangement:'series',pumpCount:3,speedRatio:0.9});
-assert.equal(seriesSlow.transformedPumpCurve[0].head_m,50*0.9*0.9*3);
+const seriesSlow=analysePumpConfiguration({...base,arrangement:'series',pumpCount:2,speedRatio:0.9});
+assert.equal(seriesSlow.transformedPumpCurve[0].head_m,50*0.9*0.9*2);
 assert.equal(seriesSlow.transformedPumpCurve[0].flow_m3_s,0.009);
 
 assert.throws(()=>analysePumpConfiguration({...base,arrangement:'unknown'}),/arrangement must be/);
