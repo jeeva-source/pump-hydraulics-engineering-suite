@@ -43,4 +43,62 @@ assert.equal(multi.intersectionsFound,3);
 assert.equal(multi.intersections.length,3);
 assert.match(multi.selectedIntersectionPolicy,/Lowest-flow/);
 assert.ok(multi.warnings.some(w=>w.includes('Multiple pump/system intersections')));
-console.log('V5.3 pump performance tests passed');
+
+// Exact quadratic intersection: two roots can exist inside one piecewise-linear
+// manufacturer interval even when the interval endpoints have the same sign.
+const twoRootsInsideInterval = calculatePumpOperatingPoint({
+ density_kg_m3: 998,
+ systemCurve: { staticHead_m: 10, designFlow_m3_s: 0.02, designHead_m: 30 },
+ pumpCurve: [
+  {flow_m3_s:0.01,head_m:14},
+  {flow_m3_s:0.03,head_m:50},
+  {flow_m3_s:0.04,head_m:40}
+ ]
+});
+assert.equal(twoRootsInsideInterval.intersectionsFound,2);
+assert.ok(Math.abs(twoRootsInsideInterval.intersections[0].flow_m3_s-0.0113667504192892)<1e-10);
+assert.ok(Math.abs(twoRootsInsideInterval.intersections[1].flow_m3_s-0.0246332495807108)<1e-10);
+
+// Tangential intersection (zero discriminant) must be detected once.
+const tangent = calculatePumpOperatingPoint({
+ density_kg_m3: 998,
+ systemCurve: { staticHead_m: 10, designFlow_m3_s: 0.02, designHead_m: 30 },
+ pumpCurve: [
+  {flow_m3_s:0.01,head_m:10},
+  {flow_m3_s:0.03,head_m:50},
+  {flow_m3_s:0.04,head_m:40}
+ ]
+});
+assert.equal(tangent.intersectionsFound,1);
+assert.ok(Math.abs(tangent.operatingPoint.flow_m3_s-0.02)<1e-10);
+
+// Real pump curves may report 0% efficiency at shutoff; that point is valid,
+// but it must not be selected as BEP or used to divide hydraulic power by zero.
+const shutoff = calculatePumpOperatingPoint({
+ density_kg_m3: 998, motorEfficiency_pct: 90,
+ systemCurve: { staticHead_m: 30, designFlow_m3_s: 0.02, designHead_m: 40 },
+ pumpCurve: [
+  {flow_m3_s:0,head_m:30,efficiency_pct:0,shaft_power_kW:5},
+  {flow_m3_s:0.02,head_m:25,efficiency_pct:50,shaft_power_kW:6},
+  {flow_m3_s:0.04,head_m:15,efficiency_pct:60,shaft_power_kW:7}
+ ]
+});
+assert.equal(shutoff.operatingPoint.flow_m3_s,0);
+assert.equal(shutoff.operatingPoint.estimatedShaftPower_kW,null);
+assert.equal(shutoff.operatingPoint.motorInputPower_kW,5/0.9);
+assert.equal(shutoff.bep.flow_m3_s,0.04);
+assert.ok(shutoff.warnings.some(w=>w.includes('efficiency is zero')));
+
+// Negative net static head is valid for a pressurised source or downhill system;
+// it is surfaced as an explicit engineering warning.
+const negativeStatic = calculatePumpOperatingPoint({
+ density_kg_m3:998,
+ systemCurve:{staticHead_m:-5,designFlow_m3_s:0.02,designHead_m:15},
+ pumpCurve:[
+  {flow_m3_s:0.005,head_m:40},
+  {flow_m3_s:0.02,head_m:25},
+  {flow_m3_s:0.04,head_m:5}
+ ]
+});
+assert.ok(negativeStatic.warnings.some(w=>w.includes('static head is negative')));
+\nconsole.log('V5.3 pump performance tests passed');
