@@ -147,4 +147,6 @@ Never mark a feature as complete or production released solely because code was 
 - Added regression tests for multiple cases, power, NPSH, vendor criteria, missing data, failed cases, isolated errors, invalid inputs and source/browser bundle parity.
 - Updated npm test/build/lint scripts to include V5.7.
 - Scope is serial-path steady-state analysis only. Branched network coupling, per-case distinct pump curves/speed changes and suction-source NPSHa calculation remain future work.
-- Development CI and browser interaction verification pending. PR #5 remains open and unmerged; production main remains unchanged.
+- GitHub Actions run #128 passed both `npm run build` and the full `npm test` suite on commit `9fe39033064021a8745e4e23e916fb1ac0390aa5`: https://github.com/jeeva-source/pump-hydraulics-engineering-suite/actions/runs/45764029233. The new page's inline controller is syntax-checked by the V5.7 regression test.
+- Fresh Vercel preview creation is currently blocked by the Free/Hobby daily deployment API limit (`api-deployments-free-per-day`, retry after 24 hours). The latest READY preview currently found is from the early V5.7 engine-only commit `a15a0d20b187e36c5fb1229756a6c64ecb72af3a`; it does not include the completed V5.7 page and should not be used as the full V5.7 preview.
+- Interactive browser/WebGL verification remains outstanding. PR #5 remains open and unmerged; production main remains unchanged.
