@@ -15,7 +15,7 @@ if (!V51 || !V53) throw new Error('V5.1 and V5.3 engines must be loaded before V
 
 function finite(value, name) {
   if (value === null || value === undefined || (typeof value === 'string' && value.trim() === '')) throw new TypeError(name + ' is required');
-  if (typeof value === 'string' && !/^[+-]?(?:\\d+\\.?\\d*|\\.\\d+)(?:[eE][+-]?\\d+)?$/.test(value.trim())) throw new TypeError(name + ' must be a decimal number');
+  if (typeof value === 'string' && !/^[+-]?(?:\d+\\.?\d*|\\.\d+)(?:[eE][+-]?\d+)?$/.test(value.trim())) throw new TypeError(name + ' must be a decimal number');
   const n = Number(value);
   if (!Number.isFinite(n)) throw new TypeError(name + ' must be finite');
   return n;
