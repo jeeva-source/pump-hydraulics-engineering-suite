@@ -1,5 +1,14 @@
 # Changelog
 
+## V5.5.0 — Pump configurations and variable-speed cases (development)
+- Added identical-pump single/series/parallel curve transformation.
+- Added reference-speed to selected-speed curve transformation using affinity-law flow/head relations.
+- Added total and per-pump hydraulic/shaft/motor input power reporting.
+- Deliberately withheld NPSHr and vendor shaft-power scaling at changed speed; added explicit manufacturer-data warnings.
+- Added simplified configuration UI, pump/system curve chart, JSON report export and print/save-PDF.
+- Added regression tests, calculation basis, durable project history and open-source reference review.
+
+
 ## V5.4.0 — Pump selection and NPSH assessment (development)
 - Added source-to-pump NPSHa calculation with absolute pressure, vapour pressure, elevation, source velocity and suction losses.
 - Added manufacturer NPSHr comparison and configurable project-required NPSH margin.
