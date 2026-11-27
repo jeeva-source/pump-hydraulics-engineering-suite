@@ -435,70 +435,21 @@ function buildCentrifugalPumpSkid(pipeY, materials, shadowMat) {
 }
 
 /**
- * Composite 6-part Industrial Gate Valve assembly mounted on a pipe segment.
+ * Neutral visual marker for aggregate fitting/valve loss input.
+ * A total K value does not identify a valve type or fitting arrangement,
+ * so the scene must not fabricate a gate-valve model.
  */
-function buildGateValve(pipeRadius, materials) {
-  const valve = new THREE.Group();
-
-  // 1. Cast valve body collar
-  const body = new THREE.Mesh(
-    new THREE.CylinderGeometry(pipeRadius * 1.38, pipeRadius * 1.38, pipeRadius * 1.45, 20),
-    materials.valveBody,
+function buildFittingLossMarker(pipeRadius, materials) {
+  const marker = new THREE.Group();
+  const ring = new THREE.Mesh(
+    new THREE.TorusGeometry(pipeRadius * 1.16, Math.max(0.025, pipeRadius * 0.075), 8, 24),
+    materials.brass,
   );
-  body.rotation.z = Math.PI / 2;
-  body.castShadow = true;
-  valve.add(body);
-
-  // 2. Vertical bonnet housing
-  const bonnet = new THREE.Mesh(
-    new THREE.CylinderGeometry(pipeRadius * 0.62, pipeRadius * 0.85, pipeRadius * 1.8, 16),
-    materials.valveBody,
-  );
-  bonnet.position.y = pipeRadius * 1.25;
-  bonnet.castShadow = true;
-  valve.add(bonnet);
-
-  // 3. Bonnet bolted flange ring
-  const bonnetFlange = new THREE.Mesh(
-    new THREE.CylinderGeometry(pipeRadius * 1.02, pipeRadius * 1.02, pipeRadius * 0.24, 16),
-    materials.flangeSteel,
-  );
-  bonnetFlange.position.y = pipeRadius * 1.05;
-  valve.add(bonnetFlange);
-
-  // 4. Stainless rising stem
-  const stem = new THREE.Mesh(
-    new THREE.CylinderGeometry(pipeRadius * 0.14, pipeRadius * 0.14, pipeRadius * 1.45, 12),
-    materials.flangeSteel,
-  );
-  stem.position.y = pipeRadius * 2.55;
-  valve.add(stem);
-
-  // 5. Cast-iron safety-red handwheel rim
-  const wheelY = pipeRadius * 2.95;
-  const wheelR = Math.max(0.24, pipeRadius * 1.35);
-  const wheelRim = new THREE.Mesh(
-    new THREE.TorusGeometry(wheelR, Math.max(0.025, pipeRadius * 0.14), 12, 24),
-    materials.valveRed,
-  );
-  wheelRim.rotation.x = Math.PI / 2;
-  wheelRim.position.y = wheelY;
-  wheelRim.castShadow = true;
-  valve.add(wheelRim);
-
-  // 6. Cross spokes
-  const spokeGeo = new THREE.CylinderGeometry(0.018, 0.018, wheelR * 1.9, 8);
-  const spoke1 = new THREE.Mesh(spokeGeo, materials.valveRed);
-  spoke1.rotation.z = Math.PI / 2;
-  spoke1.position.y = wheelY;
-  valve.add(spoke1);
-
-  const spoke2 = new THREE.Mesh(spokeGeo, materials.valveRed);
-  spoke2.rotation.x = Math.PI / 2;
-  spoke2.position.y = wheelY;
-  valve.add(spoke2);
-
-  return valve;
+  ring.rotation.y = Math.PI / 2;
+  ring.castShadow = true;
+  ring.userData.kind = 'aggregate-fitting-loss-indicator';
+  marker.add(ring);
+  return marker;
 }
 
 /**
@@ -845,16 +796,6 @@ class HydraulicsScene3D {
         roughness: 0.3,
         metalness: 0.05,
       })),
-      valveBody: tagShared(new THREE.MeshStandardMaterial({
-        color: 0x314b66,
-        roughness: 0.52,
-        metalness: 0.62,
-      })),
-      valveRed: tagShared(new THREE.MeshStandardMaterial({
-        color: 0xc9423a,
-        roughness: 0.35,
-        metalness: 0.22,
-      })),
       vesselAmber: tagShared(new THREE.MeshStandardMaterial({
         color: 0xc98b3e,
         roughness: 0.36,
@@ -1050,13 +991,11 @@ class HydraulicsScene3D {
         segGroup.add(sup2);
       }
 
-      // Inline Gate Valve if minorLossK > 0
-      if (seg.hasValve) {
-        const vt = seg.hasEquipment ? 0.24 : 0.34;
-        const vp = curve.getPointAt(vt);
-        const valve = buildGateValve(seg.visualRadius, this.materials);
-        valve.position.copy(vp);
-        segGroup.add(valve);
+      // Aggregate K is not a valve specification: show a neutral loss marker only.
+      if (seg.hasFittingLoss) {
+        const marker = buildFittingLossMarker(seg.visualRadius, this.materials);
+        marker.position.copy(curve.getPointAt(0.34));
+        segGroup.add(marker);
       }
 
       // Inline Process Equipment Vessel if equipmentPressureDrop > 0
