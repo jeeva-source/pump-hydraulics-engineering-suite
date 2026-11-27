@@ -110,7 +110,7 @@ function buildPipeLayout(result) {
       visualRadius,
       prevVisualRadius: prevSeg ? prevSeg.visualRadius : visualRadius,
       hasReducer,
-      hasValve: (Number(seg.minor_loss_K_total) || 0) > 0.01,
+      hasFittingLoss: (Number(seg.minor_loss_K_total) || 0) > 0.01,
       hasEquipment: (Number(seg.equipment_loss_head_m) || 0) > 0.001,
       velocityNorm: clamp((Number(seg.velocity_m_s) || 0) / flowVelocityMax, 0, 1),
       pressureDropNorm: clamp(Math.abs(Number(seg.pressure_drop_Pa) || 0) / pressureDropMax, 0, 1),
