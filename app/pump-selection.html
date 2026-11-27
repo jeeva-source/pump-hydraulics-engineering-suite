@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1422">
+<title>Pump Selection & NPSH Assessment | V5.4</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1422;--panel:#142238;--line:#2a4059;--text:#e9f0f8;--muted:#9eb0c4;--blue:#63b2f5;--green:#53c79b;--amber:#efc178;--red:#ff9292}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#1c3857 0,transparent 32%),var(--bg);color:var(--text);font:14px/1.5 Inter,Segoe UI,Arial,sans-serif}
+header{padding:20px clamp(16px,4vw,54px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+h1{font-size:19px;margin:0}.eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8dc5f4;font-weight:700}
+a{color:#8dc9ff;text-decoration:none}.version{border:1px solid #315273;border-radius:18px;padding:6px 11px;color:#b9dcf9;font-size:11px}
+main{max-width:1500px;margin:24px auto;padding:0 18px 55px}.intro{margin-bottom:18px}.intro h2{font-size:24px;margin:4px 0}.intro p{color:var(--muted);max-width:1000px}
+.grid{display:grid;grid-template-columns:minmax(350px,.9fr) minmax(480px,1.2fr);gap:16px;align-items:start}.panel{background:linear-gradient(180deg,#16263b,#111e30);border:1px solid var(--line);border-radius:14px;padding:17px;min-width:0}.panel h3{margin:0 0 6px;font-size:15px}.sub{font-size:12px;color:var(--muted);margin:0 0 12px}
+textarea{width:100%;min-height:560px;resize:vertical;background:#091522;border:1px solid #2a4058;border-radius:9px;color:#dce9f6;padding:13px;font:12px/1.55 ui-monospace,Consolas,monospace;tab-size:2}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}.btn{border:1px solid #345675;border-radius:8px;padding:9px 13px;background:#1b3048;color:#dceafa;cursor:pointer;font-weight:650}.btn.primary{background:linear-gradient(135deg,#2477c8,#2995b6);border:0;color:#fff}
+.error{color:var(--red);white-space:pre-wrap;margin-top:10px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:12px 0}.metric{background:#0c1929;border:1px solid #273d55;border-radius:9px;padding:11px}.metric span{display:block;color:var(--muted);font-size:10px}.metric strong{display:block;font-size:18px;margin-top:4px;overflow-wrap:anywhere}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:9px;margin-top:13px}table{width:100%;border-collapse:collapse;font-size:11px;min-width:760px}th,td{padding:9px;text-align:right;border-bottom:1px solid #2a3d53;white-space:nowrap}th{background:#172c44;color:#a9d3f7}th:first-child,td:first-child{text-align:left}
+.notice{margin-top:12px;padding:12px;border:1px solid #6b542e;background:#342b1e;border-radius:9px;color:#f3d6a5;font-size:12px;white-space:pre-wrap}.status{font-weight:700}.good{color:var(--green)}.bad{color:var(--red)}.unknown{color:var(--amber)}
+.foot{color:#8298b0;font-size:11px;line-height:1.6;margin-top:18px}
+@media(max-width:950px){.grid{grid-template-columns:1fr}textarea{min-height:390px}}@media(max-width:560px){.metrics{grid-template-columns:1fr 1fr}main{padding:0 12px 40px}}
+@media print{body{background:#fff;color:#111}.panel{background:#fff;border:1px solid #aaa;color:#111}.sub,.foot{color:#444}header{color:#111}.grid{display:block}.grid>.panel:first-child{display:none}.btn,.version,header a{display:none}.tablewrap{overflow:visible}table{min-width:0;font-size:9px}th{background:#eee;color:#111}td,th{color:#111;border-color:#ccc}.notice{background:#fff8e8;color:#332}.metric{background:#fff;color:#111;border-color:#ccc}.metric span{color:#444}}
+</style>
+</head>
+<body>
+<header>
+ <div><div class="eyebrow">Engineering calculation workspace</div><h1>Pump Hydraulics Engineering Suite</h1></div>
+ <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap"><a href="./pump-performance.html">← V5.3 Pump Performance</a><a href="./network.html">V5.2 Network</a><a href="./pump-configurations.html">V5.5 Configurations →</a><span class="version">V5.4 · Pump Selection & NPSH</span></div>
+</header>
+<main>
+ <div class="intro"><div class="eyebrow">Hydraulic module / 05</div><h2>Advanced pump selection and suction assessment</h2><p>Compare manufacturer pump curves against a common system duty, calculate available NPSH from explicit suction-system conditions, and check only the vendor operating limits and project margin criteria you supply.</p></div>
+ <div class="grid">
+  <section class="panel"><h3>Selection case (JSON)</h3><p class="sub">All dimensional inputs are SI. The included pump curves are illustrative examples only; replace them with manufacturer-approved data.</p>
+   <textarea id="caseInput" spellcheck="false"></textarea>
+   <div class="actions"><button class="btn primary" id="evaluate">Evaluate pumps</button><button class="btn" id="example">Reload example</button><button class="btn" id="export" disabled>Export JSON report</button><button class="btn" id="print" disabled>Print / Save PDF</button></div>
+   <div id="error" class="error" role="alert"></div>
+  </section>
+  <section class="panel"><h3>Comparative engineering assessment</h3><p class="sub">Operating point, NPSHa/NPSHr, manufacturer operating limits and data completeness.</p>
+   <div class="metrics">
+    <div class="metric"><span>Compared candidates</span><strong id="count">—</strong></div>
+    <div class="metric"><span>Passing supplied checks</span><strong id="passed">—</strong></div>
+    <div class="metric"><span>Needs review / incomplete</span><strong id="review">—</strong></div>
+   </div>
+   <div class="tablewrap"><table><thead><tr><th>Manufacturer / model</th><th>Flow (m³/h)</th><th>Head (m)</th><th>η (%)</th><th>NPSHa (m)</th><th>NPSHr (m)</th><th>Margin (m)</th><th>POR</th><th>AOR</th><th>Assessment</th></tr></thead><tbody id="results"><tr><td colspan="10">Enter data and evaluate the candidates.</td></tr></tbody></table></div>
+   <div id="candidateWarnings" class="notice" hidden></div>
+   <div class="foot">NPSHa uses the source-vessel Bernoulli balance to the pump suction flange. NPSHr is interpolated from supplied vendor data. POR/AOR/MCSF/runout are not inferred. Speed and impeller corrections are available in the calculation engine but are not automatically applied to vendor curves.</div>
+  </section>
+ </div>
+ <section class="panel" id="reportPanel" style="margin-top:16px"><h3>Engineering report summary</h3><p class="sub">Generated from the supplied case inputs and calculation results.</p><div id="reportSummary">No report generated.</div></section>
+</main>
+<script src="./hydraulics-v5.js"></script>
+<script src="./pump-performance-v5-3.js"></script>
+<script src="./pump-selection-v5-4.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+let lastReport=null;
+const example={
+ "density_kg_m3":998,
+ "motorEfficiency_pct":94,
+ "gravity_m_s2":9.80665,
+ "systemCurve":{"staticHead_m":10,"designFlow_m3_s":0.03,"designHead_m":30},
+ "suctionConditions":{"sourcePressureAbs_Pa":200000,"vapourPressure_Pa":3000,"sourceElevation_m":5,"pumpCenterlineElevation_m":2,"suctionLossHead_m":1.5,"sourceVelocity_m_s":0},
+ "projectCriteria":{"requiredNpshMargin_m":1.0},
+ "candidates":[
+  {"manufacturer":"Illustrative OEM A","model":"Example Pump A","vendorLimits":{"porMinFlow_m3_s":0.025,"porMaxFlow_m3_s":0.04,"aorMinFlow_m3_s":0.02,"aorMaxFlow_m3_s":0.045,"mcsfFlow_m3_s":0.015,"runoutFlow_m3_s":0.045},"pumpCurve":[{"flow_m3_s":0.01,"head_m":50,"efficiency_pct":55,"npshr_m":1.5,"shaft_power_kW":8},{"flow_m3_s":0.02,"head_m":45,"efficiency_pct":75,"npshr_m":2,"shaft_power_kW":10},{"flow_m3_s":0.03,"head_m":36,"efficiency_pct":82,"npshr_m":3,"shaft_power_kW":12},{"flow_m3_s":0.04,"head_m":24,"efficiency_pct":70,"npshr_m":4,"shaft_power_kW":13}]},
+  {"manufacturer":"Illustrative OEM B","model":"Example Pump B","vendorLimits":{"porMinFlow_m3_s":0.02,"porMaxFlow_m3_s":0.035,"aorMinFlow_m3_s":0.015,"aorMaxFlow_m3_s":0.04,"mcsfFlow_m3_s":0.012,"runoutFlow_m3_s":0.04},"pumpCurve":[{"flow_m3_s":0.01,"head_m":58,"efficiency_pct":52,"npshr_m":1.8,"shaft_power_kW":9},{"flow_m3_s":0.02,"head_m":50,"efficiency_pct":74,"npshr_m":2.4,"shaft_power_kW":11},{"flow_m3_s":0.03,"head_m":39,"efficiency_pct":84,"npshr_m":3.2,"shaft_power_kW":13},{"flow_m3_s":0.04,"head_m":26,"efficiency_pct":72,"npshr_m":4.4,"shaft_power_kW":14}]}
+ ]
+};
+const fmt=(v,d=3)=>v===null||v===undefined||!Number.isFinite(Number(v))?'—':Number(v).toLocaleString(undefined,{maximumFractionDigits:d});
+function loadExample(){ $('caseInput').value=JSON.stringify(example,null,2);$('error').textContent=''; }
+function addCell(row,value,cls){const td=document.createElement('td');td.textContent=value===null||value===undefined?'—':String(value);if(cls)td.className=cls;row.appendChild(td);}
+function statusClass(value){return value==='meets_supplied_criteria'||value==='within_range'||value==='at_or_above_mcsf'||value==='at_or_below_runout'?'good':value==='does_not_meet_supplied_criteria'||value==='outside_range'||value==='below_mcsf'||value==='above_runout'?'bad':'unknown';}
+function evaluate(){
+ $('error').textContent='';
+ try{
+  const input=JSON.parse($('caseInput').value);
+  const report=window.PumpHydraulicsV54.comparePumpCandidates(input);
+  lastReport={generatedAt:new Date().toISOString(),input,report};
+  $('count').textContent=String(report.candidates.length);
+  const pass=report.candidates.filter(c=>c.assessment?.status==='meets_supplied_criteria').length;
+  const review=report.candidates.length-pass;
+  $('passed').textContent=String(pass);$('review').textContent=String(review);
+  const body=$('results');body.replaceChildren();
+  const allWarnings=[];
+  for(const c of report.candidates){
+   const tr=document.createElement('tr');
+   addCell(tr,[c.manufacturer,c.model].filter(Boolean).join(' / ')||('Candidate '+c.index));
+   addCell(tr,c.operatingPoint?fmt(c.operatingPoint.flow_m3_h):'—');
+   addCell(tr,c.operatingPoint?fmt(c.operatingPoint.head_m):'—');
+   addCell(tr,c.operatingPoint?fmt(c.operatingPoint.efficiency_pct,2):'—');
+   addCell(tr,c.npsh?fmt(c.npsh.available?.npsha_m):'—');
+   addCell(tr,c.npsh?fmt(c.npsh.required_m):'—');
+   addCell(tr,c.npsh?fmt(c.npsh.margin_m):'—');
+   addCell(tr,c.vendorOperatingLimits?.porStatus||'—');
+   addCell(tr,c.vendorOperatingLimits?.aorStatus||'—');
+   const assessment=c.assessment?.status||c.status||'calculation_error';
+   addCell(tr,assessment,statusClass(assessment));body.appendChild(tr);
+   if(c.warnings)allWarnings.push((c.manufacturer||('Candidate '+c.index))+': '+c.warnings.join(' | '));
+   if(c.error)allWarnings.push((c.manufacturer||('Candidate '+c.index))+': '+c.error);
+  }
+  const notice=$('candidateWarnings');
+  if(allWarnings.length){notice.hidden=false;notice.textContent=allWarnings.join('\n');}else{notice.hidden=true;notice.textContent='';}
+  const summary=document.createElement('div');
+  summary.textContent='System curve: Hstatic '+fmt(input.systemCurve.staticHead_m)+' m; design point '+fmt(input.systemCurve.designFlow_m3_s*3600)+' m³/h at '+fmt(input.systemCurve.designHead_m)+' m. NPSHa suction-source method: source absolute pressure, vapour pressure, elevation, source velocity and suction losses. Candidate ranking is intentionally not generated; review vendor data and project criteria.';
+  $('reportSummary').replaceChildren(summary);
+  $('export').disabled=false;$('print').disabled=false;
+ }catch(e){$('error').textContent=e.message;lastReport=null;$('export').disabled=true;$('print').disabled=true;}
+}
+$('evaluate').addEventListener('click',evaluate);
+$('example').addEventListener('click',()=>{loadExample();evaluate();});
+$('export').addEventListener('click',()=>{
+ if(!lastReport)return;
+ const blob=new Blob([JSON.stringify(lastReport,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='pump-selection-v5-4-report.json';a.click();URL.revokeObjectURL(url);
+});
+$('print').addEventListener('click',()=>window.print());
+loadExample();evaluate();
+</script>
+</body>
+</html>

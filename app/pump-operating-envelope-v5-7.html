@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101b2b">
+<title>V5.7 Multi-Case Pump Operating Envelope</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1422;--panel:#132238;--line:#29415b;--text:#e8eef6;--muted:#9cafc4;--blue:#4da3ff;--good:#46c89a;--warn:#f0b75b;--bad:#ff7777}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#1b3450 0,transparent 35%),var(--bg);color:var(--text);font:14px/1.5 Inter,Segoe UI,Arial,sans-serif}
+header{padding:20px clamp(16px,4vw,48px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}
+h1{font-size:19px;margin:2px 0}.eyebrow{color:#7fbaff;text-transform:uppercase;letter-spacing:.13em;font-size:10px;font-weight:700}
+nav{display:flex;gap:8px;flex-wrap:wrap}nav a{color:#8dc9ff;text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:11px}
+main{max-width:1500px;margin:auto;padding:26px clamp(16px,4vw,48px) 60px}.intro{margin-bottom:18px}.intro h2{font-size:25px;margin:4px 0}.intro p{color:var(--muted);max-width:920px;margin:0}
+.grid{display:grid;grid-template-columns:minmax(320px,.95fr) minmax(420px,1.05fr);gap:18px;align-items:start}
+.panel{background:linear-gradient(180deg,#17283e,#101d2e);border:1px solid var(--line);border-radius:15px;padding:18px;min-width:0}
+h3{font-size:16px;margin:0 0 4px}.sub{color:var(--muted);font-size:12px;margin:0 0 14px}
+textarea{width:100%;min-height:620px;resize:vertical;background:#091523;color:#dbe9f7;border:1px solid #304a65;border-radius:9px;padding:12px;font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace}
+button{border:1px solid #3b77a9;border-radius:9px;padding:10px 15px;background:linear-gradient(135deg,#2477c8,#2995b6);color:white;font-weight:700;cursor:pointer;margin:12px 8px 0 0}
+button.secondary{background:#1a2b40;border-color:#3a526d;color:#c7d7e8}
+.metricgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 0}
+.metric{background:#0d1a2a;border:1px solid #263e57;border-radius:10px;padding:11px}.metric span{display:block;color:var(--muted);font-size:10px}.metric strong{display:block;font-size:19px;margin-top:3px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:14px}table{width:100%;border-collapse:collapse;min-width:760px;font-size:12px}th,td{padding:10px;border-bottom:1px solid #263a51;text-align:right;white-space:nowrap}th{color:#9fc5e9;background:#102035}th:first-child,td:first-child{text-align:left}
+.pill{display:inline-block;border-radius:20px;padding:3px 8px;font-size:10px;font-weight:700;background:#243a53;color:#bcd4ec}.ok{background:#173c36;color:#8ce0bf}.bad{background:#48272c;color:#ffb0b0}.warn{background:#46371e;color:#f3d18f}
+.notice{padding:12px;border:1px solid #66502d;background:#332a1c;border-radius:9px;color:#f4d39b;margin-top:12px;font-size:12px}.error{color:#ff9999;margin-top:10px;white-space:pre-wrap}.muted{color:var(--muted);font-size:11px}.casewarnings{padding-left:18px;margin:6px 0 12px;color:#c4d2e0;font-size:11px}
+@media(max-width:950px){.grid{grid-template-columns:1fr}.metricgrid{grid-template-columns:repeat(2,1fr)}textarea{min-height:420px}}
+</style>
+</head>
+<body>
+<header>
+ <div><div class="eyebrow">Engineering calculation workspace / V5.7</div><h1>Pump Hydraulics Engineering Suite</h1></div>
+ <nav aria-label="Modules"><a href="./index.html">Main Workspace</a><a href="./pump-performance.html">V5.3 Pump Curves</a><a href="./pump-selection.html">V5.4 NPSH</a><a href="./pipe-system-curve.html">V5.6 System Curve</a></nav>
+</header>
+<main>
+ <div class="intro"><div class="eyebrow">Multi-case assessment</div><h2>Pump operating envelope</h2><p>Compare minimum, normal, maximum and upset plant cases against one supplied manufacturer pump curve. Each case is independently recalculated using the V5.6 pipe-derived system curve. Enter all data in SI units. Vendor limits and project NPSH margins are never assumed.</p></div>
+ <div class="grid">
+  <section class="panel">
+   <h3>Case input register (JSON)</h3><p class="sub">Edit the example or paste your project case data. Each case requires a complete V5.1 serial-pipe hydraulicInput object.</p>
+   <textarea id="input" spellcheck="false" aria-label="Operating envelope JSON input"></textarea>
+   <button id="calculate" type="button">Calculate operating envelope</button><button id="loadExample" class="secondary" type="button">Restore example</button>
+   <div id="error" class="error" role="alert"></div>
+   <p class="muted">Common pump curve applies to every case. For changed speed or impeller diameter, use manufacturer data at the relevant condition; V5.7 does not automatically transform the curve.</p>
+  </section>
+  <section class="panel">
+   <h3>Envelope assessment</h3><p class="sub">Per-case duty point, power, NPSH and manufacturer operating-limit checks.</p>
+   <div class="metricgrid">
+    <div class="metric"><span>Cases</span><strong id="total">—</strong></div>
+    <div class="metric"><span>Passed</span><strong id="passed">—</strong></div>
+    <div class="metric"><span>Failed</span><strong id="failed">—</strong></div>
+    <div class="metric"><span>Incomplete / errors</span><strong id="incomplete">—</strong></div>
+   </div>
+   <div id="overall" class="notice">Load or edit the case register, then calculate.</div>
+   <div class="tablewrap"><table><thead><tr><th>Case</th><th>Flow (m³/h)</th><th>Head (m)</th><th>Eff. (%)</th><th>Motor input (kW)</th><th>NPSH margin (m)</th><th>POR</th><th>AOR</th><th>Assessment</th></tr></thead><tbody id="rows"><tr><td colspan="9">No results yet.</td></tr></tbody></table></div>
+   <div id="details"></div>
+   <p class="muted">Assessment applies only to entered manufacturer limits and project criteria. It is not a certified standards-compliance decision or final pump approval.</p>
+  </section>
+ </div>
+</main>
+<script src="./hydraulics-v5.js"></script>
+<script src="./hydraulics-v5-1.js"></script>
+<script src="./pump-performance-v5-3.js"></script>
+<script src="./pump-selection-v5-4.js"></script>
+<script src="./pipe-system-curve-v5-6.js"></script>
+<script src="./pump-operating-envelope-v5-7.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const example={
+ "pumpCurve":[
+  {"flow_m3_s":0.005,"head_m":48,"efficiency_pct":45,"npshr_m":1.2,"shaft_power_kW":5},
+  {"flow_m3_s":0.015,"head_m":43,"efficiency_pct":70,"npshr_m":2,"shaft_power_kW":7},
+  {"flow_m3_s":0.025,"head_m":34,"efficiency_pct":82,"npshr_m":3,"shaft_power_kW":9},
+  {"flow_m3_s":0.035,"head_m":20,"efficiency_pct":72,"npshr_m":4,"shaft_power_kW":11}
+ ],
+ "motorEfficiency_pct":94,"sampleCount":81,
+ "cases":[
+  {"id":"minimum","name":"Minimum operation","hydraulicInput":{"density":998,"densityUnit":"kg/m3","viscosity":0.001,"viscosityUnit":"Pa.s","inletDiameter":150,"inletDiameterUnit":"mm","segments":[{"name":"Suction","service":"suction","diameter":150,"diameterUnit":"mm","length":12,"lengthUnit":"m","roughness":0.045,"roughnessUnit":"mm","minorLossK":2.5,"elevationChange":2,"elevationChangeUnit":"m"},{"name":"Discharge","service":"discharge","diameter":100,"diameterUnit":"mm","length":90,"lengthUnit":"m","roughness":0.045,"roughnessUnit":"mm","minorLossK":8,"elevationChange":18,"elevationChangeUnit":"m"}]},"npsha_m":5.5,"requiredNpshMargin_m":1,"vendorLimits":{"porMinFlow_m3_s":0.012,"porMaxFlow_m3_s":0.032,"aorMinFlow_m3_s":0.008,"aorMaxFlow_m3_s":0.034,"mcsfFlow_m3_s":0.006,"runoutFlow_m3_s":0.035}},
+  {"id":"normal","name":"Normal operation","hydraulicInput":{"density":998,"densityUnit":"kg/m3","viscosity":0.001,"viscosityUnit":"Pa.s","inletDiameter":150,"inletDiameterUnit":"mm","segments":[{"name":"Suction","service":"suction","diameter":150,"diameterUnit":"mm","length":12,"lengthUnit":"m","roughness":0.045,"roughnessUnit":"mm","minorLossK":2.5,"elevationChange":2,"elevationChangeUnit":"m"},{"name":"Discharge","service":"discharge","diameter":100,"diameterUnit":"mm","length":85,"lengthUnit":"m","roughness":0.045,"roughnessUnit":"mm","minorLossK":8,"elevationChange":18,"elevationChangeUnit":"m"}]},"npsha_m":6,"requiredNpshMargin_m":1,"vendorLimits":{"porMinFlow_m3_s":0.012,"porMaxFlow_m3_s":0.032,"aorMinFlow_m3_s":0.008,"aorMaxFlow_m3_s":0.034,"mcsfFlow_m3_s":0.006,"runoutFlow_m3_s":0.035}},
+  {"id":"maximum","name":"Maximum operation","hydraulicInput":{"density":1000,"densityUnit":"kg/m3","viscosity":0.0012,"viscosityUnit":"Pa.s","inletDiameter":150,"inletDiameterUnit":"mm","segments":[{"name":"Suction","service":"suction","diameter":150,"diameterUnit":"mm","length":12,"lengthUnit":"m","roughness":0.045,"roughnessUnit":"mm","minorLossK":3,"elevationChange":2,"elevationChangeUnit":"m"},{"name":"Discharge","service":"discharge","diameter":100,"diameterUnit":"mm","length":85,"lengthUnit":"m","roughness":0.045,"roughnessUnit":"mm","minorLossK":9,"elevationChange":18,"elevationChangeUnit":"m"}]},"npsha_m":6.5,"requiredNpshMargin_m":1,"vendorLimits":{"porMinFlow_m3_s":0.012,"porMaxFlow_m3_s":0.032,"aorMinFlow_m3_s":0.008,"aorMaxFlow_m3_s":0.034,"mcsfFlow_m3_s":0.006,"runoutFlow_m3_s":0.035}}
+ ]
+};
+const fmt=(n,d=3)=>Number.isFinite(n)?n.toLocaleString(undefined,{maximumFractionDigits:d}):'—';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function restore(){ $('input').value=JSON.stringify(example,null,2); }
+function calculate(){
+ $('error').textContent='';
+ try{
+  const data=JSON.parse($('input').value);
+  const r=window.PumpHydraulicsV57.calculatePumpOperatingEnvelope(data);
+  $('total').textContent=r.summary.counts.total;
+  $('passed').textContent=r.summary.counts.passed;
+  $('failed').textContent=r.summary.counts.failed;
+  $('incomplete').textContent=r.summary.counts.incomplete+r.summary.counts.calculationErrors;
+  $('overall').textContent='Overall: '+r.summary.status.replaceAll('_',' ')+' · '+r.summary.counts.total+' cases assessed.';
+  $('rows').innerHTML=r.cases.map(c=>{
+   if(c.status==='calculation_error')return '<tr><td>'+esc(c.name)+'</td><td colspan="7">'+esc(c.error)+'</td><td><span class="pill bad">Calculation error</span></td></tr>';
+   const op=c.operatingPoint, status=c.status==='meets_supplied_criteria'?'ok':c.status==='does_not_meet_supplied_criteria'?'bad':'warn';
+   return '<tr><td>'+esc(c.name)+'</td><td>'+fmt(op.flow_m3_h,2)+'</td><td>'+fmt(op.head_m,2)+'</td><td>'+fmt(op.efficiency_pct,1)+'</td><td>'+fmt(op.motorInputPower_kW,2)+'</td><td>'+fmt(c.npsh.margin_m,2)+'</td><td>'+esc(c.vendorOperatingLimits.porStatus)+'</td><td>'+esc(c.vendorOperatingLimits.aorStatus)+'</td><td><span class="pill '+status+'">'+esc(c.status.replaceAll('_',' '))+'</span></td></tr>';
+  }).join('');
+  $('details').innerHTML=r.cases.map(c=>'<h4>'+esc(c.name)+'</h4>'+(c.error?'<p class="error">'+esc(c.error)+'</p>':'<ul class="casewarnings">'+(c.warnings.length?c.warnings.map(w=>'<li>'+esc(w)+'</li>').join(''):'<li>No calculation warnings returned.</li>')+'</ul>')).join('');
+ }catch(e){$('error').textContent=e.message;}
+}
+$('calculate').addEventListener('click',calculate);
+$('loadExample').addEventListener('click',()=>{restore();calculate();});
+restore();
+calculate();
+</script>
+</body>
+</html>

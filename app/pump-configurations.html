@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1422">
+<title>Pump Configurations & VFD Cases | V5.5</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1422;--panel:#142238;--line:#2a4059;--text:#e9f0f8;--muted:#9eb0c4;--blue:#63b2f5;--green:#53c79b;--amber:#efc178;--red:#ff9292}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#1c3857 0,transparent 32%),var(--bg);color:var(--text);font:14px/1.5 Inter,Segoe UI,Arial,sans-serif}
+header{padding:18px clamp(16px,4vw,48px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}h1{font-size:19px;margin:0}.eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8dc5f4;font-weight:700}a{color:#8dc9ff;text-decoration:none}.links{display:flex;gap:12px;flex-wrap:wrap;font-size:12px}.version{border:1px solid #315273;border-radius:18px;padding:6px 11px;color:#b9dcf9;font-size:11px}
+main{max-width:1450px;margin:22px auto;padding:0 16px 48px}.intro{margin-bottom:16px}.intro h2{font-size:23px;margin:4px 0}.intro p{color:var(--muted);max-width:1050px}
+.grid{display:grid;grid-template-columns:minmax(340px,.85fr) minmax(480px,1.15fr);gap:15px;align-items:start}.panel{background:linear-gradient(180deg,#16263b,#111e30);border:1px solid var(--line);border-radius:13px;padding:16px;min-width:0}.panel h3{margin:0 0 5px;font-size:15px}.sub{font-size:12px;color:var(--muted);margin:0 0 12px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field label{display:block;color:#b9c8d8;font-size:11px;margin-bottom:5px}.field input,.field select{width:100%;background:#091522;border:1px solid #2a4058;border-radius:7px;color:var(--text);padding:9px;font:inherit}
+textarea{width:100%;min-height:245px;resize:vertical;background:#091522;border:1px solid #2a4058;border-radius:8px;color:#dce9f6;padding:11px;font:12px/1.5 ui-monospace,Consolas,monospace}
+.section{font-size:10px;color:#8ebce9;text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin:15px 0 8px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.btn{border:1px solid #345675;border-radius:8px;padding:9px 12px;background:#1b3048;color:#dceafa;cursor:pointer;font-weight:650}.btn.primary{background:linear-gradient(135deg,#2477c8,#2995b6);border:0;color:#fff}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.metric{background:#0c1929;border:1px solid #273d55;border-radius:8px;padding:10px}.metric span{display:block;color:var(--muted);font-size:10px}.metric strong{display:block;font-size:18px;margin-top:4px;overflow-wrap:anywhere}
+.chart{width:100%;height:auto;background:#0b1929;border:1px solid #263d55;border-radius:9px;margin-top:10px}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:8px;margin-top:10px}table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:8px 9px;text-align:right;border-bottom:1px solid #2a3d53;white-space:nowrap}th{background:#172c44;color:#a9d3f7}th:first-child,td:first-child{text-align:left}
+.notice{margin-top:10px;padding:11px;border:1px solid #6b542e;background:#342b1e;border-radius:8px;color:#f3d6a5;font-size:12px;white-space:pre-wrap}.error{color:var(--red);white-space:pre-wrap;margin-top:8px;font-size:12px}.foot{color:#8298b0;font-size:11px;line-height:1.6;margin-top:16px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}@media(max-width:560px){.fields{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}}
+@media print{body{background:#fff;color:#111}.panel{background:#fff;border:1px solid #aaa;color:#111}.sub,.foot{color:#444}.grid{display:block}.grid>.panel:first-child{display:none}.btn,.links,.version{display:none}.metric{background:#fff;color:#111;border-color:#ccc}.metric span{color:#444}.tablewrap{overflow:visible}th{background:#eee;color:#111}td,th{color:#111;border-color:#ccc}.notice{background:#fff8e8;color:#332}.chart{background:#fff}}
+</style>
+</head>
+<body>
+<header>
+ <div><div class="eyebrow">Engineering calculation workspace</div><h1>Pump Hydraulics Engineering Suite</h1></div>
+ <nav class="links"><a href="./index.html">V5.1 Pipe</a><a href="./network.html">V5.2 Network</a><a href="./pump-performance.html">V5.3 Performance</a><a href="./pump-selection.html">V5.4 Selection</a><a href="./pipe-system-curve.html">V5.6 Auto System Curve</a><span class="version">V5.5 · Pump Configurations</span></nav>
+</header>
+<main>
+ <div class="intro"><div class="eyebrow">Hydraulic module / 06</div><h2>Series, parallel and variable-speed pump cases</h2><p>Use one manufacturer curve and a system duty to evaluate a single pump, identical pumps in series or parallel, and a changed speed. The module reuses the existing V5.3 operating-point solver and keeps vendor data separate from affinity-law estimates.</p></div>
+ <div class="grid">
+  <section class="panel">
+   <h3>Configuration and system duty</h3><p class="sub">All inputs are SI. Speed ratio = selected speed / reference curve speed.</p>
+   <div class="section">Pump arrangement</div>
+   <div class="fields">
+    <div class="field"><label>Arrangement</label><select id="arrangement"><option value="single">Single pump</option><option value="series">Identical pumps in series</option><option value="parallel">Identical pumps in parallel</option></select></div>
+    <div class="field"><label>Number of pumps</label><input id="count" type="number" min="1" max="12" step="1" value="1"></div>
+    <div class="field"><label>Speed ratio (N/Nref)</label><input id="speed" type="number" min="0.01" max="2" step="0.01" value="1"></div>
+    <div class="field"><label>Liquid density (kg/m³)</label><input id="density" type="number" min="0.001" step="any" value="998"></div>
+    <div class="field"><label>Motor efficiency (%)</label><input id="motorEfficiency" type="number" min="0.01" max="100" step="any" value="94"></div>
+    <div class="field"><label>Reference speed (rpm, optional metadata)</label><input id="ratedSpeed" type="number" min="0.01" step="any" value="2950"></div>
+   </div>
+   <div class="section">System curve design point</div>
+   <div class="fields">
+    <div class="field"><label>Static head (m)</label><input id="staticHead" type="number" step="any" value="10"></div>
+    <div class="field"><label>Design flow (m³/h)</label><input id="designFlow" type="number" min="0.001" step="any" value="108"></div>
+    <div class="field"><label>Design head (m)</label><input id="designHead" type="number" step="any" value="35"></div>
+    <div class="field"><label>Gravity (m/s²)</label><input id="gravity" type="number" min="0.001" step="any" value="9.80665"></div>
+   </div>
+   <div class="section">Manufacturer pump curve (JSON points)</div>
+   <p class="sub">Enter ascending flow points. Efficiency (%) is optional. NPSHr and shaft power are used only where valid at the selected speed/configuration.</p>
+   <textarea id="curve" spellcheck="false"></textarea>
+   <div class="actions"><button class="btn primary" id="calculate">Calculate configuration</button><button class="btn" id="example">Load example</button><button class="btn" id="export" disabled>Export JSON</button><button class="btn" id="print" disabled>Print / Save PDF</button></div>
+   <div id="error" class="error" role="alert"></div>
+  </section>
+  <section class="panel">
+   <h3>Operating case results</h3><p class="sub">Total station duty and per-pump power split for identical, equally loaded units.</p>
+   <div class="metrics">
+    <div class="metric"><span>Total flow</span><strong id="flow">—</strong></div>
+    <div class="metric"><span>Total head</span><strong id="head">—</strong></div>
+    <div class="metric"><span>Pump efficiency</span><strong id="efficiency">—</strong></div>
+    <div class="metric"><span>Total shaft power</span><strong id="shaft">—</strong></div>
+    <div class="metric"><span>Per-pump shaft power</span><strong id="perShaft">—</strong></div>
+    <div class="metric"><span>Per-pump motor input</span><strong id="perMotor">—</strong></div>
+   </div>
+   <svg id="chart" class="chart" viewBox="0 0 720 360" role="img" aria-label="Pump curve and system curve chart"><text x="360" y="180" text-anchor="middle" fill="#9eb0c4">Calculate to display curves</text></svg>
+   <div class="tablewrap"><table><thead><tr><th>Check</th><th>Result</th><th>Value</th></tr></thead><tbody id="checks"><tr><td colspan="3">No calculation yet.</td></tr></tbody></table></div>
+   <div id="warnings" class="notice" hidden></div>
+  </section>
+ </div>
+ <p class="foot">Engineering boundaries: identical pumps only; equal parallel flow split assumed; system curve remains the V5.3 quadratic model and is not auto-built from V5.1/V5.2. At changed speed, NPSHr and vendor shaft-power data are deliberately not scaled; obtain manufacturer curves at the selected speed. This is a preliminary engineering aid, not an API/ANSI-HI compliance tool.</p>
+</main>
+<script src="./pump-performance-v5-3.js"></script>
+<script src="./pump-configurations-v5-5.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const example=[
+ {flow_m3_s:0.01,head_m:50,efficiency_pct:55,npshr_m:1.5,shaft_power_kW:8},
+ {flow_m3_s:0.02,head_m:45,efficiency_pct:75,npshr_m:2,shaft_power_kW:10},
+ {flow_m3_s:0.03,head_m:36,efficiency_pct:82,npshr_m:3,shaft_power_kW:12},
+ {flow_m3_s:0.04,head_m:24,efficiency_pct:70,npshr_m:4,shaft_power_kW:13}
+];
+let last=null;
+const num=id=>{const s=$(id).value;if(s.trim()==='')throw new Error(id+' is required');const n=Number(s);if(!Number.isFinite(n))throw new Error(id+' must be finite');return n;};
+const fmt=(v,d=2)=>v===null||v===undefined||!Number.isFinite(Number(v))?'—':Number(v).toLocaleString(undefined,{maximumFractionDigits:d});
+function loadExample(){$('curve').value=JSON.stringify(example,null,2);$('error').textContent='';}
+function addRow(tbody,a,b,c){const tr=document.createElement('tr');for(const v of [a,b,c]){const td=document.createElement('td');td.textContent=String(v);tr.appendChild(td);}tbody.appendChild(tr);}
+function renderChart(r){
+ const pts=r.transformedPumpCurve, sys=r.systemCurvePoints, op=r.operatingPoint;
+ const xmax=Math.max(...pts.map(p=>p.flow_m3_s),...sys.map(p=>p.flow_m3_s))*1.04;
+ const ymax=Math.max(...pts.map(p=>p.head_m),...sys.map(p=>p.systemHead_m))*1.12;
+ const x=q=>58+q/xmax*620, y=h=>315-h/ymax*270;
+ const pump=pts.map(p=>x(p.flow_m3_s).toFixed(1)+','+y(p.head_m).toFixed(1)).join(' ');
+ const system=sys.map(p=>x(p.flow_m3_s).toFixed(1)+','+y(p.systemHead_m).toFixed(1)).join(' ');
+ const ox=x(op.flow_m3_s), oy=y(op.head_m);
+ $('chart').innerHTML='<line x1="58" y1="315" x2="680" y2="315" stroke="#8198b2"/><line x1="58" y1="45" x2="58" y2="315" stroke="#8198b2"/><polyline points="'+pump+'" fill="none" stroke="#63b2f5" stroke-width="3"/><polyline points="'+system+'" fill="none" stroke="#53c79b" stroke-width="3"/><line x1="'+ox+'" y1="'+oy+'" x2="'+ox+'" y2="315" stroke="#efc178" stroke-dasharray="5 5"/><circle cx="'+ox+'" cy="'+oy+'" r="6" fill="#efc178" stroke="#fff" stroke-width="1.5"/><text x="365" y="345" text-anchor="middle" fill="#c4d3e2" font-size="12">Total flow (m³/s)</text><text x="16" y="180" transform="rotate(-90 16 180)" text-anchor="middle" fill="#c4d3e2" font-size="12">Head (m)</text><text x="78" y="26" fill="#63b2f5" font-size="12">Combined pump curve</text><text x="260" y="26" fill="#53c79b" font-size="12">System curve</text><text x="'+Math.min(ox+10,590)+'" y="'+Math.max(oy-10,50)+'" fill="#efc178" font-size="12">Operating point</text>';
+}
+function calculate(){
+ $('error').textContent='';last=null;$('export').disabled=true;$('print').disabled=true;
+ try{
+  const curve=JSON.parse($('curve').value);
+  if(!Array.isArray(curve))throw new Error('Pump curve must be a JSON array.');
+  const input={
+   arrangement:$('arrangement').value,pumpCount:num('count'),speedRatio:num('speed'),
+   density_kg_m3:num('density'),motorEfficiency_pct:num('motorEfficiency'),gravity_m_s2:num('gravity'),
+   systemCurve:{staticHead_m:num('staticHead'),designFlow_m3_s:num('designFlow')/3600,designHead_m:num('designHead')},
+   pumpCurve:curve,pumpMetadata:{ratedSpeed_rpm:num('ratedSpeed')}
+  };
+  const result=window.PumpHydraulicsV55.analysePumpConfiguration(input);
+  last={generatedAt:new Date().toISOString(),input,result};
+  const op=result.operatingPoint;
+  $('flow').textContent=fmt(op.flow_m3_h)+' m³/h';$('head').textContent=fmt(op.head_m)+' m';
+  $('efficiency').textContent=fmt(op.efficiency_pct)+' %';$('shaft').textContent=fmt(op.totalShaftPower_kW)+' kW';
+  $('perShaft').textContent=fmt(op.perPumpShaftPower_kW)+' kW';$('perMotor').textContent=fmt(op.perPumpMotorInputPower_kW)+' kW';
+  renderChart(result);
+  const tb=$('checks');tb.replaceChildren();
+  addRow(tb,'Arrangement',result.configuration.arrangement,result.configuration.pumpCount+' pump(s)');
+  addRow(tb,'Speed ratio',result.configuration.speedRatio,'N / Nref');
+  addRow(tb,'Operating intersections',result.intersectionsFound,result.selectedIntersectionPolicy);
+  addRow(tb,'Hydraulic power',fmt(op.hydraulicPower_kW),'kW total');
+  addRow(tb,'Motor input power',fmt(op.totalMotorInputPower_kW),'kW total');
+  addRow(tb,'BEP flow',result.bep?fmt(result.bep.flow_m3_s*3600):'Not supplied','m³/h');
+  addRow(tb,'NPSHr',op.npshr_m===null?'Not assessed':fmt(op.npshr_m),'m; vendor data only');
+  $('warnings').hidden=result.warnings.length===0;$('warnings').textContent=result.warnings.join('\n');
+  $('export').disabled=false;$('print').disabled=false;
+ }catch(e){$('error').textContent=e.message;}
+}
+$('calculate').addEventListener('click',calculate);
+$('example').addEventListener('click',()=>{loadExample();calculate();});
+$('export').addEventListener('click',()=>{if(!last)return;const blob=new Blob([JSON.stringify(last,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='pump-configuration-v5-5-report.json';a.click();URL.revokeObjectURL(url);});
+$('print').addEventListener('click',()=>window.print());
+loadExample();calculate();
+</script>
+</body>
+</html>

@@ -1,4 +1,42 @@
-# Changelog
+# Changelog\n\n## V5.6.0 — Automatic pipe-derived system curve (development)\n- Added sampled system-curve generation by recalculating V5.1.1 serial pipe hydraulics at multiple flow rates.\n- Added manufacturer pump-curve intersection with bisection refinement and no curve extrapolation.\n- Added loss breakdown, operating duty, power, optional NPSH screening and warnings.\n- Rejected fixed equipment pressure drops rather than treating them as flow-dependent; deferred V5.2 network coupling.\n- Added browser module, regression tests and engineering basis/status documentation.\n
+
+## V5.5.0 — Pump configurations and variable-speed cases (development)
+- Added identical-pump single/series/parallel curve transformation.
+- Added reference-speed to selected-speed curve transformation using affinity-law flow/head relations.
+- Added total and per-pump hydraulic/shaft/motor input power reporting.
+- Deliberately withheld NPSHr and vendor shaft-power scaling at changed speed; added explicit manufacturer-data warnings.
+- Added simplified configuration UI, pump/system curve chart, JSON report export and print/save-PDF.
+- Added regression tests, calculation basis, durable project history and open-source reference review.
+
+
+## V5.4.0 — Pump selection and NPSH assessment (development)
+- Added source-to-pump NPSHa calculation with absolute pressure, vapour pressure, elevation, source velocity and suction losses.
+- Added manufacturer NPSHr comparison and configurable project-required NPSH margin.
+- Added vendor POR/AOR/MCSF/runout operating-limit evaluation; missing limits remain unknown.
+- Added multiple candidate pump comparison and approximate speed/impeller affinity-law helpers.
+- Added V5.4 browser interface with JSON report export and print/save-PDF workflow.
+- Added V5.4 calculation basis and regression tests.
+
+
+## V5.3.1 — Pump curve solver hardening (development)
+- Solve pump/system intersections analytically within each linear vendor-curve interval; detect multiple and tangent intersections within one interval.
+- Accept zero-efficiency shutoff data without dividing by zero or treating shutoff as BEP.
+- Permit negative net static head with an explicit datum/pressure warning.
+- Reject duplicate V5.2 pipe edge identifiers.
+- Add numerical regression coverage for hidden/tangent intersections and shutoff data.
+
+
+## V5.3.0 — Pump performance and operating point (development)
+- Added manufacturer pump-curve input with piecewise-linear interpolation and no extrapolation.
+- Added quadratic system curve calibrated from static head and a design flow/head point.
+- Added pump/system intersection solver, BEP identification, hydraulic power, efficiency-based shaft-power estimate and optional motor input estimate.
+- Added optional NPSHa/NPSHr screening and manufacturer curve metadata.
+- Added standalone chart-based browser interface and regression tests.
+- Explicitly disclose that system curve is not yet auto-generated from V5.1/V5.2 cases.
+
+## V5.2 — Connected pipe network (development)
+- Added preliminary steady-state nodal network engine for branches and loops with signed pipe flows and continuity residuals.
+- Added fixed-head boundaries, node withdrawals, topology validation, browser interface and regression tests.
 
 ## V5.1.0 — Multi-segment pipe hydraulics
 - Added serial multi-segment liquid hydraulic engine with segment-specific pipe diameter, length and roughness.

@@ -1,7 +1,7 @@
 {
   "name": "pump-hydraulics-engineering-suite",
-  "version": "5.1.1",
-  "description": "Pump hydraulics engineering suite with hardened single-line and multi-segment SI calculation engines",
+  "version": "5.7.0",
+  "description": "Pump hydraulics engineering suite with multi-case operating envelope, pipe-derived system curves, connected networks, pump performance, NPSH and 3D visualization",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -9,7 +9,18 @@
     "dist": "electron-builder",
     "test:v5": "node tests/hydraulics-v5.test.js",
     "test:v5.1": "node tests/hydraulics-v5-1.test.js",
-    "test": "npm run test:v5 && npm run test:v5.1"
+    "test:v5.2": "node tests/network-v5-2.test.js",
+    "test": "npm run test:v5 && npm run test:v5.1 && npm run test:v5.2 && npm run test:v5.3 && npm run test:v5.4 && npm run test:v5.5 && npm run test:v5.6 && npm run test:v5.7 && npm run test:3d-layout && npm run test:storage && npm run test:3d-integration",
+    "test:v5.3": "node tests/pump-performance-v5-3.test.js",
+    "test:v5.4": "node tests/pump-selection-v5-4.test.js",
+    "test:v5.5": "node tests/pump-configurations-v5-5.test.js",
+    "test:v5.6": "node tests/pipe-system-curve-v5-6.test.js",
+    "test:3d-layout": "node --test tests/pipe-layout-3d.test.js",
+    "test:storage": "node --test tests/storage-config.test.js",
+    "build": "node --check main.js && node --check app/hydraulics-v5.js && node --check app/hydraulics-v5-1.js && node --check app/network-v5-2.js && node --check app/pump-performance-v5-3.js && node --check app/pump-selection-v5-4.js && node --check app/pump-configurations-v5-5.js && node --check app/pipe-system-curve-v5-6.js && node --check app/pump-operating-envelope-v5-7.js && node --check app/pipe-layout-3d.js && node --check app/storage-config.js && node --check src/pump-operating-envelope-v5-7.js",
+    "lint": "node --check main.js && node --check app/hydraulics-v5.js && node --check app/hydraulics-v5-1.js && node --check app/network-v5-2.js && node --check app/pump-performance-v5-3.js && node --check app/pump-selection-v5-4.js && node --check app/pump-configurations-v5-5.js && node --check app/pipe-system-curve-v5-6.js && node --check app/pump-operating-envelope-v5-7.js && node --check app/pipe-layout-3d.js && node --check app/storage-config.js && node --check src/hydraulics-v5.js && node --check src/hydraulics-v5-1.js && node --check src/network-v5-2.js && node --check src/pump-performance-v5-3.js && node --check src/pump-selection-v5-4.js && node --check src/pump-configurations-v5-5.js && node --check src/pipe-system-curve-v5-6.js && node --check src/pump-operating-envelope-v5-7.js",
+    "test:v5.7": "node tests/pump-operating-envelope-v5-7.test.js",
+    "test:3d-integration": "node tests/3d-integration.test.js"
   },
   "devDependencies": {
     "electron": "^34.0.0",
