@@ -50,7 +50,8 @@ test('buildPipeLayout positions pump between suction and discharge and flags red
   const layout = Layout3D.buildPipeLayout(calc);
   assert.equal(layout.segments.length, 2);
   assert.equal(layout.pumpAfterIndex, 0);
-  assert.equal(layout.segments[0].hasValve, true);
+  assert.equal(layout.segments[0].hasFittingLoss, true);
+  assert.equal('hasValve' in layout.segments[0], false, 'aggregate K must not be labelled as a specific valve');
   assert.equal(layout.segments[0].hasEquipment, false);
   assert.equal(layout.segments[1].hasEquipment, true);
   assert.equal(layout.segments[1].hasReducer, true);
