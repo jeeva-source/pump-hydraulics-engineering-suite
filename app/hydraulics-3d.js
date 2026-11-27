@@ -681,8 +681,17 @@ class HydraulicsScene3D {
     this.pointer = new THREE.Vector2();
     this.lastHoverCheck = 0;
 
-    this._initRendererAndScene();
-    this._bindEvents();
+    try {
+      this._initRendererAndScene();
+      this._bindEvents();
+    } catch (error) {
+      // A failed WebGL/PMREM/controls initialisation must not break the hydraulic calculator.
+      this.controls?.dispose?.();
+      this.envRT?.dispose?.();
+      this.renderer?.dispose?.();
+      this.renderer?.domElement?.remove?.();
+      throw error;
+    }
   }
 
   _initRendererAndScene() {
@@ -1374,9 +1383,37 @@ class HydraulicsScene3D {
   }
 }
 
+function show3DFallback(mountEl, error) {
+  if (!mountEl) return;
+  mountEl.replaceChildren();
+  const message = document.createElement('div');
+  message.setAttribute('role', 'status');
+  message.style.cssText = [
+    'height:100%', 'min-height:180px', 'display:grid', 'place-content:center',
+    'gap:8px', 'padding:24px', 'text-align:center', 'color:#c7d7e8',
+    'background:#101d2d', 'font:13px/1.5 Inter,Segoe UI,Arial,sans-serif'
+  ].join(';');
+  const title = document.createElement('strong');
+  title.textContent = '3D viewport unavailable';
+  const detail = document.createElement('span');
+  detail.textContent = 'The hydraulic calculator remains available. Enable WebGL and allow the Three.js module CDN, then reload to restore the 3D view.';
+  message.append(title, detail);
+  mountEl.appendChild(message);
+  mountEl.dataset.threeStatus = 'unavailable';
+  if (error) console.warn('Pump Hydraulics 3D initialisation failed:', error);
+}
+
 window.PumpHydraulics3D = {
   create(mountEl, options) {
-    return new HydraulicsScene3D(mountEl, options);
+    try {
+      const scene = new HydraulicsScene3D(mountEl, options);
+      mountEl.dataset.threeStatus = 'ready';
+      return scene;
+    } catch (error) {
+      show3DFallback(mountEl, error);
+      return null;
+    }
   },
+  showFallback: show3DFallback,
 };
 window.dispatchEvent(new CustomEvent('hydraulics3d:ready'));
