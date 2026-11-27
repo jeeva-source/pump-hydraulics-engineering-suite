@@ -223,7 +223,7 @@ main{max-width:1500px;margin:auto;padding:26px clamp(16px,4vw,56px) 60px}
 <script src="./hydraulics-v5-1.js"></script>
 <script src="./storage-config.js"></script>
 <script src="./pipe-layout-3d.js"></script>
-<script type="module" src="./hydraulics-3d.js"></script>
+<script type="module" src="./hydraulics-3d.js" onerror="window.dispatchEvent(new Event('hydraulics3d:loaderror'))"></script>
 <script>
 const $ = (id) => document.getElementById(id);
 const fmt = (n, d = 3) => (Number.isFinite(n) ? n.toLocaleString(undefined, { maximumFractionDigits: d }) : '—');
@@ -596,6 +596,18 @@ window.addEventListener('keydown', (e) => {
 });
 
 window.addEventListener('hydraulics3d:ready', init3DScene);
+window.addEventListener('hydraulics3d:loaderror', () => {
+  const mount = $('scene3dMount');
+  if (window.PumpHydraulics3D?.showFallback) {
+    window.PumpHydraulics3D.showFallback(mount, new Error('Three.js module failed to load'));
+  } else {
+    mount.textContent = '3D viewport unavailable — the hydraulic calculator is still usable.';
+    mount.setAttribute('role', 'status');
+  }
+  $('sceneReadout').textContent = '3D unavailable; hydraulic calculations remain active';
+  document.querySelectorAll('[data-cam], [data-color], #explodeSlider, #flowToggleBtn, #fullscreenBtn')
+    .forEach((control) => { control.disabled = true; });
+});
 if (window.PumpHydraulics3D) init3DScene();
 
 // Initial page load: render default example without overwriting saved localStorage
